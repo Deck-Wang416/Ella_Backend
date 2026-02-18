@@ -17,6 +17,14 @@ class Settings(BaseSettings):
     scheduler_interval_seconds: int = 60
 
     internal_api_key: str = ""
+    notification_max_retries: int = 2
+
+    web_push_dry_run: bool = True
+    web_push_vapid_public_key: str = ""
+    web_push_vapid_private_key: str = ""
+    web_push_vapid_claims_sub: str = ""
+
+    mobile_push_dry_run: bool = True
 
     cors_origins_raw: str = Field(default="http://localhost:3000,http://localhost:5173", alias="CORS_ORIGINS")
 

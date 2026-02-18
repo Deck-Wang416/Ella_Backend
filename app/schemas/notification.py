@@ -13,5 +13,7 @@ class NotificationLogRead(BaseModel):
     slot_time: str
     timezone: str
     status: str
+    delivered_count: int
+    failed_count: int
     message: str | None
     created_at: datetime
