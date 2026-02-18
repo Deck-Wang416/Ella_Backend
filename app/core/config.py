@@ -9,9 +9,10 @@ class Settings(BaseSettings):
     app_name: str = "ELLA Reminder Backend"
     env: str = "development"
     debug: bool = True
-    api_prefix: str = "/api/v1"
+    api_prefix: str = "/api"
 
     database_url: str = "sqlite:///./ella.db"
+    daily_data_dir: str = "./data/daily"
 
     scheduler_enabled: bool = True
     scheduler_interval_seconds: int = 60

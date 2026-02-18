@@ -14,14 +14,15 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --proxy-headers --forwa
 
 Health:
 ```bash
-curl http://127.0.0.1:8000/api/v1/health
+curl http://127.0.0.1:8000/api/health
 ```
 
 ## Required Config (.env)
 
 ```env
 DATABASE_URL=sqlite:///./ella.db
-API_PREFIX=/api/v1
+DAILY_DATA_DIR=./data/daily
+API_PREFIX=/api
 INTERNAL_API_KEY=change_me
 SCHEDULER_ENABLED=true
 SCHEDULER_INTERVAL_SECONDS=60
@@ -34,12 +35,15 @@ MOBILE_PUSH_DRY_RUN=true
 
 ## Core API
 
-Base: `/api/v1`
+Base: `/api`
 
-- `GET/PUT /diary/{child_id}/{date}`
+- `GET /daily/summaries`
+- `GET/PUT /daily/{date}`
 - `GET/PUT /reminders/{caregiver_id}`
 - `POST /internal/reminders/run-due` (`X-Internal-API-Key`)
-- `POST /notifications/subscriptions`
+- `POST /subscriptions`
+- `PUT /subscriptions/{id}`
+- `DELETE /subscriptions/{id}`
 - `GET /internal/notifications/logs` (`X-Internal-API-Key`)
 - `GET /internal/notifications/deliveries` (`X-Internal-API-Key`)
 - `GET /internal/notifications/metrics` (`X-Internal-API-Key`)
@@ -58,7 +62,7 @@ cloudflared tunnel --url http://localhost:8000
 cloudflared tunnel --url http://localhost:5173
 ```
 
-Set frontend API base URL to backend tunnel domain: `https://<backend-tunnel>/api/v1`.
+Set frontend API base URL to backend tunnel domain: `https://<backend-tunnel>/api`.
 
 ## Quick Validation
 

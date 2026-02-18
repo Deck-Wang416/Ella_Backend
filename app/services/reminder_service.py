@@ -5,14 +5,15 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.models.child import Child
-from app.models.diary_entry import DiaryEntry
 from app.models.reminder_setting import ReminderSetting
+from app.services.daily_content_service import DailyContentService
 from app.services.notification_service import NotificationService
 
 
 class ReminderRunner:
     def __init__(self, notification_service: NotificationService | None = None):
         self.notification_service = notification_service or NotificationService()
+        self.daily_service = DailyContentService()
 
     def run_due(self, db: Session) -> tuple[int, int]:
         now_utc = datetime.now(timezone.utc)
@@ -37,14 +38,11 @@ class ReminderRunner:
                 continue
 
             children = db.scalars(select(Child).where(Child.caregiver_id == setting.caregiver_id)).all()
+            if not children:
+                # JSON-backed diary mode may run without child rows in DB.
+                children = [Child(id=1, caregiver_id=setting.caregiver_id, name="Child")]
             for child in children:
-                diary = db.scalar(
-                    select(DiaryEntry).where(
-                        DiaryEntry.child_id == child.id,
-                        DiaryEntry.entry_date == local_today,
-                    )
-                )
-                if diary and diary.submitted:
+                if self.daily_service.is_submitted(local_today):
                     continue
 
                 sent = self.notification_service.send_reminder(

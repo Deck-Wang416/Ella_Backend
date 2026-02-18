@@ -16,14 +16,14 @@ curl -sS -X POST "$BASE/caregivers/children" \
   -d '{"caregiver_id":1,"name":"Ella"}' | tee /tmp/ella_child.json
 
 printf "\n[3/8] upsert web_push subscription\n"
-curl -sS -X POST "$BASE/notifications/subscriptions" \
+curl -sS -X POST "$BASE/subscriptions" \
   -H "Content-Type: application/json" \
-  -d '{"caregiver_id":1,"platform":"web_push","endpoint":"https://push.example.test/abc","keys":{"p256dh":"demo","auth":"demo"}}' | tee /tmp/ella_sub_web.json
+  -d '{"caregiver_id":1,"platform":"web_push","endpointOrToken":"https://push.example.test/abc","keys":{"p256dh":"demo","auth":"demo"}}' | tee /tmp/ella_sub_web.json
 
 printf "\n[4/8] upsert fcm subscription\n"
-curl -sS -X POST "$BASE/notifications/subscriptions" \
+curl -sS -X POST "$BASE/subscriptions" \
   -H "Content-Type: application/json" \
-  -d '{"caregiver_id":1,"platform":"fcm","endpoint":"fcm_device_token_demo"}' | tee /tmp/ella_sub_fcm.json
+  -d '{"caregiver_id":1,"platform":"fcm","endpointOrToken":"fcm_device_token_demo"}' | tee /tmp/ella_sub_fcm.json
 
 printf "\n[5/8] confirm diary today not submitted\n"
 curl -sS "$BASE/diary/1/$TODAY" | tee /tmp/ella_diary_before.json

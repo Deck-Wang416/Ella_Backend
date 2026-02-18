@@ -23,6 +23,8 @@ app.add_middleware(
 app.add_middleware(TrustedHostMiddleware, allowed_hosts=settings.trusted_hosts or ["*"])
 
 app.include_router(api_router, prefix=settings.api_prefix)
+if settings.api_prefix != "/api":
+    app.include_router(api_router, prefix="/api")
 
 
 @app.on_event("startup")

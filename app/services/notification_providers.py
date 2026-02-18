@@ -40,7 +40,7 @@ class WebPushProvider(BaseNotificationProvider):
         try:
             webpush(
                 subscription_info={
-                    "endpoint": subscription.endpoint,
+                    "endpoint": subscription.endpoint_or_token or subscription.endpoint,
                     "keys": subscription.keys or {},
                 },
                 data=json.dumps(payload, ensure_ascii=False),
