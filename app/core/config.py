@@ -26,13 +26,19 @@ class Settings(BaseSettings):
 
     mobile_push_dry_run: bool = True
 
+    cors_allow_all: bool = False
     cors_origins_raw: str = Field(default="http://localhost:3000,http://localhost:5173", alias="CORS_ORIGINS")
+    trusted_hosts_raw: str = Field(default="*", alias="TRUSTED_HOSTS")
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore", case_sensitive=False)
 
     @property
     def cors_origins(self) -> List[str]:
         return [item.strip() for item in self.cors_origins_raw.split(",") if item.strip()]
+
+    @property
+    def trusted_hosts(self) -> List[str]:
+        return [item.strip() for item in self.trusted_hosts_raw.split(",") if item.strip()]
 
 
 @lru_cache
