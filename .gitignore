@@ -1,7 +1,15 @@
+# Python
 __pycache__/
 *.pyc
 .venv/
+
+# OS
+.DS_Store
+
+# Env
 .env
+
+# Local Data
 ella.db
 alembic.ini
 secrets/
