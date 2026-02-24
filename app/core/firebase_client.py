@@ -1,0 +1,38 @@
+from functools import lru_cache
+from pathlib import Path
+
+from app.core.config import get_settings
+
+
+@lru_cache
+def get_firebase_app():
+    settings = get_settings()
+
+    if not settings.firebase_database_url or not settings.firebase_credentials_path:
+        return None
+
+    cred_path = Path(settings.firebase_credentials_path)
+    if not cred_path.exists():
+        raise FileNotFoundError(f"Firebase credentials file not found: {cred_path}")
+
+    try:
+        import firebase_admin
+        from firebase_admin import credentials
+    except ImportError as exc:
+        raise RuntimeError("firebase-admin is not installed. Install dependencies first.") from exc
+
+    if firebase_admin._apps:
+        return firebase_admin.get_app()
+
+    cred = credentials.Certificate(str(cred_path))
+    return firebase_admin.initialize_app(cred, {"databaseURL": settings.firebase_database_url})
+
+
+def get_rtdb_reference(path: str):
+    app = get_firebase_app()
+    if app is None:
+        return None
+
+    from firebase_admin import db
+
+    return db.reference(path, app=app)

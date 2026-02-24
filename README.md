@@ -22,6 +22,9 @@ curl http://127.0.0.1:8000/api/health
 ```env
 DATABASE_URL=sqlite:///./ella.db
 DAILY_DATA_DIR=./data/daily
+FIREBASE_DATABASE_URL=
+FIREBASE_CREDENTIALS_PATH=
+FIREBASE_DAILY_ROOT=dailyData
 API_PREFIX=/api
 INTERNAL_API_KEY=change_me
 SCHEDULER_ENABLED=true
@@ -32,6 +35,10 @@ TRUSTED_HOSTS=*
 WEB_PUSH_DRY_RUN=true
 MOBILE_PUSH_DRY_RUN=true
 ```
+
+Notes:
+- If `FIREBASE_DATABASE_URL` and `FIREBASE_CREDENTIALS_PATH` are set, `/api/daily/*` reads/writes Realtime Database (`FIREBASE_DAILY_ROOT/{date}`).
+- If not set, daily data falls back to local files under `DAILY_DATA_DIR`.
 
 ## Core API
 

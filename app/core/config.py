@@ -13,6 +13,9 @@ class Settings(BaseSettings):
 
     database_url: str = "sqlite:///./ella.db"
     daily_data_dir: str = "./data/daily"
+    firebase_database_url: str = ""
+    firebase_credentials_path: str = ""
+    firebase_daily_root: str = "dailyData"
 
     scheduler_enabled: bool = True
     scheduler_interval_seconds: int = 60
