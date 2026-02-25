@@ -3,7 +3,6 @@ import json
 from typing import Any
 
 from app.core.config import get_settings
-from app.models.notification_subscription import NotificationSubscription
 
 
 @dataclass
@@ -15,14 +14,14 @@ class ProviderResult:
 class BaseNotificationProvider:
     platform = "base"
 
-    def send(self, subscription: NotificationSubscription, payload: dict[str, Any]) -> ProviderResult:
+    def send(self, subscription: Any, payload: dict[str, Any]) -> ProviderResult:
         raise NotImplementedError
 
 
 class WebPushProvider(BaseNotificationProvider):
     platform = "web_push"
 
-    def send(self, subscription: NotificationSubscription, payload: dict[str, Any]) -> ProviderResult:
+    def send(self, subscription: Any, payload: dict[str, Any]) -> ProviderResult:
         settings = get_settings()
         if settings.web_push_dry_run:
             return ProviderResult(success=True, message="web_push dry-run success")
@@ -55,7 +54,7 @@ class WebPushProvider(BaseNotificationProvider):
 class FcmProvider(BaseNotificationProvider):
     platform = "fcm"
 
-    def send(self, subscription: NotificationSubscription, payload: dict[str, Any]) -> ProviderResult:
+    def send(self, subscription: Any, payload: dict[str, Any]) -> ProviderResult:
         settings = get_settings()
         if settings.mobile_push_dry_run:
             return ProviderResult(success=True, message="fcm dry-run success")
@@ -65,7 +64,7 @@ class FcmProvider(BaseNotificationProvider):
 class ApnsProvider(BaseNotificationProvider):
     platform = "apns"
 
-    def send(self, subscription: NotificationSubscription, payload: dict[str, Any]) -> ProviderResult:
+    def send(self, subscription: Any, payload: dict[str, Any]) -> ProviderResult:
         settings = get_settings()
         if settings.mobile_push_dry_run:
             return ProviderResult(success=True, message="apns dry-run success")

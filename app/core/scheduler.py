@@ -3,7 +3,6 @@ import logging
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from app.core.config import get_settings
-from app.core.database import SessionLocal
 from app.services.reminder_service import ReminderRunner
 
 logger = logging.getLogger(__name__)
@@ -12,14 +11,11 @@ scheduler = BackgroundScheduler(timezone="UTC")
 
 
 def run_due_job():
-    db = SessionLocal()
     try:
-        checked, triggered = ReminderRunner().run_due(db)
+        checked, triggered = ReminderRunner().run_due()
         logger.info("run_due_job finished: checked=%s triggered=%s", checked, triggered)
     except Exception as exc:  # noqa: BLE001
         logger.exception("run_due_job failed: %s", exc)
-    finally:
-        db.close()
 
 
 def start_scheduler():

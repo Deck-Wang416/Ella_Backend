@@ -10,6 +10,4 @@ __pycache__/
 .env
 
 # Local Data
-ella.db
-alembic.ini
 secrets/

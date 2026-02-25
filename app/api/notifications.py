@@ -1,45 +1,61 @@
 from datetime import date
 
 from fastapi import APIRouter, Depends
-from sqlalchemy import func, select
-from sqlalchemy.orm import Session
 
-from app.core.database import get_db
 from app.core.security import validate_internal_api_key
-from app.models.notification_delivery import NotificationDelivery
-from app.models.notification_log import NotificationLog
 from app.schemas.delivery import NotificationDeliveryRead
 from app.schemas.notification import NotificationLogRead
 from app.schemas.notification_internal import InternalTestSendRequest, InternalTestSendResult, NotificationMetrics
+from app.services.firebase_notification_state_service import FirebaseNotificationStateService
 from app.services.notification_service import NotificationService
 
 router = APIRouter(prefix="/internal/notifications", tags=["internal-notifications"])
 
 
 @router.get("/logs", response_model=list[NotificationLogRead], dependencies=[Depends(validate_internal_api_key)])
-def list_notification_logs(caregiver_id: int | None = None, local_date: date | None = None, db: Session = Depends(get_db)):
-    stmt = select(NotificationLog).order_by(NotificationLog.created_at.desc())
-    if caregiver_id is not None:
-        stmt = stmt.where(NotificationLog.caregiver_id == caregiver_id)
-    if local_date is not None:
-        stmt = stmt.where(NotificationLog.local_date == local_date)
-    logs = db.scalars(stmt).all()
-    return list(logs)
+def list_notification_logs(caregiver_id: int | None = None, local_date: date | None = None):
+    state = FirebaseNotificationStateService()
+    logs = state.list_dispatch_logs(caregiver_id=caregiver_id, local_date=local_date)
+    return [
+        {
+            "id": item["id"],
+            "caregiver_id": item["caregiverId"],
+            "child_id": item["childId"],
+            "local_date": item["localDate"],
+            "slot_time": item["slotTime"],
+            "timezone": item.get("timezone", "UTC"),
+            "status": item["status"],
+            "delivered_count": int(item.get("deliveredCount", 0)),
+            "failed_count": int(item.get("failedCount", 0)),
+            "message": item.get("message"),
+            "created_at": item["createdAt"],
+        }
+        for item in logs
+    ]
 
 
 @router.get("/deliveries", response_model=list[NotificationDeliveryRead], dependencies=[Depends(validate_internal_api_key)])
-def list_notification_deliveries(notification_log_id: int | None = None, db: Session = Depends(get_db)):
-    stmt = select(NotificationDelivery).order_by(NotificationDelivery.created_at.desc())
-    if notification_log_id is not None:
-        stmt = stmt.where(NotificationDelivery.notification_log_id == notification_log_id)
-    deliveries = db.scalars(stmt).all()
-    return list(deliveries)
+def list_notification_deliveries(notification_log_id: int | None = None):
+    state = FirebaseNotificationStateService()
+    deliveries = state.list_deliveries(notification_log_id=notification_log_id)
+    return [
+        {
+            "id": item["id"],
+            "notification_log_id": item["notificationLogId"],
+            "subscription_id": item["subscriptionId"],
+            "platform": item["platform"],
+            "attempt_no": item["attemptNo"],
+            "status": item["status"],
+            "provider_message": item.get("providerMessage"),
+            "created_at": item["createdAt"],
+        }
+        for item in deliveries
+    ]
 
 
 @router.post("/test-send", response_model=InternalTestSendResult, dependencies=[Depends(validate_internal_api_key)])
-def test_send_notification(payload: InternalTestSendRequest, db: Session = Depends(get_db)):
+def test_send_notification(payload: InternalTestSendRequest):
     accepted = NotificationService().send_reminder(
-        db=db,
         caregiver_id=payload.caregiver_id,
         child_id=payload.child_id,
         local_date=payload.local_date,
@@ -51,16 +67,12 @@ def test_send_notification(payload: InternalTestSendRequest, db: Session = Depen
 
 
 @router.get("/metrics", response_model=NotificationMetrics, dependencies=[Depends(validate_internal_api_key)])
-def notification_metrics(db: Session = Depends(get_db)):
-    rows = db.execute(
-        select(NotificationLog.status, func.count(NotificationLog.id)).group_by(NotificationLog.status)
-    ).all()
-    counts = {status: count for status, count in rows}
-    total_logs = sum(counts.values())
+def notification_metrics():
+    metrics = FirebaseNotificationStateService().metrics()
     return NotificationMetrics(
-        total_logs=total_logs,
-        sent=counts.get("sent", 0),
-        partial=counts.get("partial", 0),
-        failed=counts.get("failed", 0),
-        no_subscription=counts.get("no_subscription", 0),
+        total_logs=metrics["total_logs"],
+        sent=metrics["sent"],
+        partial=metrics["partial"],
+        failed=metrics["failed"],
+        no_subscription=metrics["no_subscription"],
     )

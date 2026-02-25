@@ -1,6 +1,13 @@
 # Firebase Migration Snapshots
 
-- `firebase_daily_seed_2026-02-18.json`
+## Daily Content Seed
+- `firebase_daily_seed.json`
   - Source: `data/daily/*.json`
-  - Purpose: Initial import into Realtime Database node `dailyData`
-  - Generated on: 2026-02-18
+  - Target node: `dailyData`
+  - Purpose: initial daily content import to Realtime Database
+
+## Notification State Seed
+- `firebase_notification_state_seed.json`
+  - Source: local SQLite (`ella.db`) notification-related tables
+  - Target node: `notificationState`
+  - Purpose: migrate reminder/subscription/dispatch state to Realtime Database

@@ -31,7 +31,7 @@ def get_firebase_app():
 def get_rtdb_reference(path: str):
     app = get_firebase_app()
     if app is None:
-        return None
+        raise RuntimeError("Firebase is not configured. Set FIREBASE_DATABASE_URL and FIREBASE_CREDENTIALS_PATH.")
 
     from firebase_admin import db
 

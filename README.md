@@ -8,7 +8,6 @@ FastAPI backend for diary submission and reminder notifications.
 cd /Users/wang/Desktop/Ella_Backend
 conda activate ella
 pip install -r requirements.txt
-alembic upgrade head
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --proxy-headers --forwarded-allow-ips='*'
 ```
 
@@ -20,8 +19,6 @@ curl http://127.0.0.1:8000/api/health
 ## Required Config (.env)
 
 ```env
-DATABASE_URL=sqlite:///./ella.db
-DAILY_DATA_DIR=./data/daily
 FIREBASE_DATABASE_URL=
 FIREBASE_CREDENTIALS_PATH=
 FIREBASE_DAILY_ROOT=dailyData
@@ -35,10 +32,6 @@ TRUSTED_HOSTS=*
 WEB_PUSH_DRY_RUN=true
 MOBILE_PUSH_DRY_RUN=true
 ```
-
-Notes:
-- If `FIREBASE_DATABASE_URL` and `FIREBASE_CREDENTIALS_PATH` are set, `/api/daily/*` reads/writes Realtime Database (`FIREBASE_DAILY_ROOT/{date}`).
-- If not set, daily data falls back to local files under `DAILY_DATA_DIR`.
 
 ## Core API
 
@@ -70,9 +63,3 @@ cloudflared tunnel --url http://localhost:5173
 ```
 
 Set frontend API base URL to backend tunnel domain: `https://<backend-tunnel>/api`.
-
-## Quick Validation
-
-```bash
-bash scripts/notification_e2e_check.sh
-```

@@ -1,14 +1,11 @@
 from datetime import date
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
-from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import select
-from sqlalchemy.orm import Session
+from fastapi import APIRouter, HTTPException, Query
 
-from app.core.database import get_db
-from app.models.reminder_setting import ReminderSetting
 from app.schemas.daily import DailyDetailResponse, DailySummary, DailyUpdateRequest
 from app.services.daily_content_service import DailyContentService
+from app.services.firebase_notification_state_service import FirebaseNotificationStateService
 
 router = APIRouter(prefix="/daily", tags=["daily"])
 
@@ -21,14 +18,14 @@ def _validate_timezone(timezone_name: str) -> str:
     return timezone_name
 
 
-def _resolve_timezone(db: Session, caregiver_id: int | None, fallback_timezone: str | None) -> str:
+def _resolve_timezone(caregiver_id: int | None, fallback_timezone: str | None) -> str:
     if fallback_timezone:
         return _validate_timezone(fallback_timezone)
     if caregiver_id is None:
         return "UTC"
-    settings = db.scalar(select(ReminderSetting).where(ReminderSetting.caregiver_id == caregiver_id))
-    if settings and settings.timezone:
-        return _validate_timezone(settings.timezone)
+    settings = FirebaseNotificationStateService().get_reminder(caregiver_id)
+    if settings and settings.get("timezone"):
+        return _validate_timezone(settings["timezone"])
     return "UTC"
 
 
@@ -56,9 +53,8 @@ def _local_today(timezone_name: str) -> date:
 def get_daily_summaries(
     caregiver_id: int | None = Query(default=None),
     timezone: str | None = Query(default=None),
-    db: Session = Depends(get_db),
 ):
-    tz_name = _resolve_timezone(db, caregiver_id, timezone)
+    tz_name = _resolve_timezone(caregiver_id, timezone)
     service = DailyContentService()
     return service.list_summaries(timezone_name=tz_name)
 
@@ -68,9 +64,8 @@ def get_daily(
     entry_date: date,
     caregiver_id: int | None = Query(default=None),
     timezone: str | None = Query(default=None),
-    db: Session = Depends(get_db),
 ):
-    tz_name = _resolve_timezone(db, caregiver_id, timezone)
+    tz_name = _resolve_timezone(caregiver_id, timezone)
     service = DailyContentService()
     try:
         daily = service.get_daily(entry_date)
@@ -88,9 +83,8 @@ def update_daily(
     payload: DailyUpdateRequest,
     caregiver_id: int | None = Query(default=None),
     timezone: str | None = Query(default=None),
-    db: Session = Depends(get_db),
 ):
-    tz_name = _resolve_timezone(db, caregiver_id, timezone)
+    tz_name = _resolve_timezone(caregiver_id, timezone)
     service = DailyContentService()
     try:
         daily = service.upsert_diary_today(

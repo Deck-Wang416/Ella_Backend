@@ -1,12 +1,8 @@
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
-from sqlalchemy import select
-from sqlalchemy.orm import Session
-
-from app.models.child import Child
-from app.models.reminder_setting import ReminderSetting
 from app.services.daily_content_service import DailyContentService
+from app.services.firebase_notification_state_service import FirebaseNotificationStateService
 from app.services.notification_service import NotificationService
 
 
@@ -14,10 +10,11 @@ class ReminderRunner:
     def __init__(self, notification_service: NotificationService | None = None):
         self.notification_service = notification_service or NotificationService()
         self.daily_service = DailyContentService()
+        self.notification_state = FirebaseNotificationStateService()
 
-    def run_due(self, db: Session) -> tuple[int, int]:
+    def run_due(self) -> tuple[int, int]:
         now_utc = datetime.now(timezone.utc)
-        settings = db.scalars(select(ReminderSetting).where(ReminderSetting.enabled.is_(True))).all()
+        settings = self.notification_state.list_enabled_reminders()
 
         checked_caregivers = 0
         triggered_notifications = 0
@@ -25,8 +22,14 @@ class ReminderRunner:
         for setting in settings:
             checked_caregivers += 1
 
+            timezone_name = setting.get("timezone", "UTC")
+            reminder_times = setting.get("reminderTimes", [])
+            caregiver_id = int(setting.get("caregiverId", 0))
+            if caregiver_id <= 0:
+                continue
+
             try:
-                tz = ZoneInfo(setting.timezone)
+                tz = ZoneInfo(timezone_name)
             except ZoneInfoNotFoundError:
                 tz = ZoneInfo("UTC")
 
@@ -34,27 +37,24 @@ class ReminderRunner:
             local_today = local_now.date()
             current_hhmm = local_now.strftime("%H:%M")
 
-            if current_hhmm not in (setting.reminder_times or []):
+            if current_hhmm not in reminder_times:
                 continue
 
-            children = db.scalars(select(Child).where(Child.caregiver_id == setting.caregiver_id)).all()
-            if not children:
-                # JSON-backed diary mode may run without child rows in DB.
-                children = [Child(id=1, caregiver_id=setting.caregiver_id, name="Child")]
-            for child in children:
-                if self.daily_service.is_submitted(local_today):
-                    continue
+            # Child tables are deprecated in single-user mode; keep a stable child_id for dedupe key.
+            child_id = 1
+            child_name = "Child"
+            if self.daily_service.is_submitted(local_today):
+                continue
 
-                sent = self.notification_service.send_reminder(
-                    db=db,
-                    caregiver_id=setting.caregiver_id,
-                    child_id=child.id,
-                    local_date=local_today,
-                    slot_time=current_hhmm,
-                    timezone=setting.timezone,
-                    message=f"Diary not submitted yet for {child.name}",
-                )
-                if sent:
-                    triggered_notifications += 1
+            sent = self.notification_service.send_reminder(
+                caregiver_id=caregiver_id,
+                child_id=child_id,
+                local_date=local_today,
+                slot_time=current_hhmm,
+                timezone=timezone_name,
+                message=f"Diary not submitted yet for {child_name}",
+            )
+            if sent:
+                triggered_notifications += 1
 
         return checked_caregivers, triggered_notifications

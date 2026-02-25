@@ -1,6 +1,4 @@
-import json
 from datetime import date, datetime, timezone
-from pathlib import Path
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from app.core.config import get_settings
@@ -11,12 +9,8 @@ from app.schemas.daily import DailyContent, DailySummary
 class DailyContentService:
     def __init__(self):
         self.settings = get_settings()
-        self.base_dir = Path(self.settings.daily_data_dir)
-        self.base_dir.mkdir(parents=True, exist_ok=True)
-        self.use_firebase = bool(self.settings.firebase_database_url and self.settings.firebase_credentials_path)
-
-    def _file_path(self, target_date: date) -> Path:
-        return self.base_dir / f"{target_date.isoformat()}.json"
+        if not self.settings.firebase_database_url or not self.settings.firebase_credentials_path:
+            raise RuntimeError("Firebase is required. Set FIREBASE_DATABASE_URL and FIREBASE_CREDENTIALS_PATH.")
 
     def list_summaries(self, timezone_name: str = "UTC") -> list[DailySummary]:
         today = self._local_today(timezone_name)
@@ -43,17 +37,11 @@ class DailyContentService:
         return result
 
     def get_daily(self, target_date: date) -> DailyContent:
-        if self.use_firebase:
-            ref = get_rtdb_reference(f"{self.settings.firebase_daily_root}/{target_date.isoformat()}")
-            if ref is not None:
-                payload = ref.get()
-                if payload:
-                    return DailyContent.model_validate(payload)
-                raise FileNotFoundError(target_date.isoformat())
-        file_path = self._file_path(target_date)
-        if not file_path.exists():
-            raise FileNotFoundError(target_date.isoformat())
-        return self._read_file(file_path)
+        ref = get_rtdb_reference(f"{self.settings.firebase_daily_root}/{target_date.isoformat()}")
+        payload = ref.get()
+        if payload:
+            return DailyContent.model_validate(payload)
+        raise FileNotFoundError(target_date.isoformat())
 
     def build_empty_daily(self, target_date: date) -> DailyContent:
         template = self._load_latest_diary_template()
@@ -128,21 +116,9 @@ class DailyContentService:
             diaryEditable=is_today,
         )
 
-    def _read_file(self, file_path: Path) -> DailyContent:
-        with file_path.open("r", encoding="utf-8") as f:
-            return DailyContent.model_validate(json.load(f))
-
-    def _write_file(self, file_path: Path, daily: DailyContent) -> None:
-        with file_path.open("w", encoding="utf-8") as f:
-            json.dump(daily.model_dump(mode="json"), f, ensure_ascii=False, indent=2)
-
     def _save_daily(self, target_date: date, daily: DailyContent) -> None:
-        if self.use_firebase:
-            ref = get_rtdb_reference(f"{self.settings.firebase_daily_root}/{target_date.isoformat()}")
-            if ref is not None:
-                ref.set(daily.model_dump(mode="json"))
-                return
-        self._write_file(self._file_path(target_date), daily)
+        ref = get_rtdb_reference(f"{self.settings.firebase_daily_root}/{target_date.isoformat()}")
+        ref.set(daily.model_dump(mode="json"))
 
     def _load_latest_diary_template(self) -> dict:
         """
@@ -164,20 +140,14 @@ class DailyContentService:
 
     def _iter_daily_records(self) -> list[DailyContent]:
         records: list[DailyContent] = []
-        if self.use_firebase:
-            ref = get_rtdb_reference(self.settings.firebase_daily_root)
-            if ref is not None:
-                payload = ref.get() or {}
-                if isinstance(payload, dict):
-                    for _, value in payload.items():
-                        try:
-                            records.append(DailyContent.model_validate(value))
-                        except Exception:
-                            continue
-                return records
-
-        for file_path in sorted(self.base_dir.glob("*.json")):
-            records.append(self._read_file(file_path))
+        ref = get_rtdb_reference(self.settings.firebase_daily_root)
+        payload = ref.get() or {}
+        if isinstance(payload, dict):
+            for _, value in payload.items():
+                try:
+                    records.append(DailyContent.model_validate(value))
+                except Exception:
+                    continue
         return records
 
     def _local_today(self, timezone_name: str) -> date:

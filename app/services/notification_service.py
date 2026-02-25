@@ -1,14 +1,9 @@
 import logging
 from datetime import date
-
-from sqlalchemy import select
-from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import Session
+from types import SimpleNamespace
 
 from app.core.config import get_settings
-from app.models.notification_delivery import NotificationDelivery
-from app.models.notification_log import NotificationLog
-from app.models.notification_subscription import NotificationSubscription
+from app.services.firebase_notification_state_service import FirebaseNotificationStateService
 from app.services.notification_providers import get_provider
 
 logger = logging.getLogger(__name__)
@@ -19,7 +14,6 @@ class NotificationService:
 
     def send_reminder(
         self,
-        db: Session,
         caregiver_id: int,
         child_id: int,
         local_date: date,
@@ -27,45 +21,23 @@ class NotificationService:
         timezone: str,
         message: str,
     ) -> bool:
-        existing = db.scalar(
-            select(NotificationLog).where(
-                NotificationLog.caregiver_id == caregiver_id,
-                NotificationLog.child_id == child_id,
-                NotificationLog.local_date == local_date,
-                NotificationLog.slot_time == slot_time,
-            )
-        )
-        if existing:
-            return False
-
-        log = NotificationLog(
+        state = FirebaseNotificationStateService()
+        created = state.create_dispatch_log(
             caregiver_id=caregiver_id,
             child_id=child_id,
             local_date=local_date,
             slot_time=slot_time,
-            timezone=timezone,
-            status="pending",
+            timezone_name=timezone,
             message=message,
-            delivered_count=0,
-            failed_count=0,
         )
-        db.add(log)
-        try:
-            db.flush()
-        except IntegrityError:
-            db.rollback()
+        if created.get("duplicate"):
             return False
 
-        subscriptions = db.scalars(
-            select(NotificationSubscription).where(
-                NotificationSubscription.caregiver_id == caregiver_id,
-                NotificationSubscription.active.is_(True),
-            )
-        ).all()
+        log_id = int(created["id"])
+        subscriptions = state.list_active_subscriptions(caregiver_id)
 
         if not subscriptions:
-            log.status = "no_subscription"
-            db.commit()
+            state.update_dispatch_log(log_id, {"status": "no_subscription"})
             return True
 
         settings = get_settings()
@@ -79,60 +51,67 @@ class NotificationService:
             "slot_time": slot_time,
             "message": message,
         }
+        delivered_count = 0
+        failed_count = 0
 
         for sub in subscriptions:
-            provider = get_provider(sub.platform)
+            platform = sub.get("platform", "")
+            provider = get_provider(platform)
             if provider is None:
-                db.add(
-                    NotificationDelivery(
-                        notification_log_id=log.id,
-                        subscription_id=sub.id,
-                        platform=sub.platform,
-                        attempt_no=1,
-                        status="provider_missing",
-                        provider_message=f"unsupported platform: {sub.platform}",
-                    )
+                state.create_delivery(
+                    log_id=log_id,
+                    subscription_id=int(sub["id"]),
+                    platform=platform,
+                    attempt_no=1,
+                    status="provider_missing",
+                    provider_message=f"unsupported platform: {platform}",
                 )
-                log.failed_count += 1
+                failed_count += 1
                 continue
 
             delivered = False
+            sub_obj = SimpleNamespace(
+                endpoint_or_token=sub.get("endpointOrToken"),
+                endpoint=sub.get("endpointOrToken"),
+                keys=sub.get("keys"),
+                platform=platform,
+            )
             for attempt in range(1, max_retries + 1):
-                result = provider.send(sub, payload)
-                db.add(
-                    NotificationDelivery(
-                        notification_log_id=log.id,
-                        subscription_id=sub.id,
-                        platform=sub.platform,
-                        attempt_no=attempt,
-                        status="success" if result.success else "failed",
-                        provider_message=(result.message or "")[:255] or None,
-                    )
+                result = provider.send(sub_obj, payload)
+                state.create_delivery(
+                    log_id=log_id,
+                    subscription_id=int(sub["id"]),
+                    platform=platform,
+                    attempt_no=attempt,
+                    status="success" if result.success else "failed",
+                    provider_message=(result.message or "")[:255] or None,
                 )
                 if result.success:
                     delivered = True
                     break
 
             if delivered:
-                log.delivered_count += 1
+                delivered_count += 1
             else:
-                log.failed_count += 1
+                failed_count += 1
 
-        if log.delivered_count > 0 and log.failed_count == 0:
-            log.status = "sent"
-        elif log.delivered_count > 0 and log.failed_count > 0:
-            log.status = "partial"
+        if delivered_count > 0 and failed_count == 0:
+            status = "sent"
+        elif delivered_count > 0 and failed_count > 0:
+            status = "partial"
         else:
-            log.status = "failed"
-
-        db.commit()
+            status = "failed"
+        state.update_dispatch_log(
+            log_id,
+            {"status": status, "deliveredCount": delivered_count, "failedCount": failed_count},
+        )
 
         logger.info(
             "Reminder dispatch finished: caregiver=%s child=%s status=%s delivered=%s failed=%s",
             caregiver_id,
             child_id,
-            log.status,
-            log.delivered_count,
-            log.failed_count,
+            status,
+            delivered_count,
+            failed_count,
         )
         return True
