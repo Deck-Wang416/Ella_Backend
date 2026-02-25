@@ -27,6 +27,17 @@ class FirebaseNotificationStateService:
         next_value = ref.transaction(_inc)
         return int(next_value)
 
+    def _iter_keyed_items(self, data: Any):
+        if isinstance(data, dict):
+            for key, value in data.items():
+                yield str(key), value
+            return
+        if isinstance(data, list):
+            for idx, value in enumerate(data):
+                if value is None:
+                    continue
+                yield str(idx), value
+
     def get_reminder(self, caregiver_id: int) -> dict[str, Any] | None:
         ref = get_rtdb_reference(f"{self.root}/reminderSettings/{caregiver_id}")
         if ref is None:
@@ -58,10 +69,9 @@ class FirebaseNotificationStateService:
             raise RuntimeError("Firebase is not configured")
         data = ref.get() or {}
         result: list[dict[str, Any]] = []
-        if isinstance(data, dict):
-            for _, value in data.items():
-                if isinstance(value, dict) and value.get("enabled") is True:
-                    result.append(value)
+        for _, value in self._iter_keyed_items(data):
+            if isinstance(value, dict) and value.get("enabled") is True:
+                result.append(value)
         return result
 
     def list_subscriptions(self, caregiver_id: int) -> list[dict[str, Any]]:
@@ -70,15 +80,14 @@ class FirebaseNotificationStateService:
             raise RuntimeError("Firebase is not configured")
         data = ref.get() or {}
         result: list[dict[str, Any]] = []
-        if isinstance(data, dict):
-            for key, value in data.items():
-                if not isinstance(value, dict):
-                    continue
-                if int(value.get("caregiverId", -1)) == caregiver_id:
-                    value.setdefault("id", int(key) if str(key).isdigit() else value.get("id"))
-                    value.setdefault("createdAt", value.get("updatedAt", self._now_iso()))
-                    value.setdefault("updatedAt", value.get("createdAt", self._now_iso()))
-                    result.append(value)
+        for key, value in self._iter_keyed_items(data):
+            if not isinstance(value, dict):
+                continue
+            if int(value.get("caregiverId", -1)) == caregiver_id:
+                value.setdefault("id", int(key) if str(key).isdigit() else value.get("id"))
+                value.setdefault("createdAt", value.get("updatedAt", self._now_iso()))
+                value.setdefault("updatedAt", value.get("createdAt", self._now_iso()))
+                result.append(value)
         result.sort(key=lambda x: int(x.get("id", 0)))
         return result
 
@@ -159,11 +168,19 @@ class FirebaseNotificationStateService:
         value = ref.get()
         return int(value) if value is not None else None
 
+    def _dispatch_log_exists(self, log_id: int) -> bool:
+        ref = get_rtdb_reference(f"{self.root}/dispatchLogs/{log_id}")
+        if ref is None:
+            raise RuntimeError("Firebase is not configured")
+        return isinstance(ref.get(), dict)
+
     def create_dispatch_log(self, caregiver_id: int, child_id: int, local_date: date, slot_time: str, timezone_name: str, message: str) -> dict[str, Any]:
         unique_key = f"{caregiver_id}_{child_id}_{local_date.isoformat()}_{slot_time}"
         existing = self.check_dispatch_duplicate(caregiver_id, child_id, local_date, slot_time)
         if existing is not None:
-            return {"duplicate": True, "id": existing}
+            # Guard against orphaned dedupe index values (index exists but log node was removed).
+            if self._dispatch_log_exists(existing):
+                return {"duplicate": True, "id": existing}
 
         log_id = self._next_id("nextDispatchLogId")
         now = self._now_iso()
@@ -201,16 +218,15 @@ class FirebaseNotificationStateService:
             raise RuntimeError("Firebase is not configured")
         data = ref.get() or {}
         result: list[dict[str, Any]] = []
-        if isinstance(data, dict):
-            for key, value in data.items():
-                if not isinstance(value, dict):
-                    continue
-                value.setdefault("id", int(key) if str(key).isdigit() else value.get("id"))
-                if caregiver_id is not None and int(value.get("caregiverId", -1)) != caregiver_id:
-                    continue
-                if local_date is not None and value.get("localDate") != local_date.isoformat():
-                    continue
-                result.append(value)
+        for key, value in self._iter_keyed_items(data):
+            if not isinstance(value, dict):
+                continue
+            value.setdefault("id", int(key) if str(key).isdigit() else value.get("id"))
+            if caregiver_id is not None and int(value.get("caregiverId", -1)) != caregiver_id:
+                continue
+            if local_date is not None and value.get("localDate") != local_date.isoformat():
+                continue
+            result.append(value)
         result.sort(key=lambda item: item.get("createdAt", ""), reverse=True)
         return result
 
@@ -235,14 +251,13 @@ class FirebaseNotificationStateService:
             raise RuntimeError("Firebase is not configured")
         data = ref.get() or {}
         result: list[dict[str, Any]] = []
-        if isinstance(data, dict):
-            for key, value in data.items():
-                if not isinstance(value, dict):
-                    continue
-                value.setdefault("id", int(key) if str(key).isdigit() else value.get("id"))
-                if notification_log_id is not None and int(value.get("notificationLogId", -1)) != notification_log_id:
-                    continue
-                result.append(value)
+        for key, value in self._iter_keyed_items(data):
+            if not isinstance(value, dict):
+                continue
+            value.setdefault("id", int(key) if str(key).isdigit() else value.get("id"))
+            if notification_log_id is not None and int(value.get("notificationLogId", -1)) != notification_log_id:
+                continue
+            result.append(value)
         result.sort(key=lambda item: item.get("createdAt", ""), reverse=True)
         return result
 
