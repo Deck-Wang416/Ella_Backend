@@ -25,7 +25,12 @@ def get_firebase_app():
         return firebase_admin.get_app()
 
     cred = credentials.Certificate(str(cred_path))
-    return firebase_admin.initialize_app(cred, {"databaseURL": settings.firebase_database_url})
+    try:
+        return firebase_admin.initialize_app(cred, {"databaseURL": settings.firebase_database_url})
+    except ValueError:
+        # Concurrent requests may race during first init on multithreaded workers.
+        # If another request already initialized the default app, reuse it.
+        return firebase_admin.get_app()
 
 
 def get_rtdb_reference(path: str):
