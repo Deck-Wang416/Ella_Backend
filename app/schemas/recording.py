@@ -15,7 +15,7 @@ class RecordingSessionRead(BaseModel):
     date: str
     caregiverId: int
     childId: int
-    condition: str
+    condition: Literal["parent"]
     status: Literal["recording", "completed", "failed"]
     mimeType: str | None = None
     uploadedChunks: int
@@ -36,4 +36,4 @@ class RecordingChunkUploadResponse(BaseModel):
 
 
 class RecordingSessionCompleteRequest(BaseModel):
-    finalChunkIndex: int = Field(ge=0)
+    finalChunkIndex: int = Field(ge=-1)

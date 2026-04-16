@@ -13,12 +13,16 @@ router = APIRouter(prefix="/recordings", tags=["recordings"])
 
 @router.post("/sessions", response_model=RecordingSessionRead, status_code=status.HTTP_201_CREATED)
 def create_recording_session(payload: RecordingSessionCreateRequest):
-    session = FirebaseRecordingService().create_session(
-        entry_date=payload.date,
-        caregiver_id=payload.caregiverId,
-        child_id=payload.childId,
-    )
-    return session
+    try:
+        return FirebaseRecordingService().create_session(
+            entry_date=payload.date,
+            caregiver_id=payload.caregiverId,
+            child_id=payload.childId,
+        )
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Daily content not found") from None
+    except PermissionError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
 
 
 @router.get("/sessions/{session_id}", response_model=RecordingSessionRead)
@@ -63,3 +67,5 @@ def complete_recording_session(session_id: str, payload: RecordingSessionComplet
         )
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Recording session not found") from None
+    except PermissionError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc

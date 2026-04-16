@@ -24,36 +24,13 @@ class FirebaseRecordingService:
         payload = self._daily_ref(entry_date).get()
         return payload if isinstance(payload, dict) else None
 
-    def ensure_parent_daily(self, entry_date: date) -> dict:
+    def _get_existing_parent_daily(self, entry_date: date) -> dict:
         payload = self._read_daily_payload(entry_date)
         if payload is None:
-            payload = {
-                "date": entry_date.isoformat(),
-                "condition": "parent",
-                "dashboard": {
-                    "hasInteraction": False,
-                    "photos": [],
-                    "words": [],
-                    "highlight": [],
-                    "ask": [],
-                },
-                "diary": {
-                    "submitted": False,
-                    "submittedAt": None,
-                    "updatedAt": None,
-                    "instructions": [],
-                    "questions": [],
-                    "responses": {},
-                },
-                "parentAudio": {
-                    "enabled": True,
-                    "activeSession": None,
-                },
-            }
-            self._daily_ref(entry_date).set(payload)
-            return payload
+            raise FileNotFoundError(entry_date.isoformat())
+        if payload.get("condition") != "parent":
+            raise PermissionError("Recording session is only allowed when daily.condition is 'parent'")
 
-        payload.setdefault("condition", "parent")
         payload.setdefault(
             "dashboard",
             {
@@ -76,13 +53,12 @@ class FirebaseRecordingService:
             },
         )
         payload.setdefault("parentAudio", {"enabled": True, "activeSession": None})
-        payload["condition"] = "parent"
         payload["parentAudio"]["enabled"] = True
         self._daily_ref(entry_date).set(payload)
         return payload
 
     def create_session(self, entry_date: date, caregiver_id: int, child_id: int) -> dict:
-        self.ensure_parent_daily(entry_date)
+        self._get_existing_parent_daily(entry_date)
 
         active_session_id = self.get_active_session_id_for_date(entry_date)
         if active_session_id is not None:
@@ -181,7 +157,7 @@ class FirebaseRecordingService:
         self._session_ref(session_id).set(session)
 
         entry_date = date.fromisoformat(session["date"])
-        daily = self.ensure_parent_daily(entry_date)
+        daily = self._get_existing_parent_daily(entry_date)
         parent_audio = daily.setdefault("parentAudio", {"enabled": True, "activeSession": None})
         parent_audio["enabled"] = True
         parent_audio["activeSession"] = None
@@ -198,7 +174,7 @@ class FirebaseRecordingService:
         }
 
     def _set_daily_active_session(self, entry_date: date, session: dict) -> None:
-        daily = self.ensure_parent_daily(entry_date)
+        daily = self._get_existing_parent_daily(entry_date)
         parent_audio = daily.setdefault("parentAudio", {"enabled": True, "activeSession": None})
         parent_audio["enabled"] = True
         parent_audio["activeSession"] = {
