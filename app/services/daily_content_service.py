@@ -47,6 +47,7 @@ class DailyContentService:
         template = self._load_latest_diary_template()
         return DailyContent(
             date=target_date.isoformat(),
+            condition="robot",
             dashboard={
                 "hasInteraction": False,
                 "photos": [],
@@ -62,6 +63,7 @@ class DailyContentService:
                 "questions": template["questions"],
                 "responses": {},
             },
+            parentAudio=None,
         )
 
     def upsert_diary_today(

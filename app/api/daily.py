@@ -6,6 +6,7 @@ from fastapi import APIRouter, HTTPException, Query
 from app.schemas.daily import DailyDetailResponse, DailySummary, DailyUpdateRequest
 from app.services.daily_content_service import DailyContentService
 from app.services.firebase_notification_state_service import FirebaseNotificationStateService
+from app.services.firebase_recording_service import FirebaseRecordingService
 
 router = APIRouter(prefix="/daily", tags=["daily"])
 
@@ -31,8 +32,12 @@ def _resolve_timezone(caregiver_id: int | None, fallback_timezone: str | None) -
 
 def _to_detail_response(service: DailyContentService, daily, timezone_name: str) -> DailyDetailResponse:
     summary = service.build_summary(daily, timezone_name=timezone_name)
+    entry_date = date.fromisoformat(daily.date)
+    condition = getattr(daily, "condition", "robot")
+    parent_audio = FirebaseRecordingService().build_parent_audio_meta(entry_date, condition)
     return DailyDetailResponse(
         date=daily.date,
+        condition=condition,
         dashboard=daily.dashboard,
         diary=daily.diary,
         meta={
@@ -42,6 +47,7 @@ def _to_detail_response(service: DailyContentService, daily, timezone_name: str)
             "dashboardSelectable": summary.dashboardSelectable,
             "diaryEditable": summary.diaryEditable,
         },
+        parentAudio=parent_audio,
     )
 
 

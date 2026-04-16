@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     firebase_database_url: str = ""
     firebase_credentials_path: str = ""
     firebase_daily_root: str = "dailyData"
+    firebase_storage_bucket: str = ""
 
     scheduler_enabled: bool = True
     scheduler_interval_seconds: int = 60
