@@ -162,9 +162,28 @@ class FirebaseRecordingService:
 
     def _normalize_received_chunk_indexes(self, received: object) -> dict[str, bool]:
         if isinstance(received, dict):
-            return {str(key): bool(value) for key, value in received.items()}
+            normalized: dict[str, bool] = {}
+            for key, value in received.items():
+                try:
+                    normalized[str(int(key))] = bool(value)
+                except (TypeError, ValueError):
+                    continue
+            return normalized
         if isinstance(received, list):
-            return {str(index): True for index in received}
+            normalized: dict[str, bool] = {}
+            # Some older payloads were stored as dense boolean arrays like [true, false, true].
+            if all(isinstance(item, bool) for item in received):
+                for index, present in enumerate(received):
+                    if present:
+                        normalized[str(index)] = True
+                return normalized
+            # Some payloads may contain explicit chunk indexes like [0, 1, 2].
+            for item in received:
+                try:
+                    normalized[str(int(item))] = True
+                except (TypeError, ValueError):
+                    continue
+            return normalized
         return {}
 
     def _guess_extension(self, mime_type: str) -> str:
