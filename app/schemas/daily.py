@@ -4,7 +4,7 @@ from typing import Any, Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 
-ModeType = Literal["robot", "parent"]
+ConditionType = Literal["robot", "parent"]
 QuestionType = Literal["checkbox", "radio", "textarea"]
 OperatorType = Literal["equals", "includesAny"]
 RecordingStatusType = Literal["recording", "completed", "failed"]
@@ -40,7 +40,7 @@ class ParentAudioMeta(BaseModel):
     activeSession: ParentAudioSession | None = None
 
 
-class RobotDashboardContent(BaseModel):
+class DashboardContent(BaseModel):
     hasInteraction: bool = False
     photos: list[str] = Field(default_factory=list)
     words: list[str] = Field(default_factory=list)
@@ -64,35 +64,19 @@ class DiaryContent(BaseModel):
     responses: dict[str, Any] = Field(default_factory=dict)
 
 
-class RobotModeContent(BaseModel):
-    dashboard: RobotDashboardContent
-    diary: DiaryContent
-
-
-class ParentModeContent(BaseModel):
-    dashboard: ParentDashboardContent
-    diary: DiaryContent
-    parentAudio: ParentAudioMeta | None = None
-
-
-class DailyModes(BaseModel):
-    robot: RobotModeContent | None = None
-    parent: ParentModeContent | None = None
-
-
 class DailyContent(BaseModel):
     model_config = ConfigDict(extra="allow")
 
     date: str
-    availableModes: list[ModeType] = Field(default_factory=lambda: ["robot"])
-    defaultMode: ModeType = "robot"
-    modes: DailyModes
+    condition: ConditionType = "robot"
+    dashboard: DashboardContent | ParentDashboardContent
+    diary: DiaryContent
+    parentAudio: ParentAudioMeta | None = None
 
 
 class DailySummary(BaseModel):
     date: str
-    availableModes: list[ModeType]
-    defaultMode: ModeType
+    condition: ConditionType
     isToday: bool
     hasInteraction: bool
     diarySubmitted: bool
@@ -112,10 +96,8 @@ class DailyMeta(BaseModel):
 
 class DailyDetailResponse(BaseModel):
     date: str
-    availableModes: list[ModeType]
-    defaultMode: ModeType
-    selectedMode: ModeType
-    dashboard: RobotDashboardContent | ParentDashboardContent
+    condition: ConditionType
+    dashboard: DashboardContent | ParentDashboardContent
     diary: DiaryContent
     meta: DailyMeta
     parentAudio: ParentAudioMeta | None = None
@@ -124,7 +106,3 @@ class DailyDetailResponse(BaseModel):
 class DailyUpdateRequest(BaseModel):
     responses: dict[str, Any] = Field(default_factory=dict)
     submitted: bool = True
-
-
-class DailyModeCreateRequest(BaseModel):
-    makeDefault: bool = False

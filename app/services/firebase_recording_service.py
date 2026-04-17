@@ -2,7 +2,7 @@ from datetime import date, datetime, timezone
 from uuid import uuid4
 
 from app.core.firebase_client import get_rtdb_reference, get_storage_bucket
-from app.schemas.daily import DailyContent, ModeType, ParentAudioMeta, ParentAudioSession
+from app.schemas.daily import DailyContent, ParentAudioMeta, ParentAudioSession
 from app.services.daily_content_service import DailyContentService
 
 
@@ -22,17 +22,14 @@ class FirebaseRecordingService:
 
     def _get_existing_parent_daily(self, entry_date: date) -> DailyContent:
         daily = self.daily_service.get_daily(entry_date)
-        if "parent" not in daily.availableModes:
-            raise PermissionError("Recording session is only allowed when parent mode is available for this date")
-        parent_mode = self.daily_service.get_mode_content(daily, "parent")
-        if parent_mode is None:
-            raise PermissionError("Recording session is only allowed when parent mode is available for this date")
+        if daily.condition != "parent":
+            raise PermissionError("Recording session is only allowed when daily.condition is 'parent'")
         return daily
 
     def create_session(self, entry_date: date, caregiver_id: int, child_id: int) -> dict:
         daily = self._get_existing_parent_daily(entry_date)
 
-        active_session_id = self.get_active_session_id_for_date(daily, "parent")
+        active_session_id = self.get_active_session_id_for_date(daily)
         if active_session_id is not None:
             existing_session = self.get_session(active_session_id)
             if existing_session is not None:
@@ -58,7 +55,7 @@ class FirebaseRecordingService:
             "completedAt": None,
         }
         self._session_ref(session_id).set(payload)
-        self._set_parent_active_session(daily, payload)
+        self._set_daily_active_session(daily, payload)
         self.daily_service._save_daily(entry_date, daily)
         return payload
 
@@ -66,17 +63,14 @@ class FirebaseRecordingService:
         data = self._session_ref(session_id).get()
         return data if isinstance(data, dict) else None
 
-    def get_active_session_for_date(self, daily: DailyContent, mode: ModeType) -> dict | None:
-        mode_content = self.daily_service.get_mode_content(daily, mode)
-        if mode_content is None or mode_content.parentAudio is None:
+    def get_active_session_for_date(self, daily: DailyContent) -> dict | None:
+        parent_audio = daily.parentAudio
+        if parent_audio is None or parent_audio.activeSession is None:
             return None
-        active_session = mode_content.parentAudio.activeSession
-        if active_session is None:
-            return None
-        return active_session.model_dump(mode="json")
+        return parent_audio.activeSession.model_dump(mode="json")
 
-    def get_active_session_id_for_date(self, daily: DailyContent, mode: ModeType) -> str | None:
-        active_session = self.get_active_session_for_date(daily, mode)
+    def get_active_session_id_for_date(self, daily: DailyContent) -> str | None:
+        active_session = self.get_active_session_for_date(daily)
         if not active_session:
             return None
         session_id = active_session.get("sessionId")
@@ -106,7 +100,7 @@ class FirebaseRecordingService:
 
         entry_date = date.fromisoformat(session["date"])
         daily = self._get_existing_parent_daily(entry_date)
-        self._set_parent_active_session(daily, session)
+        self._set_daily_active_session(daily, session)
         self.daily_service._save_daily(entry_date, daily)
 
         return {
@@ -132,31 +126,19 @@ class FirebaseRecordingService:
 
         entry_date = date.fromisoformat(session["date"])
         daily = self._get_existing_parent_daily(entry_date)
-        parent_mode = self.daily_service.get_mode_content(daily, "parent")
-        if parent_mode is None:
-            raise PermissionError("Recording session is only allowed when parent mode is available for this date")
-        parent_mode.parentAudio = ParentAudioMeta(enabled=True, activeSession=None)
-        self.daily_service.set_mode_content(daily, "parent", parent_mode)
+        daily.parentAudio = ParentAudioMeta(enabled=True, activeSession=None)
         self.daily_service._save_daily(entry_date, daily)
         return session
 
-    def build_parent_audio_meta(self, daily: DailyContent, mode: ModeType) -> ParentAudioMeta | None:
-        if mode != "parent":
+    def build_parent_audio_meta(self, daily: DailyContent) -> ParentAudioMeta | None:
+        if daily.condition != "parent":
             return None
-        if "parent" not in daily.availableModes:
-            return None
-        parent_mode = self.daily_service.get_mode_content(daily, "parent")
-        if parent_mode is None:
-            return None
-        if parent_mode.parentAudio is None:
+        if daily.parentAudio is None:
             return ParentAudioMeta(enabled=True, activeSession=None)
-        return parent_mode.parentAudio
+        return daily.parentAudio
 
-    def _set_parent_active_session(self, daily: DailyContent, session: dict) -> None:
-        parent_mode = self.daily_service.get_mode_content(daily, "parent")
-        if parent_mode is None:
-            raise PermissionError("Recording session is only allowed when parent mode is available for this date")
-        parent_mode.parentAudio = ParentAudioMeta(
+    def _set_daily_active_session(self, daily: DailyContent, session: dict) -> None:
+        daily.parentAudio = ParentAudioMeta(
             enabled=True,
             activeSession=ParentAudioSession(
                 sessionId=session["sessionId"],
@@ -165,7 +147,6 @@ class FirebaseRecordingService:
                 lastChunkIndex=session["lastChunkIndex"],
             ),
         )
-        self.daily_service.set_mode_content(daily, "parent", parent_mode)
 
     def _guess_extension(self, mime_type: str) -> str:
         mapping = {
