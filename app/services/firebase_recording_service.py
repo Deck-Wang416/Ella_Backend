@@ -34,6 +34,8 @@ class FirebaseRecordingService:
             existing_session = self.get_session(active_session_id)
             if existing_session is not None:
                 return existing_session
+            self._clear_daily_active_session(daily)
+            self.daily_service._save_daily(entry_date, daily)
 
         now = self._now_iso()
         session_id = f"rec_{entry_date.strftime('%Y%m%d')}_{uuid4().hex[:8]}"
@@ -135,6 +137,11 @@ class FirebaseRecordingService:
             return None
         if daily.parentAudio is None:
             return ParentAudioMeta(enabled=True, activeSession=None)
+        active_session_id = self.get_active_session_id_for_date(daily)
+        if active_session_id is not None and self.get_session(active_session_id) is None:
+            self._clear_daily_active_session(daily)
+            self.daily_service._save_daily(date.fromisoformat(daily.date), daily)
+            return daily.parentAudio
         return daily.parentAudio
 
     def _set_daily_active_session(self, daily: DailyContent, session: dict) -> None:
@@ -147,6 +154,9 @@ class FirebaseRecordingService:
                 lastChunkIndex=session["lastChunkIndex"],
             ),
         )
+
+    def _clear_daily_active_session(self, daily: DailyContent) -> None:
+        daily.parentAudio = ParentAudioMeta(enabled=True, activeSession=None)
 
     def _guess_extension(self, mime_type: str) -> str:
         mapping = {
