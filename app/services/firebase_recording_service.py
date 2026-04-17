@@ -91,7 +91,7 @@ class FirebaseRecordingService:
         storage_blob = bucket.blob(storage_path)
         storage_blob.upload_from_string(blob, content_type=mime_type)
 
-        received = session.get("receivedChunkIndexes") or {}
+        received = self._normalize_received_chunk_indexes(session.get("receivedChunkIndexes"))
         received[str(chunk_index)] = True
         session["receivedChunkIndexes"] = received
         session["mimeType"] = mime_type
@@ -159,6 +159,13 @@ class FirebaseRecordingService:
 
     def _clear_daily_active_session(self, daily: DailyContent) -> None:
         daily.parentAudio = ParentAudioMeta(enabled=True, activeSession=None)
+
+    def _normalize_received_chunk_indexes(self, received: object) -> dict[str, bool]:
+        if isinstance(received, dict):
+            return {str(key): bool(value) for key, value in received.items()}
+        if isinstance(received, list):
+            return {str(index): True for index in received}
+        return {}
 
     def _guess_extension(self, mime_type: str) -> str:
         mapping = {
