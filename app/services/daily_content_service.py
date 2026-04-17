@@ -9,7 +9,6 @@ from app.schemas.daily import (
     DailySummary,
     DiaryContent,
     DashboardContent,
-    ParentAudioMeta,
     ParentDashboardContent,
 )
 
@@ -60,7 +59,6 @@ class DailyContentService:
                 questions=template["questions"],
                 responses={},
             ),
-            parentAudio=ParentAudioMeta(enabled=True, activeSession=None) if condition == "parent" else None,
         )
 
     def initialize_daily_today(self, target_date: date, timezone_name: str, condition: ConditionType) -> DailyContent:
@@ -138,8 +136,6 @@ class DailyContentService:
             else DashboardContent.model_validate(dashboard_payload)
         )
         diary = DiaryContent.model_validate(payload.get("diary") or {})
-        parent_audio_payload = payload.get("parentAudio")
-        parent_audio = ParentAudioMeta.model_validate(parent_audio_payload) if isinstance(parent_audio_payload, dict) else None
         resolved_date = payload.get("date") or (target_date.isoformat() if target_date else "")
 
         return DailyContent(
@@ -147,7 +143,6 @@ class DailyContentService:
             condition=condition,
             dashboard=dashboard,
             diary=diary,
-            parentAudio=parent_audio if condition == "parent" else None,
         )
 
     def _save_daily(self, target_date: date, daily: DailyContent) -> None:

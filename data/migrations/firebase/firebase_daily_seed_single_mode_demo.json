@@ -205,10 +205,6 @@
         "read_book": "Yes",
         "notes": "Parent storytelling went smoothly and the child stayed seated for most of it."
       }
-    },
-    "parentAudio": {
-      "enabled": true,
-      "activeSession": null
     }
   },
   "2026-04-16": {
@@ -407,10 +403,6 @@
         }
       ],
       "responses": {}
-    },
-    "parentAudio": {
-      "enabled": true,
-      "activeSession": null
     }
   }
 }

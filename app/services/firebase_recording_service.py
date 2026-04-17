@@ -2,7 +2,7 @@ from datetime import date, datetime, timezone
 from uuid import uuid4
 
 from app.core.firebase_client import get_rtdb_reference, get_storage_bucket
-from app.schemas.daily import DailyContent, ParentAudioMeta, ParentAudioSession
+from app.schemas.daily import DailyContent
 from app.services.daily_content_service import DailyContentService
 
 
@@ -27,15 +27,7 @@ class FirebaseRecordingService:
         return daily
 
     def create_session(self, entry_date: date, caregiver_id: int, child_id: int) -> dict:
-        daily = self._get_existing_parent_daily(entry_date)
-
-        active_session_id = self.get_active_session_id_for_date(daily)
-        if active_session_id is not None:
-            existing_session = self.get_session(active_session_id)
-            if existing_session is not None and existing_session.get("status") == "recording":
-                return existing_session
-            self._clear_daily_active_session(daily)
-            self.daily_service._save_daily(entry_date, daily)
+        self._get_existing_parent_daily(entry_date)
 
         now = self._now_iso()
         session_id = f"rec_{entry_date.strftime('%Y%m%d')}_{uuid4().hex[:8]}"
@@ -57,26 +49,11 @@ class FirebaseRecordingService:
             "completedAt": None,
         }
         self._session_ref(session_id).set(payload)
-        self._set_daily_active_session(daily, payload)
-        self.daily_service._save_daily(entry_date, daily)
         return payload
 
     def get_session(self, session_id: str) -> dict | None:
         data = self._session_ref(session_id).get()
         return data if isinstance(data, dict) else None
-
-    def get_active_session_for_date(self, daily: DailyContent) -> dict | None:
-        parent_audio = daily.parentAudio
-        if parent_audio is None or parent_audio.activeSession is None:
-            return None
-        return parent_audio.activeSession.model_dump(mode="json")
-
-    def get_active_session_id_for_date(self, daily: DailyContent) -> str | None:
-        active_session = self.get_active_session_for_date(daily)
-        if not active_session:
-            return None
-        session_id = active_session.get("sessionId")
-        return session_id if isinstance(session_id, str) and session_id else None
 
     def upload_chunk(self, session_id: str, chunk_index: int, mime_type: str, blob: bytes) -> dict:
         session = self.get_session(session_id)
@@ -100,11 +77,6 @@ class FirebaseRecordingService:
         session["updatedAt"] = self._now_iso()
         self._session_ref(session_id).set(session)
 
-        entry_date = date.fromisoformat(session["date"])
-        daily = self._get_existing_parent_daily(entry_date)
-        self._set_daily_active_session(daily, session)
-        self.daily_service._save_daily(entry_date, daily)
-
         return {
             "sessionId": session_id,
             "chunkIndex": chunk_index,
@@ -125,40 +97,7 @@ class FirebaseRecordingService:
         session["updatedAt"] = now
         session["completedAt"] = now
         self._session_ref(session_id).set(session)
-
-        entry_date = date.fromisoformat(session["date"])
-        daily = self._get_existing_parent_daily(entry_date)
-        daily.parentAudio = ParentAudioMeta(enabled=True, activeSession=None)
-        self.daily_service._save_daily(entry_date, daily)
         return session
-
-    def build_parent_audio_meta(self, daily: DailyContent) -> ParentAudioMeta | None:
-        if daily.condition != "parent":
-            return None
-        if daily.parentAudio is None:
-            return ParentAudioMeta(enabled=True, activeSession=None)
-        active_session_id = self.get_active_session_id_for_date(daily)
-        if active_session_id is not None:
-            session = self.get_session(active_session_id)
-            if session is None or session.get("status") != "recording":
-                self._clear_daily_active_session(daily)
-                self.daily_service._save_daily(date.fromisoformat(daily.date), daily)
-                return daily.parentAudio
-        return daily.parentAudio
-
-    def _set_daily_active_session(self, daily: DailyContent, session: dict) -> None:
-        daily.parentAudio = ParentAudioMeta(
-            enabled=True,
-            activeSession=ParentAudioSession(
-                sessionId=session["sessionId"],
-                status=session["status"],
-                uploadedChunks=session["uploadedChunks"],
-                lastChunkIndex=session["lastChunkIndex"],
-            ),
-        )
-
-    def _clear_daily_active_session(self, daily: DailyContent) -> None:
-        daily.parentAudio = ParentAudioMeta(enabled=True, activeSession=None)
 
     def _normalize_received_chunk_indexes(self, received: object) -> dict[str, bool]:
         if isinstance(received, dict):

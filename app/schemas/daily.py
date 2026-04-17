@@ -7,9 +7,6 @@ from pydantic import BaseModel, ConfigDict, Field
 ConditionType = Literal["robot", "parent"]
 QuestionType = Literal["checkbox", "radio", "textarea"]
 OperatorType = Literal["equals", "includesAny"]
-RecordingStatusType = Literal["recording", "completed", "failed"]
-
-
 class FollowupShowWhen(BaseModel):
     operator: OperatorType
     value: str | list[str]
@@ -26,18 +23,6 @@ class DailyQuestion(BaseModel):
     label: str
     options: list[str] | None = None
     followup: FollowupConfig | None = None
-
-
-class ParentAudioSession(BaseModel):
-    sessionId: str
-    status: RecordingStatusType
-    uploadedChunks: int = 0
-    lastChunkIndex: int = -1
-
-
-class ParentAudioMeta(BaseModel):
-    enabled: bool = False
-    activeSession: ParentAudioSession | None = None
 
 
 class DashboardContent(BaseModel):
@@ -69,7 +54,6 @@ class DailyContent(BaseModel):
     condition: ConditionType = "robot"
     dashboard: DashboardContent | ParentDashboardContent
     diary: DiaryContent
-    parentAudio: ParentAudioMeta | None = None
 
 
 class DailySummary(BaseModel):
@@ -98,7 +82,6 @@ class DailyDetailResponse(BaseModel):
     dashboard: DashboardContent | ParentDashboardContent
     diary: DiaryContent
     meta: DailyMeta
-    parentAudio: ParentAudioMeta | None = None
 
 
 class DailyUpdateRequest(BaseModel):
