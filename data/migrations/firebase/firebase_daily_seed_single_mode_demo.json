@@ -28,7 +28,7 @@
       "updatedAt": "2026-04-14T20:18:00Z",
       "instructions": [
         "Please complete this diary once per day, preferably at the end of the day.",
-        "There are no right or wrong answers — we are interested in your observations.",
+        "There are no right or wrong answers \u2014 we are interested in your observations.",
         "You may write short notes or longer reflections.",
         "If your child does not interact with Ella on a given day, please still complete the entry."
       ],
@@ -118,14 +118,6 @@
         "forest",
         "owl",
         "quiet"
-      ],
-      "highlight": [
-        "The parent-led story time stayed calm and focused.",
-        "The child asked to hear one page again."
-      ],
-      "ask": [
-        "Which part of the story held your child's attention the longest?",
-        "Did your child repeat any words from the story afterward?"
       ]
     },
     "diary": {
@@ -134,7 +126,7 @@
       "updatedAt": "2026-04-15T20:12:00Z",
       "instructions": [
         "Please complete this diary once per day, preferably at the end of the day.",
-        "There are no right or wrong answers — we are interested in your observations.",
+        "There are no right or wrong answers \u2014 we are interested in your observations.",
         "You may write short notes or longer reflections.",
         "If your child does not interact with Ella on a given day, please still complete the entry."
       ],
@@ -235,7 +227,7 @@
       "updatedAt": "2026-04-16T21:02:00Z",
       "instructions": [
         "Please complete this diary once per day, preferably at the end of the day.",
-        "There are no right or wrong answers — we are interested in your observations.",
+        "There are no right or wrong answers \u2014 we are interested in your observations.",
         "You may write short notes or longer reflections.",
         "If your child does not interact with Ella on a given day, please still complete the entry."
       ],
@@ -325,14 +317,6 @@
         "river",
         "soft",
         "boat"
-      ],
-      "highlight": [
-        "Parent-mode session is ready for recording demo.",
-        "The dashboard intentionally omits photos in parent mode."
-      ],
-      "ask": [
-        "What part of the story did your child respond to first?",
-        "Would you describe today's session as calm, active, or mixed?"
       ]
     },
     "diary": {
@@ -341,7 +325,7 @@
       "updatedAt": null,
       "instructions": [
         "Please complete this diary once per day, preferably at the end of the day.",
-        "There are no right or wrong answers — we are interested in your observations.",
+        "There are no right or wrong answers \u2014 we are interested in your observations.",
         "You may write short notes or longer reflections.",
         "If your child does not interact with Ella on a given day, please still complete the entry."
       ],

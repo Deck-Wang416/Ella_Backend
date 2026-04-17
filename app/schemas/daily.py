@@ -51,8 +51,6 @@ class DashboardContent(BaseModel):
 class ParentDashboardContent(BaseModel):
     hasInteraction: bool = False
     words: list[str] = Field(default_factory=list)
-    highlight: list[str] = Field(default_factory=list)
-    ask: list[str] = Field(default_factory=list)
 
 
 class DiaryContent(BaseModel):

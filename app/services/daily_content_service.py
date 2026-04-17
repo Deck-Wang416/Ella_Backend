@@ -44,7 +44,7 @@ class DailyContentService:
     def build_empty_daily(self, target_date: date, condition: ConditionType = "robot") -> DailyContent:
         template = self._load_latest_diary_template()
         dashboard = (
-            ParentDashboardContent(hasInteraction=False, words=[], highlight=[], ask=[])
+            ParentDashboardContent(hasInteraction=False, words=[])
             if condition == "parent"
             else DashboardContent(hasInteraction=False, photos=[], words=[], highlight=[], ask=[])
         )
