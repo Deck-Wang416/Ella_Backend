@@ -215,16 +215,28 @@
     "date": "2026-04-16",
     "condition": "robot",
     "dashboard": {
-      "hasInteraction": false,
-      "photos": [],
-      "words": [],
-      "highlight": [],
-      "ask": []
+      "hasInteraction": true,
+      "photos": [
+        "/assets/sample-photo.svg"
+      ],
+      "words": [
+        "bridge",
+        "river",
+        "count"
+      ],
+      "highlight": [
+        "Ella guided a short robot storytelling session with strong attention.",
+        "The child repeated one target word during the story."
+      ],
+      "ask": [
+        "Which part of the robot story did your child like most?",
+        "Did your child repeat any of the new words after the session?"
+      ]
     },
     "diary": {
       "submitted": true,
-      "submittedAt": "2026-04-16T21:02:00Z",
-      "updatedAt": "2026-04-16T21:02:00Z",
+      "submittedAt": "2026-04-16T20:20:00Z",
+      "updatedAt": "2026-04-16T20:28:00Z",
       "instructions": [
         "Please complete this diary once per day, preferably at the end of the day.",
         "There are no right or wrong answers \u2014 we are interested in your observations.",
@@ -298,13 +310,13 @@
       ],
       "responses": {
         "prompted": [
-          "Unsure"
+          "Scheduled routine"
         ],
         "feelings": [
-          "Neutral"
+          "Excited"
         ],
-        "read_book": "No",
-        "notes": "No robot interaction today, but the diary was still completed."
+        "read_book": "Yes",
+        "notes": "Normal robot session with good participation."
       }
     }
   },
