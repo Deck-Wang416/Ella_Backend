@@ -63,6 +63,18 @@ class DailyContentService:
             parentAudio=ParentAudioMeta(enabled=True, activeSession=None) if condition == "parent" else None,
         )
 
+    def initialize_daily_today(self, target_date: date, timezone_name: str, condition: ConditionType) -> DailyContent:
+        today = self._local_today(timezone_name)
+        if target_date != today:
+            raise PermissionError("Only today's daily content can be initialized")
+        try:
+            self.get_daily(target_date)
+        except FileNotFoundError:
+            daily = self.build_empty_daily(target_date, condition=condition)
+            self._save_daily(target_date, daily)
+            return daily
+        raise FileExistsError(target_date.isoformat())
+
     def upsert_diary_today(
         self,
         target_date: date,
@@ -74,10 +86,7 @@ class DailyContentService:
         if target_date != today:
             raise PermissionError("Only today's daily diary is editable")
 
-        try:
-            daily = self.get_daily(target_date)
-        except FileNotFoundError:
-            daily = self.build_empty_daily(target_date)
+        daily = self.get_daily(target_date)
 
         now = datetime.now(timezone.utc)
         first_submit = daily.diary.submittedAt

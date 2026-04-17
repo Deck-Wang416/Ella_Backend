@@ -106,3 +106,7 @@ class DailyDetailResponse(BaseModel):
 class DailyUpdateRequest(BaseModel):
     responses: dict[str, Any] = Field(default_factory=dict)
     submitted: bool = True
+
+
+class DailyInitializeRequest(BaseModel):
+    condition: ConditionType

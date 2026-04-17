@@ -3,7 +3,7 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from fastapi import APIRouter, HTTPException, Query
 
-from app.schemas.daily import DailyDetailResponse, DailySummary, DailyUpdateRequest
+from app.schemas.daily import DailyDetailResponse, DailyInitializeRequest, DailySummary, DailyUpdateRequest
 from app.services.daily_content_service import DailyContentService
 from app.services.firebase_notification_state_service import FirebaseNotificationStateService
 from app.services.firebase_recording_service import FirebaseRecordingService
@@ -49,10 +49,6 @@ def _to_detail_response(service: DailyContentService, daily, timezone_name: str)
     )
 
 
-def _local_today(timezone_name: str) -> date:
-    return DailyContentService().local_today(timezone_name)
-
-
 @router.get("/summaries", response_model=list[DailySummary])
 def get_daily_summaries(
     caregiver_id: int | None = Query(default=None),
@@ -75,10 +71,29 @@ def get_daily(
         daily = service.get_daily(entry_date)
         return _to_detail_response(service, daily, tz_name)
     except FileNotFoundError:
-        if entry_date == _local_today(tz_name):
-            daily = service.build_empty_daily(entry_date)
-            return _to_detail_response(service, daily, tz_name)
         raise HTTPException(status_code=404, detail="Daily content not found") from None
+
+
+@router.post("/{entry_date}/initialize", response_model=DailyDetailResponse)
+def initialize_daily(
+    entry_date: date,
+    payload: DailyInitializeRequest,
+    caregiver_id: int | None = Query(default=None),
+    timezone: str | None = Query(default=None),
+):
+    tz_name = _resolve_timezone(caregiver_id, timezone)
+    service = DailyContentService()
+    try:
+        daily = service.initialize_daily_today(
+            target_date=entry_date,
+            timezone_name=tz_name,
+            condition=payload.condition,
+        )
+        return _to_detail_response(service, daily, tz_name)
+    except PermissionError:
+        raise HTTPException(status_code=409, detail="Only today's daily content can be initialized") from None
+    except FileExistsError:
+        raise HTTPException(status_code=409, detail="Daily content already exists") from None
 
 
 @router.put("/{entry_date}", response_model=DailyDetailResponse)
@@ -100,3 +115,5 @@ def update_daily(
         return _to_detail_response(service, daily, tz_name)
     except PermissionError:
         raise HTTPException(status_code=409, detail="Edit not allowed for non-today date") from None
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Daily content not found") from None
