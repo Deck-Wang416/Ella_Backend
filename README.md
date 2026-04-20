@@ -75,3 +75,24 @@ cloudflared tunnel --url http://localhost:5173
 ```
 
 Set frontend API base URL to backend tunnel domain: `https://<backend-tunnel>/api`.
+
+## Local Chunk Merge
+
+Google Cloud SDK:
+
+```bash
+brew install --cask google-cloud-sdk
+gcloud auth login
+```
+
+Export chunks:
+
+```bash
+gsutil -o "GSUtil:parallel_process_count=1" cp -r gs://ella-development-464ea.firebasestorage.app/audio/<YYYY-MM-DD>/<session_id>/ /path/to/output/
+```
+
+A script locally assembled chunks:
+
+```bash
+python3 merge_recording_chunks.py /path/to/output/<session_id>/
+```
