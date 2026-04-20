@@ -48,24 +48,24 @@ def _to_detail_response(service: DailyContentService, daily, timezone_name: str)
 
 @router.get("/summaries", response_model=list[DailySummary])
 def get_daily_summaries(
-    caregiver_id: int | None = Query(default=None),
+    caregiver_id: int = Query(..., gt=0),
     timezone: str | None = Query(default=None),
 ):
     tz_name = _resolve_timezone(caregiver_id, timezone)
     service = DailyContentService()
-    return service.list_summaries(timezone_name=tz_name)
+    return service.list_summaries(caregiver_id=caregiver_id, timezone_name=tz_name)
 
 
 @router.get("/{entry_date}", response_model=DailyDetailResponse)
 def get_daily(
     entry_date: date,
-    caregiver_id: int | None = Query(default=None),
+    caregiver_id: int = Query(..., gt=0),
     timezone: str | None = Query(default=None),
 ):
     tz_name = _resolve_timezone(caregiver_id, timezone)
     service = DailyContentService()
     try:
-        daily = service.get_daily(entry_date)
+        daily = service.get_daily(caregiver_id, entry_date)
         return _to_detail_response(service, daily, tz_name)
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Daily content not found") from None
@@ -75,13 +75,14 @@ def get_daily(
 def initialize_daily(
     entry_date: date,
     payload: DailyInitializeRequest,
-    caregiver_id: int | None = Query(default=None),
+    caregiver_id: int = Query(..., gt=0),
     timezone: str | None = Query(default=None),
 ):
     tz_name = _resolve_timezone(caregiver_id, timezone)
     service = DailyContentService()
     try:
         daily = service.initialize_daily_today(
+            caregiver_id=caregiver_id,
             target_date=entry_date,
             timezone_name=tz_name,
             condition=payload.condition,
@@ -97,13 +98,14 @@ def initialize_daily(
 def update_daily(
     entry_date: date,
     payload: DailyUpdateRequest,
-    caregiver_id: int | None = Query(default=None),
+    caregiver_id: int = Query(..., gt=0),
     timezone: str | None = Query(default=None),
 ):
     tz_name = _resolve_timezone(caregiver_id, timezone)
     service = DailyContentService()
     try:
         daily = service.upsert_diary_today(
+            caregiver_id=caregiver_id,
             target_date=entry_date,
             timezone_name=tz_name,
             responses=payload.responses,

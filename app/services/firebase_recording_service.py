@@ -20,14 +20,14 @@ class FirebaseRecordingService:
     def _session_ref(self, session_id: str):
         return get_rtdb_reference(f"{self.sessions_root}/{session_id}")
 
-    def _get_existing_parent_daily(self, entry_date: date) -> DailyContent:
-        daily = self.daily_service.get_daily(entry_date)
+    def _get_existing_parent_daily(self, caregiver_id: int, entry_date: date) -> DailyContent:
+        daily = self.daily_service.get_daily(caregiver_id, entry_date)
         if daily.condition != "parent":
             raise PermissionError("Recording session is only allowed when daily.condition is 'parent'")
         return daily
 
     def create_session(self, entry_date: date, caregiver_id: int, child_id: int) -> dict:
-        self._get_existing_parent_daily(entry_date)
+        self._get_existing_parent_daily(caregiver_id, entry_date)
 
         now = self._now_iso()
         session_id = f"rec_{entry_date.strftime('%Y%m%d')}_{uuid4().hex[:8]}"

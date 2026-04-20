@@ -43,7 +43,7 @@ class ReminderRunner:
             # Child tables are deprecated in single-user mode; keep a stable child_id for dedupe key.
             child_id = 1
             child_name = "Child"
-            if self.daily_service.is_submitted(local_today):
+            if self.daily_service.is_submitted(caregiver_id, local_today):
                 continue
 
             sent = self.notification_service.send_reminder(
