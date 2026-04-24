@@ -11,34 +11,36 @@ from app.schemas.daily import (
     DashboardContent,
     ParentDashboardContent,
 )
+from app.services.user_profile_service import UserProfileService
 
 
 class DailyContentService:
     def __init__(self):
         self.settings = get_settings()
+        self.profile_service = UserProfileService()
         if not self.settings.firebase_database_url or not self.settings.firebase_credentials_path:
             raise RuntimeError("Firebase is required. Set FIREBASE_DATABASE_URL and FIREBASE_CREDENTIALS_PATH.")
 
     def list_summaries(self, caregiver_id: int, timezone_name: str = "UTC") -> list[DailySummary]:
-        today = self._local_today(timezone_name)
         result: list[DailySummary] = []
-        seen_dates: set[date] = set()
-        for daily in self._iter_daily_records(caregiver_id):
-            day = date.fromisoformat(daily.date)
-            seen_dates.add(day)
+        for day in self.profile_service.list_scheduled_dates(caregiver_id):
+            daily = self.get_daily(caregiver_id, day)
             result.append(self.build_summary(daily, timezone_name))
-        if today not in seen_dates:
-            empty_daily = self.build_empty_daily(caregiver_id, today)
-            result.append(self.build_summary(empty_daily, timezone_name))
         result.sort(key=lambda item: item.date)
         return result
 
     def get_daily(self, caregiver_id: int, target_date: date) -> DailyContent:
+        expected_condition = self.resolve_condition_for_date(caregiver_id, target_date)
+        if expected_condition is None:
+            raise FileNotFoundError(target_date.isoformat())
+
         ref = get_rtdb_reference(f"{self._daily_root(caregiver_id)}/{target_date.isoformat()}")
         payload = ref.get()
         if payload:
             return self.normalize_daily_payload(payload, target_date)
-        raise FileNotFoundError(target_date.isoformat())
+        daily = self.build_empty_daily(caregiver_id, target_date, condition=expected_condition)
+        self._save_daily(caregiver_id, target_date, daily)
+        return daily
 
     def build_empty_daily(self, caregiver_id: int, target_date: date, condition: ConditionType = "robot") -> DailyContent:
         template = self._load_latest_diary_template(caregiver_id)
@@ -66,18 +68,15 @@ class DailyContentService:
         caregiver_id: int,
         target_date: date,
         timezone_name: str,
-        condition: ConditionType,
     ) -> DailyContent:
         today = self._local_today(timezone_name)
         if target_date != today:
             raise PermissionError("Only today's daily content can be initialized")
-        try:
-            self.get_daily(caregiver_id, target_date)
-        except FileNotFoundError:
-            daily = self.build_empty_daily(caregiver_id, target_date, condition=condition)
-            self._save_daily(caregiver_id, target_date, daily)
-            return daily
-        raise FileExistsError(target_date.isoformat())
+        expected_condition = self.resolve_condition_for_date(caregiver_id, target_date)
+        if expected_condition is None:
+            raise PermissionError("Today's date is outside configured condition ranges")
+        daily = self.get_daily(caregiver_id, target_date)
+        return daily
 
     def upsert_diary_today(
         self,
@@ -112,6 +111,9 @@ class DailyContentService:
             return bool(daily.diary.submitted)
         except FileNotFoundError:
             return False
+
+    def resolve_condition_for_date(self, caregiver_id: int, target_date: date) -> ConditionType | None:
+        return self.profile_service.resolve_condition_for_date(caregiver_id, target_date)
 
     def build_summary(self, daily: DailyContent, timezone_name: str = "UTC") -> DailySummary:
         day = date.fromisoformat(daily.date)
@@ -158,6 +160,33 @@ class DailyContentService:
 
     def _load_latest_diary_template(self, caregiver_id: int) -> dict:
         records = list(self._iter_daily_records(caregiver_id))
+        if not records:
+            return self._load_latest_global_diary_template()
+        records.sort(key=lambda item: item.date)
+        for item in reversed(records):
+            try:
+                return {
+                    "instructions": item.diary.instructions or [],
+                    "questions": item.diary.questions or [],
+                }
+            except Exception:
+                continue
+        return self._load_latest_global_diary_template()
+
+    def _load_latest_global_diary_template(self) -> dict:
+        ref = get_rtdb_reference(self.settings.firebase_daily_root)
+        payload = ref.get() or {}
+        records: list[DailyContent] = []
+        if isinstance(payload, dict):
+            for caregiver_payload in payload.values():
+                if not isinstance(caregiver_payload, dict):
+                    continue
+                for key, value in caregiver_payload.items():
+                    try:
+                        fallback_date = date.fromisoformat(str(key))
+                        records.append(self.normalize_daily_payload(value, fallback_date))
+                    except Exception:
+                        continue
         if not records:
             return {"instructions": [], "questions": []}
         records.sort(key=lambda item: item.date)

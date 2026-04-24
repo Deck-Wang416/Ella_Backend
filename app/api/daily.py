@@ -85,13 +85,13 @@ def initialize_daily(
             caregiver_id=caregiver_id,
             target_date=entry_date,
             timezone_name=tz_name,
-            condition=payload.condition,
         )
         return _to_detail_response(service, daily, tz_name)
     except PermissionError:
-        raise HTTPException(status_code=409, detail="Only today's daily content can be initialized") from None
-    except FileExistsError:
-        raise HTTPException(status_code=409, detail="Daily content already exists") from None
+        raise HTTPException(
+            status_code=409,
+            detail="Manual daily initialization is disabled; daily content is driven by user profile condition ranges",
+        ) from None
 
 
 @router.put("/{entry_date}", response_model=DailyDetailResponse)
@@ -115,4 +115,4 @@ def update_daily(
     except PermissionError:
         raise HTTPException(status_code=409, detail="Edit not allowed for non-today date") from None
     except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="Daily content not found") from None
+        raise HTTPException(status_code=404, detail="Daily content not found for this caregiver/date") from None

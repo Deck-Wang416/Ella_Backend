@@ -40,6 +40,9 @@ class ReminderRunner:
             if current_hhmm not in reminder_times:
                 continue
 
+            if self.daily_service.resolve_condition_for_date(caregiver_id, local_today) is None:
+                continue
+
             # Child tables are deprecated in single-user mode; keep a stable child_id for dedupe key.
             child_id = 1
             child_name = "Child"
