@@ -29,7 +29,7 @@
         "updatedAt": "2026-04-14T20:18:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
+          "There are no right or wrong answers — we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -112,104 +112,6 @@
     },
     "2026-04-15": {
       "date": "2026-04-15",
-      "condition": "parent",
-      "dashboard": {
-        "hasInteraction": true,
-        "words": [
-          "forest",
-          "owl",
-          "quiet"
-        ]
-      },
-      "diary": {
-        "submitted": true,
-        "submittedAt": "2026-04-15T20:05:00Z",
-        "updatedAt": "2026-04-15T20:12:00Z",
-        "instructions": [
-          "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
-          "You may write short notes or longer reflections.",
-          "If your child does not interact with Ella on a given day, please still complete the entry."
-        ],
-        "questions": [
-          {
-            "id": "prompted",
-            "type": "checkbox",
-            "label": "What prompted the storytelling session?",
-            "options": [
-              "Child initiated",
-              "Parent prompted",
-              "Scheduled routine",
-              "Unsure",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "feelings",
-            "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
-            "options": [
-              "Excited",
-              "Neutral",
-              "Frustrated",
-              "Hesitant",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "read_book",
-            "type": "radio",
-            "label": "Did you read a book or tell your child a story today?",
-            "options": [
-              "Yes",
-              "No"
-            ],
-            "followup": {
-              "label": "If not, please share if there was a particular reason:",
-              "showWhen": {
-                "operator": "equals",
-                "value": "No"
-              }
-            }
-          },
-          {
-            "id": "notes",
-            "type": "textarea",
-            "label": "Anything else you would like to share about today?"
-          }
-        ],
-        "responses": {
-          "prompted": [
-            "Parent prompted"
-          ],
-          "feelings": [
-            "Neutral"
-          ],
-          "read_book": "Yes",
-          "notes": "Parent storytelling went smoothly and the child stayed seated for most of it."
-        }
-      }
-    },
-    "2026-04-16": {
-      "date": "2026-04-16",
       "condition": "robot",
       "dashboard": {
         "hasInteraction": true,
@@ -232,11 +134,11 @@
       },
       "diary": {
         "submitted": true,
-        "submittedAt": "2026-04-16T20:20:00Z",
-        "updatedAt": "2026-04-16T20:28:00Z",
+        "submittedAt": "2026-04-15T20:20:00Z",
+        "updatedAt": "2026-04-15T20:28:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
+          "There are no right or wrong answers — we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -317,97 +219,8 @@
         }
       }
     },
-    "2026-04-17": {
-      "date": "2026-04-17",
-      "condition": "parent",
-      "dashboard": {
-        "hasInteraction": true,
-        "words": [
-          "river",
-          "soft",
-          "boat"
-        ]
-      },
-      "diary": {
-        "submitted": false,
-        "submittedAt": null,
-        "updatedAt": null,
-        "instructions": [
-          "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
-          "You may write short notes or longer reflections.",
-          "If your child does not interact with Ella on a given day, please still complete the entry."
-        ],
-        "questions": [
-          {
-            "id": "prompted",
-            "type": "checkbox",
-            "label": "What prompted the storytelling session?",
-            "options": [
-              "Child initiated",
-              "Parent prompted",
-              "Scheduled routine",
-              "Unsure",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "feelings",
-            "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
-            "options": [
-              "Excited",
-              "Neutral",
-              "Frustrated",
-              "Hesitant",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "read_book",
-            "type": "radio",
-            "label": "Did you read a book or tell your child a story today?",
-            "options": [
-              "Yes",
-              "No"
-            ],
-            "followup": {
-              "label": "If not, please share if there was a particular reason:",
-              "showWhen": {
-                "operator": "equals",
-                "value": "No"
-              }
-            }
-          },
-          {
-            "id": "notes",
-            "type": "textarea",
-            "label": "Anything else you would like to share about today?"
-          }
-        ],
-        "responses": {}
-      }
-    },
-    "2026-04-18": {
-      "date": "2026-04-18",
+    "2026-04-16": {
+      "date": "2026-04-16",
       "condition": "robot",
       "dashboard": {
         "hasInteraction": true,
@@ -430,11 +243,11 @@
       },
       "diary": {
         "submitted": true,
-        "submittedAt": "2026-04-18T20:09:00Z",
-        "updatedAt": "2026-04-18T20:16:00Z",
+        "submittedAt": "2026-04-16T20:09:00Z",
+        "updatedAt": "2026-04-16T20:16:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
+          "There are no right or wrong answers — we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -515,6 +328,193 @@
         }
       }
     },
+    "2026-04-17": {
+      "date": "2026-04-17",
+      "condition": "parent",
+      "dashboard": {
+        "hasInteraction": true,
+        "words": [
+          "forest",
+          "owl",
+          "quiet"
+        ]
+      },
+      "diary": {
+        "submitted": true,
+        "submittedAt": "2026-04-17T20:05:00Z",
+        "updatedAt": "2026-04-17T20:12:00Z",
+        "instructions": [
+          "Please complete this diary once per day, preferably at the end of the day.",
+          "There are no right or wrong answers — we are interested in your observations.",
+          "You may write short notes or longer reflections.",
+          "If your child does not interact with Ella on a given day, please still complete the entry."
+        ],
+        "questions": [
+          {
+            "id": "prompted",
+            "type": "checkbox",
+            "label": "What prompted the storytelling session?",
+            "options": [
+              "Child initiated",
+              "Parent prompted",
+              "Scheduled routine",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "feelings",
+            "type": "checkbox",
+            "label": "How did your child feel about Ella today?",
+            "options": [
+              "Excited",
+              "Neutral",
+              "Frustrated",
+              "Hesitant",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "read_book",
+            "type": "radio",
+            "label": "Did you read a book or tell your child a story today?",
+            "options": [
+              "Yes",
+              "No"
+            ],
+            "followup": {
+              "label": "If not, please share if there was a particular reason:",
+              "showWhen": {
+                "operator": "equals",
+                "value": "No"
+              }
+            }
+          },
+          {
+            "id": "notes",
+            "type": "textarea",
+            "label": "Anything else you would like to share about today?"
+          }
+        ],
+        "responses": {
+          "prompted": [
+            "Parent prompted"
+          ],
+          "feelings": [
+            "Neutral"
+          ],
+          "read_book": "Yes",
+          "notes": "Parent storytelling went smoothly and the child stayed seated for most of it."
+        }
+      }
+    },
+    "2026-04-18": {
+      "date": "2026-04-18",
+      "condition": "parent",
+      "dashboard": {
+        "hasInteraction": true,
+        "words": [
+          "river",
+          "soft",
+          "boat"
+        ]
+      },
+      "diary": {
+        "submitted": false,
+        "submittedAt": null,
+        "updatedAt": null,
+        "instructions": [
+          "Please complete this diary once per day, preferably at the end of the day.",
+          "There are no right or wrong answers — we are interested in your observations.",
+          "You may write short notes or longer reflections.",
+          "If your child does not interact with Ella on a given day, please still complete the entry."
+        ],
+        "questions": [
+          {
+            "id": "prompted",
+            "type": "checkbox",
+            "label": "What prompted the storytelling session?",
+            "options": [
+              "Child initiated",
+              "Parent prompted",
+              "Scheduled routine",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "feelings",
+            "type": "checkbox",
+            "label": "How did your child feel about Ella today?",
+            "options": [
+              "Excited",
+              "Neutral",
+              "Frustrated",
+              "Hesitant",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "read_book",
+            "type": "radio",
+            "label": "Did you read a book or tell your child a story today?",
+            "options": [
+              "Yes",
+              "No"
+            ],
+            "followup": {
+              "label": "If not, please share if there was a particular reason:",
+              "showWhen": {
+                "operator": "equals",
+                "value": "No"
+              }
+            }
+          },
+          {
+            "id": "notes",
+            "type": "textarea",
+            "label": "Anything else you would like to share about today?"
+          }
+        ],
+        "responses": {}
+      }
+    },
     "2026-04-19": {
       "date": "2026-04-19",
       "condition": "parent",
@@ -532,7 +532,7 @@
         "updatedAt": "2026-04-19T20:18:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
+          "There are no right or wrong answers — we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -644,7 +644,7 @@
         "updatedAt": "2026-04-14T20:18:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
+          "There are no right or wrong answers — we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -727,104 +727,6 @@
     },
     "2026-04-15": {
       "date": "2026-04-15",
-      "condition": "parent",
-      "dashboard": {
-        "hasInteraction": true,
-        "words": [
-          "kitchen",
-          "mix",
-          "spoon"
-        ]
-      },
-      "diary": {
-        "submitted": true,
-        "submittedAt": "2026-04-15T20:05:00Z",
-        "updatedAt": "2026-04-15T20:12:00Z",
-        "instructions": [
-          "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
-          "You may write short notes or longer reflections.",
-          "If your child does not interact with Ella on a given day, please still complete the entry."
-        ],
-        "questions": [
-          {
-            "id": "prompted",
-            "type": "checkbox",
-            "label": "What prompted the storytelling session?",
-            "options": [
-              "Child initiated",
-              "Parent prompted",
-              "Scheduled routine",
-              "Unsure",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "feelings",
-            "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
-            "options": [
-              "Excited",
-              "Neutral",
-              "Frustrated",
-              "Hesitant",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "read_book",
-            "type": "radio",
-            "label": "Did you read a book or tell your child a story today?",
-            "options": [
-              "Yes",
-              "No"
-            ],
-            "followup": {
-              "label": "If not, please share if there was a particular reason:",
-              "showWhen": {
-                "operator": "equals",
-                "value": "No"
-              }
-            }
-          },
-          {
-            "id": "notes",
-            "type": "textarea",
-            "label": "Anything else you would like to share about today?"
-          }
-        ],
-        "responses": {
-          "prompted": [
-            "Scheduled routine"
-          ],
-          "feelings": [
-            "Excited"
-          ],
-          "read_book": "Yes",
-          "notes": "Parent storytelling felt playful and connected to dinner prep."
-        }
-      }
-    },
-    "2026-04-16": {
-      "date": "2026-04-16",
       "condition": "robot",
       "dashboard": {
         "hasInteraction": true,
@@ -847,11 +749,11 @@
       },
       "diary": {
         "submitted": true,
-        "submittedAt": "2026-04-16T20:20:00Z",
-        "updatedAt": "2026-04-16T20:28:00Z",
+        "submittedAt": "2026-04-15T20:20:00Z",
+        "updatedAt": "2026-04-15T20:28:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
+          "There are no right or wrong answers — we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -932,106 +834,8 @@
         }
       }
     },
-    "2026-04-17": {
-      "date": "2026-04-17",
-      "condition": "parent",
-      "dashboard": {
-        "hasInteraction": true,
-        "words": [
-          "blanket",
-          "lamp",
-          "sleep"
-        ]
-      },
-      "diary": {
-        "submitted": true,
-        "submittedAt": "2026-04-17T20:08:00Z",
-        "updatedAt": "2026-04-17T20:15:00Z",
-        "instructions": [
-          "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
-          "You may write short notes or longer reflections.",
-          "If your child does not interact with Ella on a given day, please still complete the entry."
-        ],
-        "questions": [
-          {
-            "id": "prompted",
-            "type": "checkbox",
-            "label": "What prompted the storytelling session?",
-            "options": [
-              "Child initiated",
-              "Parent prompted",
-              "Scheduled routine",
-              "Unsure",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "feelings",
-            "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
-            "options": [
-              "Excited",
-              "Neutral",
-              "Frustrated",
-              "Hesitant",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "read_book",
-            "type": "radio",
-            "label": "Did you read a book or tell your child a story today?",
-            "options": [
-              "Yes",
-              "No"
-            ],
-            "followup": {
-              "label": "If not, please share if there was a particular reason:",
-              "showWhen": {
-                "operator": "equals",
-                "value": "No"
-              }
-            }
-          },
-          {
-            "id": "notes",
-            "type": "textarea",
-            "label": "Anything else you would like to share about today?"
-          }
-        ],
-        "responses": {
-          "prompted": [
-            "Parent prompted"
-          ],
-          "feelings": [
-            "Neutral"
-          ],
-          "read_book": "Yes",
-          "notes": "Parent session was calm but shorter than usual."
-        }
-      }
-    },
-    "2026-04-18": {
-      "date": "2026-04-18",
+    "2026-04-16": {
+      "date": "2026-04-16",
       "condition": "robot",
       "dashboard": {
         "hasInteraction": true,
@@ -1054,11 +858,11 @@
       },
       "diary": {
         "submitted": true,
-        "submittedAt": "2026-04-18T20:13:00Z",
-        "updatedAt": "2026-04-18T20:20:00Z",
+        "submittedAt": "2026-04-16T20:13:00Z",
+        "updatedAt": "2026-04-16T20:20:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
+          "There are no right or wrong answers — we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -1139,6 +943,202 @@
         }
       }
     },
+    "2026-04-17": {
+      "date": "2026-04-17",
+      "condition": "parent",
+      "dashboard": {
+        "hasInteraction": true,
+        "words": [
+          "kitchen",
+          "mix",
+          "spoon"
+        ]
+      },
+      "diary": {
+        "submitted": true,
+        "submittedAt": "2026-04-17T20:05:00Z",
+        "updatedAt": "2026-04-17T20:12:00Z",
+        "instructions": [
+          "Please complete this diary once per day, preferably at the end of the day.",
+          "There are no right or wrong answers — we are interested in your observations.",
+          "You may write short notes or longer reflections.",
+          "If your child does not interact with Ella on a given day, please still complete the entry."
+        ],
+        "questions": [
+          {
+            "id": "prompted",
+            "type": "checkbox",
+            "label": "What prompted the storytelling session?",
+            "options": [
+              "Child initiated",
+              "Parent prompted",
+              "Scheduled routine",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "feelings",
+            "type": "checkbox",
+            "label": "How did your child feel about Ella today?",
+            "options": [
+              "Excited",
+              "Neutral",
+              "Frustrated",
+              "Hesitant",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "read_book",
+            "type": "radio",
+            "label": "Did you read a book or tell your child a story today?",
+            "options": [
+              "Yes",
+              "No"
+            ],
+            "followup": {
+              "label": "If not, please share if there was a particular reason:",
+              "showWhen": {
+                "operator": "equals",
+                "value": "No"
+              }
+            }
+          },
+          {
+            "id": "notes",
+            "type": "textarea",
+            "label": "Anything else you would like to share about today?"
+          }
+        ],
+        "responses": {
+          "prompted": [
+            "Scheduled routine"
+          ],
+          "feelings": [
+            "Excited"
+          ],
+          "read_book": "Yes",
+          "notes": "Parent storytelling felt playful and connected to dinner prep."
+        }
+      }
+    },
+    "2026-04-18": {
+      "date": "2026-04-18",
+      "condition": "parent",
+      "dashboard": {
+        "hasInteraction": true,
+        "words": [
+          "blanket",
+          "lamp",
+          "sleep"
+        ]
+      },
+      "diary": {
+        "submitted": true,
+        "submittedAt": "2026-04-18T20:08:00Z",
+        "updatedAt": "2026-04-18T20:15:00Z",
+        "instructions": [
+          "Please complete this diary once per day, preferably at the end of the day.",
+          "There are no right or wrong answers — we are interested in your observations.",
+          "You may write short notes or longer reflections.",
+          "If your child does not interact with Ella on a given day, please still complete the entry."
+        ],
+        "questions": [
+          {
+            "id": "prompted",
+            "type": "checkbox",
+            "label": "What prompted the storytelling session?",
+            "options": [
+              "Child initiated",
+              "Parent prompted",
+              "Scheduled routine",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "feelings",
+            "type": "checkbox",
+            "label": "How did your child feel about Ella today?",
+            "options": [
+              "Excited",
+              "Neutral",
+              "Frustrated",
+              "Hesitant",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "read_book",
+            "type": "radio",
+            "label": "Did you read a book or tell your child a story today?",
+            "options": [
+              "Yes",
+              "No"
+            ],
+            "followup": {
+              "label": "If not, please share if there was a particular reason:",
+              "showWhen": {
+                "operator": "equals",
+                "value": "No"
+              }
+            }
+          },
+          {
+            "id": "notes",
+            "type": "textarea",
+            "label": "Anything else you would like to share about today?"
+          }
+        ],
+        "responses": {
+          "prompted": [
+            "Parent prompted"
+          ],
+          "feelings": [
+            "Neutral"
+          ],
+          "read_book": "Yes",
+          "notes": "Parent session was calm but shorter than usual."
+        }
+      }
+    },
     "2026-04-19": {
       "date": "2026-04-19",
       "condition": "parent",
@@ -1156,7 +1156,7 @@
         "updatedAt": null,
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
+          "There are no right or wrong answers — we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -1259,7 +1259,7 @@
         "updatedAt": "2026-04-14T20:18:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
+          "There are no right or wrong answers — we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -1342,95 +1342,6 @@
     },
     "2026-04-15": {
       "date": "2026-04-15",
-      "condition": "parent",
-      "dashboard": {
-        "hasInteraction": true,
-        "words": [
-          "window",
-          "rain",
-          "tap"
-        ]
-      },
-      "diary": {
-        "submitted": false,
-        "submittedAt": null,
-        "updatedAt": null,
-        "instructions": [
-          "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
-          "You may write short notes or longer reflections.",
-          "If your child does not interact with Ella on a given day, please still complete the entry."
-        ],
-        "questions": [
-          {
-            "id": "prompted",
-            "type": "checkbox",
-            "label": "What prompted the storytelling session?",
-            "options": [
-              "Child initiated",
-              "Parent prompted",
-              "Scheduled routine",
-              "Unsure",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "feelings",
-            "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
-            "options": [
-              "Excited",
-              "Neutral",
-              "Frustrated",
-              "Hesitant",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "read_book",
-            "type": "radio",
-            "label": "Did you read a book or tell your child a story today?",
-            "options": [
-              "Yes",
-              "No"
-            ],
-            "followup": {
-              "label": "If not, please share if there was a particular reason:",
-              "showWhen": {
-                "operator": "equals",
-                "value": "No"
-              }
-            }
-          },
-          {
-            "id": "notes",
-            "type": "textarea",
-            "label": "Anything else you would like to share about today?"
-          }
-        ],
-        "responses": {}
-      }
-    },
-    "2026-04-16": {
-      "date": "2026-04-16",
       "condition": "robot",
       "dashboard": {
         "hasInteraction": true,
@@ -1453,11 +1364,11 @@
       },
       "diary": {
         "submitted": true,
-        "submittedAt": "2026-04-16T20:20:00Z",
-        "updatedAt": "2026-04-16T20:28:00Z",
+        "submittedAt": "2026-04-15T20:20:00Z",
+        "updatedAt": "2026-04-15T20:28:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
+          "There are no right or wrong answers — we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -1538,97 +1449,8 @@
         }
       }
     },
-    "2026-04-17": {
-      "date": "2026-04-17",
-      "condition": "parent",
-      "dashboard": {
-        "hasInteraction": true,
-        "words": [
-          "river",
-          "soft",
-          "boat"
-        ]
-      },
-      "diary": {
-        "submitted": false,
-        "submittedAt": null,
-        "updatedAt": null,
-        "instructions": [
-          "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
-          "You may write short notes or longer reflections.",
-          "If your child does not interact with Ella on a given day, please still complete the entry."
-        ],
-        "questions": [
-          {
-            "id": "prompted",
-            "type": "checkbox",
-            "label": "What prompted the storytelling session?",
-            "options": [
-              "Child initiated",
-              "Parent prompted",
-              "Scheduled routine",
-              "Unsure",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "feelings",
-            "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
-            "options": [
-              "Excited",
-              "Neutral",
-              "Frustrated",
-              "Hesitant",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "read_book",
-            "type": "radio",
-            "label": "Did you read a book or tell your child a story today?",
-            "options": [
-              "Yes",
-              "No"
-            ],
-            "followup": {
-              "label": "If not, please share if there was a particular reason:",
-              "showWhen": {
-                "operator": "equals",
-                "value": "No"
-              }
-            }
-          },
-          {
-            "id": "notes",
-            "type": "textarea",
-            "label": "Anything else you would like to share about today?"
-          }
-        ],
-        "responses": {}
-      }
-    },
-    "2026-04-18": {
-      "date": "2026-04-18",
+    "2026-04-16": {
+      "date": "2026-04-16",
       "condition": "robot",
       "dashboard": {
         "hasInteraction": true,
@@ -1651,11 +1473,11 @@
       },
       "diary": {
         "submitted": true,
-        "submittedAt": "2026-04-18T20:25:00Z",
-        "updatedAt": "2026-04-18T20:31:00Z",
+        "submittedAt": "2026-04-16T20:25:00Z",
+        "updatedAt": "2026-04-16T20:31:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
+          "There are no right or wrong answers — we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -1736,6 +1558,184 @@
         }
       }
     },
+    "2026-04-17": {
+      "date": "2026-04-17",
+      "condition": "parent",
+      "dashboard": {
+        "hasInteraction": true,
+        "words": [
+          "window",
+          "rain",
+          "tap"
+        ]
+      },
+      "diary": {
+        "submitted": false,
+        "submittedAt": null,
+        "updatedAt": null,
+        "instructions": [
+          "Please complete this diary once per day, preferably at the end of the day.",
+          "There are no right or wrong answers — we are interested in your observations.",
+          "You may write short notes or longer reflections.",
+          "If your child does not interact with Ella on a given day, please still complete the entry."
+        ],
+        "questions": [
+          {
+            "id": "prompted",
+            "type": "checkbox",
+            "label": "What prompted the storytelling session?",
+            "options": [
+              "Child initiated",
+              "Parent prompted",
+              "Scheduled routine",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "feelings",
+            "type": "checkbox",
+            "label": "How did your child feel about Ella today?",
+            "options": [
+              "Excited",
+              "Neutral",
+              "Frustrated",
+              "Hesitant",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "read_book",
+            "type": "radio",
+            "label": "Did you read a book or tell your child a story today?",
+            "options": [
+              "Yes",
+              "No"
+            ],
+            "followup": {
+              "label": "If not, please share if there was a particular reason:",
+              "showWhen": {
+                "operator": "equals",
+                "value": "No"
+              }
+            }
+          },
+          {
+            "id": "notes",
+            "type": "textarea",
+            "label": "Anything else you would like to share about today?"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "2026-04-18": {
+      "date": "2026-04-18",
+      "condition": "parent",
+      "dashboard": {
+        "hasInteraction": true,
+        "words": [
+          "river",
+          "soft",
+          "boat"
+        ]
+      },
+      "diary": {
+        "submitted": false,
+        "submittedAt": null,
+        "updatedAt": null,
+        "instructions": [
+          "Please complete this diary once per day, preferably at the end of the day.",
+          "There are no right or wrong answers — we are interested in your observations.",
+          "You may write short notes or longer reflections.",
+          "If your child does not interact with Ella on a given day, please still complete the entry."
+        ],
+        "questions": [
+          {
+            "id": "prompted",
+            "type": "checkbox",
+            "label": "What prompted the storytelling session?",
+            "options": [
+              "Child initiated",
+              "Parent prompted",
+              "Scheduled routine",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "feelings",
+            "type": "checkbox",
+            "label": "How did your child feel about Ella today?",
+            "options": [
+              "Excited",
+              "Neutral",
+              "Frustrated",
+              "Hesitant",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "read_book",
+            "type": "radio",
+            "label": "Did you read a book or tell your child a story today?",
+            "options": [
+              "Yes",
+              "No"
+            ],
+            "followup": {
+              "label": "If not, please share if there was a particular reason:",
+              "showWhen": {
+                "operator": "equals",
+                "value": "No"
+              }
+            }
+          },
+          {
+            "id": "notes",
+            "type": "textarea",
+            "label": "Anything else you would like to share about today?"
+          }
+        ],
+        "responses": {}
+      }
+    },
     "2026-04-19": {
       "date": "2026-04-19",
       "condition": "parent",
@@ -1753,7 +1753,7 @@
         "updatedAt": "2026-04-19T20:13:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
+          "There are no right or wrong answers — we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -1865,7 +1865,7 @@
         "updatedAt": "2026-04-14T20:18:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
+          "There are no right or wrong answers — we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -1948,104 +1948,6 @@
     },
     "2026-04-15": {
       "date": "2026-04-15",
-      "condition": "parent",
-      "dashboard": {
-        "hasInteraction": true,
-        "words": [
-          "garden",
-          "seed",
-          "water"
-        ]
-      },
-      "diary": {
-        "submitted": true,
-        "submittedAt": "2026-04-15T20:05:00Z",
-        "updatedAt": "2026-04-15T20:12:00Z",
-        "instructions": [
-          "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
-          "You may write short notes or longer reflections.",
-          "If your child does not interact with Ella on a given day, please still complete the entry."
-        ],
-        "questions": [
-          {
-            "id": "prompted",
-            "type": "checkbox",
-            "label": "What prompted the storytelling session?",
-            "options": [
-              "Child initiated",
-              "Parent prompted",
-              "Scheduled routine",
-              "Unsure",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "feelings",
-            "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
-            "options": [
-              "Excited",
-              "Neutral",
-              "Frustrated",
-              "Hesitant",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "read_book",
-            "type": "radio",
-            "label": "Did you read a book or tell your child a story today?",
-            "options": [
-              "Yes",
-              "No"
-            ],
-            "followup": {
-              "label": "If not, please share if there was a particular reason:",
-              "showWhen": {
-                "operator": "equals",
-                "value": "No"
-              }
-            }
-          },
-          {
-            "id": "notes",
-            "type": "textarea",
-            "label": "Anything else you would like to share about today?"
-          }
-        ],
-        "responses": {
-          "prompted": [
-            "Child initiated"
-          ],
-          "feelings": [
-            "Excited"
-          ],
-          "read_book": "Yes",
-          "notes": "Parent session went well because the child picked the topic."
-        }
-      }
-    },
-    "2026-04-16": {
-      "date": "2026-04-16",
       "condition": "robot",
       "dashboard": {
         "hasInteraction": true,
@@ -2068,11 +1970,11 @@
       },
       "diary": {
         "submitted": true,
-        "submittedAt": "2026-04-16T20:20:00Z",
-        "updatedAt": "2026-04-16T20:28:00Z",
+        "submittedAt": "2026-04-15T20:20:00Z",
+        "updatedAt": "2026-04-15T20:28:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
+          "There are no right or wrong answers — we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -2153,106 +2055,8 @@
         }
       }
     },
-    "2026-04-17": {
-      "date": "2026-04-17",
-      "condition": "parent",
-      "dashboard": {
-        "hasInteraction": true,
-        "words": [
-          "pillow",
-          "quiet",
-          "hug"
-        ]
-      },
-      "diary": {
-        "submitted": true,
-        "submittedAt": "2026-04-17T20:21:00Z",
-        "updatedAt": "2026-04-17T20:27:00Z",
-        "instructions": [
-          "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
-          "You may write short notes or longer reflections.",
-          "If your child does not interact with Ella on a given day, please still complete the entry."
-        ],
-        "questions": [
-          {
-            "id": "prompted",
-            "type": "checkbox",
-            "label": "What prompted the storytelling session?",
-            "options": [
-              "Child initiated",
-              "Parent prompted",
-              "Scheduled routine",
-              "Unsure",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "feelings",
-            "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
-            "options": [
-              "Excited",
-              "Neutral",
-              "Frustrated",
-              "Hesitant",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "read_book",
-            "type": "radio",
-            "label": "Did you read a book or tell your child a story today?",
-            "options": [
-              "Yes",
-              "No"
-            ],
-            "followup": {
-              "label": "If not, please share if there was a particular reason:",
-              "showWhen": {
-                "operator": "equals",
-                "value": "No"
-              }
-            }
-          },
-          {
-            "id": "notes",
-            "type": "textarea",
-            "label": "Anything else you would like to share about today?"
-          }
-        ],
-        "responses": {
-          "prompted": [
-            "Scheduled routine"
-          ],
-          "feelings": [
-            "Excited"
-          ],
-          "read_book": "Yes",
-          "notes": "Parent storytelling before bed felt especially smooth tonight."
-        }
-      }
-    },
-    "2026-04-18": {
-      "date": "2026-04-18",
+    "2026-04-16": {
+      "date": "2026-04-16",
       "condition": "robot",
       "dashboard": {
         "hasInteraction": true,
@@ -2275,11 +2079,11 @@
       },
       "diary": {
         "submitted": true,
-        "submittedAt": "2026-04-18T20:05:00Z",
-        "updatedAt": "2026-04-18T20:12:00Z",
+        "submittedAt": "2026-04-16T20:05:00Z",
+        "updatedAt": "2026-04-16T20:12:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
+          "There are no right or wrong answers — we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -2360,6 +2164,202 @@
         }
       }
     },
+    "2026-04-17": {
+      "date": "2026-04-17",
+      "condition": "parent",
+      "dashboard": {
+        "hasInteraction": true,
+        "words": [
+          "garden",
+          "seed",
+          "water"
+        ]
+      },
+      "diary": {
+        "submitted": true,
+        "submittedAt": "2026-04-17T20:05:00Z",
+        "updatedAt": "2026-04-17T20:12:00Z",
+        "instructions": [
+          "Please complete this diary once per day, preferably at the end of the day.",
+          "There are no right or wrong answers — we are interested in your observations.",
+          "You may write short notes or longer reflections.",
+          "If your child does not interact with Ella on a given day, please still complete the entry."
+        ],
+        "questions": [
+          {
+            "id": "prompted",
+            "type": "checkbox",
+            "label": "What prompted the storytelling session?",
+            "options": [
+              "Child initiated",
+              "Parent prompted",
+              "Scheduled routine",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "feelings",
+            "type": "checkbox",
+            "label": "How did your child feel about Ella today?",
+            "options": [
+              "Excited",
+              "Neutral",
+              "Frustrated",
+              "Hesitant",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "read_book",
+            "type": "radio",
+            "label": "Did you read a book or tell your child a story today?",
+            "options": [
+              "Yes",
+              "No"
+            ],
+            "followup": {
+              "label": "If not, please share if there was a particular reason:",
+              "showWhen": {
+                "operator": "equals",
+                "value": "No"
+              }
+            }
+          },
+          {
+            "id": "notes",
+            "type": "textarea",
+            "label": "Anything else you would like to share about today?"
+          }
+        ],
+        "responses": {
+          "prompted": [
+            "Child initiated"
+          ],
+          "feelings": [
+            "Excited"
+          ],
+          "read_book": "Yes",
+          "notes": "Parent session went well because the child picked the topic."
+        }
+      }
+    },
+    "2026-04-18": {
+      "date": "2026-04-18",
+      "condition": "parent",
+      "dashboard": {
+        "hasInteraction": true,
+        "words": [
+          "pillow",
+          "quiet",
+          "hug"
+        ]
+      },
+      "diary": {
+        "submitted": true,
+        "submittedAt": "2026-04-18T20:21:00Z",
+        "updatedAt": "2026-04-18T20:27:00Z",
+        "instructions": [
+          "Please complete this diary once per day, preferably at the end of the day.",
+          "There are no right or wrong answers — we are interested in your observations.",
+          "You may write short notes or longer reflections.",
+          "If your child does not interact with Ella on a given day, please still complete the entry."
+        ],
+        "questions": [
+          {
+            "id": "prompted",
+            "type": "checkbox",
+            "label": "What prompted the storytelling session?",
+            "options": [
+              "Child initiated",
+              "Parent prompted",
+              "Scheduled routine",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "feelings",
+            "type": "checkbox",
+            "label": "How did your child feel about Ella today?",
+            "options": [
+              "Excited",
+              "Neutral",
+              "Frustrated",
+              "Hesitant",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "read_book",
+            "type": "radio",
+            "label": "Did you read a book or tell your child a story today?",
+            "options": [
+              "Yes",
+              "No"
+            ],
+            "followup": {
+              "label": "If not, please share if there was a particular reason:",
+              "showWhen": {
+                "operator": "equals",
+                "value": "No"
+              }
+            }
+          },
+          {
+            "id": "notes",
+            "type": "textarea",
+            "label": "Anything else you would like to share about today?"
+          }
+        ],
+        "responses": {
+          "prompted": [
+            "Scheduled routine"
+          ],
+          "feelings": [
+            "Excited"
+          ],
+          "read_book": "Yes",
+          "notes": "Parent storytelling before bed felt especially smooth tonight."
+        }
+      }
+    },
     "2026-04-19": {
       "date": "2026-04-19",
       "condition": "parent",
@@ -2377,7 +2377,7 @@
         "updatedAt": "2026-04-19T20:20:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
+          "There are no right or wrong answers — we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -2489,7 +2489,7 @@
         "updatedAt": "2026-04-14T20:18:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
+          "There are no right or wrong answers — we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -2572,104 +2572,6 @@
     },
     "2026-04-15": {
       "date": "2026-04-15",
-      "condition": "parent",
-      "dashboard": {
-        "hasInteraction": true,
-        "words": [
-          "soap",
-          "bubbles",
-          "sink"
-        ]
-      },
-      "diary": {
-        "submitted": true,
-        "submittedAt": "2026-04-15T20:05:00Z",
-        "updatedAt": "2026-04-15T20:12:00Z",
-        "instructions": [
-          "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
-          "You may write short notes or longer reflections.",
-          "If your child does not interact with Ella on a given day, please still complete the entry."
-        ],
-        "questions": [
-          {
-            "id": "prompted",
-            "type": "checkbox",
-            "label": "What prompted the storytelling session?",
-            "options": [
-              "Child initiated",
-              "Parent prompted",
-              "Scheduled routine",
-              "Unsure",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "feelings",
-            "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
-            "options": [
-              "Excited",
-              "Neutral",
-              "Frustrated",
-              "Hesitant",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "read_book",
-            "type": "radio",
-            "label": "Did you read a book or tell your child a story today?",
-            "options": [
-              "Yes",
-              "No"
-            ],
-            "followup": {
-              "label": "If not, please share if there was a particular reason:",
-              "showWhen": {
-                "operator": "equals",
-                "value": "No"
-              }
-            }
-          },
-          {
-            "id": "notes",
-            "type": "textarea",
-            "label": "Anything else you would like to share about today?"
-          }
-        ],
-        "responses": {
-          "prompted": [
-            "Scheduled routine"
-          ],
-          "feelings": [
-            "Excited"
-          ],
-          "read_book": "Yes",
-          "notes": "Parent story fit nicely into bath-time routine."
-        }
-      }
-    },
-    "2026-04-16": {
-      "date": "2026-04-16",
       "condition": "robot",
       "dashboard": {
         "hasInteraction": true,
@@ -2692,11 +2594,11 @@
       },
       "diary": {
         "submitted": true,
-        "submittedAt": "2026-04-16T20:20:00Z",
-        "updatedAt": "2026-04-16T20:28:00Z",
+        "submittedAt": "2026-04-15T20:20:00Z",
+        "updatedAt": "2026-04-15T20:28:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
+          "There are no right or wrong answers — we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -2777,97 +2679,8 @@
         }
       }
     },
-    "2026-04-17": {
-      "date": "2026-04-17",
-      "condition": "parent",
-      "dashboard": {
-        "hasInteraction": true,
-        "words": [
-          "moon",
-          "quiet",
-          "blanket"
-        ]
-      },
-      "diary": {
-        "submitted": false,
-        "submittedAt": null,
-        "updatedAt": null,
-        "instructions": [
-          "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
-          "You may write short notes or longer reflections.",
-          "If your child does not interact with Ella on a given day, please still complete the entry."
-        ],
-        "questions": [
-          {
-            "id": "prompted",
-            "type": "checkbox",
-            "label": "What prompted the storytelling session?",
-            "options": [
-              "Child initiated",
-              "Parent prompted",
-              "Scheduled routine",
-              "Unsure",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "feelings",
-            "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
-            "options": [
-              "Excited",
-              "Neutral",
-              "Frustrated",
-              "Hesitant",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "read_book",
-            "type": "radio",
-            "label": "Did you read a book or tell your child a story today?",
-            "options": [
-              "Yes",
-              "No"
-            ],
-            "followup": {
-              "label": "If not, please share if there was a particular reason:",
-              "showWhen": {
-                "operator": "equals",
-                "value": "No"
-              }
-            }
-          },
-          {
-            "id": "notes",
-            "type": "textarea",
-            "label": "Anything else you would like to share about today?"
-          }
-        ],
-        "responses": {}
-      }
-    },
-    "2026-04-18": {
-      "date": "2026-04-18",
+    "2026-04-16": {
+      "date": "2026-04-16",
       "condition": "robot",
       "dashboard": {
         "hasInteraction": true,
@@ -2890,11 +2703,11 @@
       },
       "diary": {
         "submitted": true,
-        "submittedAt": "2026-04-18T20:18:00Z",
-        "updatedAt": "2026-04-18T20:24:00Z",
+        "submittedAt": "2026-04-16T20:18:00Z",
+        "updatedAt": "2026-04-16T20:24:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
+          "There are no right or wrong answers — we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -2975,6 +2788,193 @@
         }
       }
     },
+    "2026-04-17": {
+      "date": "2026-04-17",
+      "condition": "parent",
+      "dashboard": {
+        "hasInteraction": true,
+        "words": [
+          "soap",
+          "bubbles",
+          "sink"
+        ]
+      },
+      "diary": {
+        "submitted": true,
+        "submittedAt": "2026-04-17T20:05:00Z",
+        "updatedAt": "2026-04-17T20:12:00Z",
+        "instructions": [
+          "Please complete this diary once per day, preferably at the end of the day.",
+          "There are no right or wrong answers — we are interested in your observations.",
+          "You may write short notes or longer reflections.",
+          "If your child does not interact with Ella on a given day, please still complete the entry."
+        ],
+        "questions": [
+          {
+            "id": "prompted",
+            "type": "checkbox",
+            "label": "What prompted the storytelling session?",
+            "options": [
+              "Child initiated",
+              "Parent prompted",
+              "Scheduled routine",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "feelings",
+            "type": "checkbox",
+            "label": "How did your child feel about Ella today?",
+            "options": [
+              "Excited",
+              "Neutral",
+              "Frustrated",
+              "Hesitant",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "read_book",
+            "type": "radio",
+            "label": "Did you read a book or tell your child a story today?",
+            "options": [
+              "Yes",
+              "No"
+            ],
+            "followup": {
+              "label": "If not, please share if there was a particular reason:",
+              "showWhen": {
+                "operator": "equals",
+                "value": "No"
+              }
+            }
+          },
+          {
+            "id": "notes",
+            "type": "textarea",
+            "label": "Anything else you would like to share about today?"
+          }
+        ],
+        "responses": {
+          "prompted": [
+            "Scheduled routine"
+          ],
+          "feelings": [
+            "Excited"
+          ],
+          "read_book": "Yes",
+          "notes": "Parent story fit nicely into bath-time routine."
+        }
+      }
+    },
+    "2026-04-18": {
+      "date": "2026-04-18",
+      "condition": "parent",
+      "dashboard": {
+        "hasInteraction": true,
+        "words": [
+          "moon",
+          "quiet",
+          "blanket"
+        ]
+      },
+      "diary": {
+        "submitted": false,
+        "submittedAt": null,
+        "updatedAt": null,
+        "instructions": [
+          "Please complete this diary once per day, preferably at the end of the day.",
+          "There are no right or wrong answers — we are interested in your observations.",
+          "You may write short notes or longer reflections.",
+          "If your child does not interact with Ella on a given day, please still complete the entry."
+        ],
+        "questions": [
+          {
+            "id": "prompted",
+            "type": "checkbox",
+            "label": "What prompted the storytelling session?",
+            "options": [
+              "Child initiated",
+              "Parent prompted",
+              "Scheduled routine",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "feelings",
+            "type": "checkbox",
+            "label": "How did your child feel about Ella today?",
+            "options": [
+              "Excited",
+              "Neutral",
+              "Frustrated",
+              "Hesitant",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "read_book",
+            "type": "radio",
+            "label": "Did you read a book or tell your child a story today?",
+            "options": [
+              "Yes",
+              "No"
+            ],
+            "followup": {
+              "label": "If not, please share if there was a particular reason:",
+              "showWhen": {
+                "operator": "equals",
+                "value": "No"
+              }
+            }
+          },
+          {
+            "id": "notes",
+            "type": "textarea",
+            "label": "Anything else you would like to share about today?"
+          }
+        ],
+        "responses": {}
+      }
+    },
     "2026-04-19": {
       "date": "2026-04-19",
       "condition": "parent",
@@ -2992,7 +2992,7 @@
         "updatedAt": null,
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
+          "There are no right or wrong answers — we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
