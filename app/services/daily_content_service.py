@@ -332,7 +332,7 @@ class DailyContentService:
                 {
                     "id": "no_engage_reason",
                     "type": "checkbox",
-                    "label": "If your child did not engage with Ella today, why? (Check all that apply; skip if your child did engage with Ella today)",
+                    "label": "If your child did not engage with Ella today, why? (Check all that apply)",
                     "options": [
                         "Child was not interested",
                         "Time constraints",
