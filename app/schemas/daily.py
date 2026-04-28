@@ -6,15 +6,18 @@ from pydantic import BaseModel, ConfigDict, Field
 
 ConditionType = Literal["robot", "parent"]
 QuestionType = Literal["checkbox", "radio", "textarea"]
-OperatorType = Literal["equals", "includesAny"]
-class FollowupShowWhen(BaseModel):
+OperatorType = Literal["equals", "equalsAny", "includesAny"]
+
+
+class ConditionalShowWhen(BaseModel):
+    questionId: str | None = None
     operator: OperatorType
     value: str | list[str]
 
 
 class FollowupConfig(BaseModel):
     label: str
-    showWhen: FollowupShowWhen
+    showWhen: ConditionalShowWhen
 
 
 class DailyQuestion(BaseModel):
@@ -23,6 +26,7 @@ class DailyQuestion(BaseModel):
     label: str
     options: list[str] | None = None
     followup: FollowupConfig | None = None
+    showWhen: ConditionalShowWhen | None = None
 
 
 class DashboardContent(BaseModel):

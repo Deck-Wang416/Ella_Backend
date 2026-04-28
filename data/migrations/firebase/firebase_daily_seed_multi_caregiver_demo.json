@@ -37,11 +37,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -58,12 +83,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -71,6 +98,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -93,9 +145,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {
@@ -146,11 +273,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -167,12 +319,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -180,6 +334,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -202,9 +381,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {
@@ -255,11 +509,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -276,12 +555,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -289,6 +570,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -311,9 +617,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {
@@ -353,11 +734,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -374,12 +780,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -387,6 +795,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -409,9 +842,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {
@@ -451,11 +959,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -472,12 +1005,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -485,6 +1020,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -507,9 +1067,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {}
@@ -540,11 +1175,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -561,12 +1221,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -574,6 +1236,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -596,9 +1283,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {
@@ -652,11 +1414,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -673,12 +1460,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -686,6 +1475,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -708,9 +1522,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {
@@ -761,11 +1650,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -782,12 +1696,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -795,6 +1711,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -817,9 +1758,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {
@@ -870,11 +1886,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -891,12 +1932,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -904,6 +1947,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -926,9 +1994,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {
@@ -968,11 +2111,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -989,12 +2157,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -1002,6 +2172,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -1024,9 +2219,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {
@@ -1066,11 +2336,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -1087,12 +2382,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -1100,6 +2397,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -1122,9 +2444,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {
@@ -1164,11 +2561,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -1185,12 +2607,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -1198,6 +2622,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -1220,9 +2669,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {}
@@ -1267,11 +2791,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -1288,12 +2837,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -1301,6 +2852,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -1323,9 +2899,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {
@@ -1376,11 +3027,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -1397,12 +3073,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -1410,6 +3088,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -1432,9 +3135,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {
@@ -1485,11 +3263,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -1506,12 +3309,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -1519,6 +3324,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -1541,9 +3371,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {
@@ -1583,11 +3488,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -1604,12 +3534,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -1617,6 +3549,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -1639,9 +3596,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {}
@@ -1672,11 +3704,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -1693,12 +3750,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -1706,6 +3765,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -1728,9 +3812,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {}
@@ -1761,11 +3920,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -1782,12 +3966,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -1795,6 +3981,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -1817,9 +4028,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {
@@ -1873,11 +4159,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -1894,12 +4205,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -1907,6 +4220,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -1929,9 +4267,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {
@@ -1982,11 +4395,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -2003,12 +4441,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -2016,6 +4456,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -2038,9 +4503,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {
@@ -2091,11 +4631,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -2112,12 +4677,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -2125,6 +4692,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -2147,9 +4739,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {
@@ -2189,11 +4856,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -2210,12 +4902,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -2223,6 +4917,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -2245,9 +4964,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {
@@ -2287,11 +5081,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -2308,12 +5127,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -2321,6 +5142,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -2343,9 +5189,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {
@@ -2385,11 +5306,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -2406,12 +5352,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -2419,6 +5367,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -2441,9 +5414,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {
@@ -2497,11 +5545,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -2518,12 +5591,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -2531,6 +5606,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -2553,9 +5653,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {
@@ -2606,11 +5781,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -2627,12 +5827,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -2640,6 +5842,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -2662,9 +5889,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {
@@ -2715,11 +6017,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -2736,12 +6063,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -2749,6 +6078,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -2771,9 +6125,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {
@@ -2813,11 +6242,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -2834,12 +6288,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -2847,6 +6303,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -2869,9 +6350,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {
@@ -2911,11 +6467,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -2932,12 +6513,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -2945,6 +6528,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -2967,9 +6575,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {}
@@ -3000,11 +6683,36 @@
           {
             "id": "prompted",
             "type": "checkbox",
-            "label": "What prompted the storytelling session?",
+            "label": "What prompted the storytelling session? (Check all that apply)",
             "options": [
               "Child initiated",
               "Parent prompted",
+              "Sibling encouraged",
               "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
               "Unsure",
               "Other"
             ],
@@ -3021,12 +6729,14 @@
           {
             "id": "feelings",
             "type": "checkbox",
-            "label": "How did your child feel about Ella today?",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
             "options": [
               "Excited",
               "Neutral",
               "Frustrated",
               "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
               "Other"
             ],
             "followup": {
@@ -3034,6 +6744,31 @@
               "showWhen": {
                 "operator": "includesAny",
                 "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the story ideas:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Wanted related books",
+                  "Wanted related tv show/movies",
+                  "Asked related questions",
                   "Other"
                 ]
               }
@@ -3056,9 +6791,84 @@
             }
           },
           {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today?",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
             "id": "notes",
             "type": "textarea",
-            "label": "Anything else you would like to share about today?"
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
         "responses": {}

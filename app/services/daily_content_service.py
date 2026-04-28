@@ -3,14 +3,7 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from app.core.config import get_settings
 from app.core.firebase_client import get_rtdb_reference
-from app.schemas.daily import (
-    ConditionType,
-    DailyContent,
-    DailySummary,
-    DiaryContent,
-    DashboardContent,
-    ParentDashboardContent,
-)
+from app.schemas.daily import ConditionType, DailyContent, DailyQuestion, DailySummary, DiaryContent, DashboardContent, ParentDashboardContent
 from app.services.user_profile_service import UserProfileService
 
 
@@ -43,7 +36,7 @@ class DailyContentService:
         return daily
 
     def build_empty_daily(self, caregiver_id: int, target_date: date, condition: ConditionType = "robot") -> DailyContent:
-        template = self._load_latest_diary_template(caregiver_id)
+        template = self._current_diary_template()
         dashboard = (
             ParentDashboardContent(hasInteraction=False, words=[])
             if condition == "parent"
@@ -145,6 +138,9 @@ class DailyContentService:
             else DashboardContent.model_validate(dashboard_payload)
         )
         diary = DiaryContent.model_validate(payload.get("diary") or {})
+        template = self._current_diary_template()
+        diary.instructions = template["instructions"]
+        diary.questions = template["questions"]
         resolved_date = payload.get("date") or (target_date.isoformat() if target_date else "")
 
         return DailyContent(
@@ -158,60 +154,208 @@ class DailyContentService:
         ref = get_rtdb_reference(f"{self._daily_root(caregiver_id)}/{target_date.isoformat()}")
         ref.set(daily.model_dump(mode="json", exclude_none=True))
 
-    def _load_latest_diary_template(self, caregiver_id: int) -> dict:
-        records = list(self._iter_daily_records(caregiver_id))
-        if not records:
-            return self._load_latest_global_diary_template()
-        records.sort(key=lambda item: item.date)
-        for item in reversed(records):
-            try:
-                return {
-                    "instructions": item.diary.instructions or [],
-                    "questions": item.diary.questions or [],
+    def _current_diary_template(self) -> dict[str, list]:
+        instructions = [
+            "Please complete this diary once per day, preferably at the end of the day.",
+            "There are no right or wrong answers — we are interested in your observations.",
+            "You may write short notes or longer reflections.",
+            "If your child does not interact with Ella on a given day, please still complete the entry.",
+        ]
+        questions = [
+            DailyQuestion.model_validate(
+                {
+                    "id": "prompted",
+                    "type": "checkbox",
+                    "label": "What prompted the storytelling session? (Check all that apply)",
+                    "options": [
+                        "Child initiated",
+                        "Parent prompted",
+                        "Sibling encouraged",
+                        "Scheduled routine",
+                        "Unsure",
+                        "My child did not engage in a session today",
+                        "Other",
+                    ],
+                    "followup": {
+                        "label": "If Other, please specify:",
+                        "showWhen": {
+                            "operator": "includesAny",
+                            "value": ["Other"],
+                        },
+                    },
                 }
-            except Exception:
-                continue
-        return self._load_latest_global_diary_template()
-
-    def _load_latest_global_diary_template(self) -> dict:
-        ref = get_rtdb_reference(self.settings.firebase_daily_root)
-        payload = ref.get() or {}
-        records: list[DailyContent] = []
-        if isinstance(payload, dict):
-            for caregiver_payload in payload.values():
-                if not isinstance(caregiver_payload, dict):
-                    continue
-                for key, value in caregiver_payload.items():
-                    try:
-                        fallback_date = date.fromisoformat(str(key))
-                        records.append(self.normalize_daily_payload(value, fallback_date))
-                    except Exception:
-                        continue
-        if not records:
-            return {"instructions": [], "questions": []}
-        records.sort(key=lambda item: item.date)
-        for item in reversed(records):
-            try:
-                return {
-                    "instructions": item.diary.instructions or [],
-                    "questions": item.diary.questions or [],
+            ),
+            DailyQuestion.model_validate(
+                {
+                    "id": "who_present",
+                    "type": "checkbox",
+                    "label": "Who was present or engaged during the session? (Check all that apply)",
+                    "options": [
+                        "Parent(s)",
+                        "Other caregiver(s)",
+                        "Sibling(s)",
+                        "Friend(s)",
+                        "Child was alone",
+                        "Unsure",
+                        "Other",
+                    ],
+                    "followup": {
+                        "label": "If Other, please specify:",
+                        "showWhen": {
+                            "operator": "includesAny",
+                            "value": ["Other"],
+                        },
+                    },
                 }
-            except Exception:
-                continue
-        return {"instructions": [], "questions": []}
-
-    def _iter_daily_records(self, caregiver_id: int) -> list[DailyContent]:
-        records: list[DailyContent] = []
-        ref = get_rtdb_reference(self._daily_root(caregiver_id))
-        payload = ref.get() or {}
-        if isinstance(payload, dict):
-            for key, value in payload.items():
-                try:
-                    fallback_date = date.fromisoformat(str(key))
-                    records.append(self.normalize_daily_payload(value, fallback_date))
-                except Exception:
-                    continue
-        return records
+            ),
+            DailyQuestion.model_validate(
+                {
+                    "id": "feelings",
+                    "type": "checkbox",
+                    "label": "How did your child feel about Ella today? (Check all that apply)",
+                    "options": [
+                        "Excited",
+                        "Neutral",
+                        "Frustrated",
+                        "Hesitant",
+                        "Want to continue beyond the session",
+                        "Unsure",
+                        "Other",
+                    ],
+                    "followup": {
+                        "label": "If Other, please specify:",
+                        "showWhen": {
+                            "operator": "includesAny",
+                            "value": ["Other"],
+                        },
+                    },
+                }
+            ),
+            DailyQuestion.model_validate(
+                {
+                    "id": "story_ideas",
+                    "type": "checkbox",
+                    "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+                    "options": [
+                        "Wanted related books",
+                        "Wanted related tv show/movies",
+                        "Asked related questions",
+                        "No, my child did not use story ideas outside the session today",
+                        "Unsure",
+                        "Other",
+                    ],
+                    "followup": {
+                        "label": "If yes, could you briefly describe how your child used the story ideas:",
+                        "showWhen": {
+                            "operator": "includesAny",
+                            "value": [
+                                "Wanted related books",
+                                "Wanted related tv show/movies",
+                                "Asked related questions",
+                                "Other",
+                            ],
+                        },
+                    },
+                }
+            ),
+            DailyQuestion.model_validate(
+                {
+                    "id": "read_book",
+                    "type": "radio",
+                    "label": "Did you read a book or tell your child a story today?",
+                    "options": ["Yes", "No"],
+                    "followup": {
+                        "label": "If not, please share if there was a particular reason:",
+                        "showWhen": {
+                            "operator": "equals",
+                            "value": "No",
+                        },
+                    },
+                }
+            ),
+            DailyQuestion.model_validate(
+                {
+                    "id": "mention_ella",
+                    "type": "checkbox",
+                    "label": "Did your child talk about Ella or the stories today?",
+                    "options": [
+                        "Shared story with caregiver",
+                        "Shared story with others",
+                        "Talked about Ella with caregiver",
+                        "Talked about Ella with others",
+                        "No, my child did not mention Ella today",
+                        "Unsure",
+                    ],
+                    "followup": {
+                        "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+                        "showWhen": {
+                            "operator": "includesAny",
+                            "value": [
+                                "Shared story with caregiver",
+                                "Shared story with others",
+                                "Talked about Ella with caregiver",
+                                "Talked about Ella with others",
+                            ],
+                        },
+                    },
+                }
+            ),
+            DailyQuestion.model_validate(
+                {
+                    "id": "target_words",
+                    "type": "radio",
+                    "label": "Did you or anyone else hear your child use any target words today?",
+                    "options": [
+                        "Yes, correctly",
+                        "Yes, incorrectly",
+                        "No, my child did not use the target words today",
+                        "Unsure",
+                    ],
+                    "followup": {
+                        "label": "If yes, could you briefly describe how your child used the target word:",
+                        "showWhen": {
+                            "operator": "equalsAny",
+                            "value": ["Yes, correctly", "Yes, incorrectly"],
+                        },
+                    },
+                }
+            ),
+            DailyQuestion.model_validate(
+                {
+                    "id": "no_engage_reason",
+                    "type": "checkbox",
+                    "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+                    "options": [
+                        "Child was not interested",
+                        "Time constraints",
+                        "Technical issue",
+                        "Child was tired or upset",
+                        "Unsure",
+                        "Other",
+                    ],
+                    "showWhen": {
+                        "questionId": "prompted",
+                        "operator": "includesAny",
+                        "value": ["My child did not engage in a session today"],
+                    },
+                    "followup": {
+                        "label": "If Other, please specify:",
+                        "showWhen": {
+                            "operator": "includesAny",
+                            "value": ["Other"],
+                        },
+                    },
+                }
+            ),
+            DailyQuestion.model_validate(
+                {
+                    "id": "notes",
+                    "type": "textarea",
+                    "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days).",
+                }
+            ),
+        ]
+        return {"instructions": instructions, "questions": questions}
 
     def _local_today(self, timezone_name: str) -> date:
         try:
