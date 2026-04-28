@@ -244,18 +244,26 @@ class DailyContentService:
                         "Unsure",
                         "Other",
                     ],
-                    "followup": {
-                        "label": "If yes, could you briefly describe how your child used the story ideas:",
-                        "showWhen": {
-                            "operator": "includesAny",
-                            "value": [
-                                "Wanted related books",
-                                "Wanted related tv show/movies",
-                                "Asked related questions",
-                                "Other",
-                            ],
+                    "followups": [
+                        {
+                            "label": "If Other, please specify:",
+                            "showWhen": {
+                                "operator": "includesAny",
+                                "value": ["Other"],
+                            },
                         },
-                    },
+                        {
+                            "label": "If yes, could you briefly describe how your child used the story ideas:",
+                            "showWhen": {
+                                "operator": "includesAny",
+                                "value": [
+                                    "Wanted related books",
+                                    "Wanted related tv show/movies",
+                                    "Asked related questions",
+                                ],
+                            },
+                        },
+                    ],
                 }
             ),
             DailyQuestion.model_validate(
@@ -277,7 +285,7 @@ class DailyContentService:
                 {
                     "id": "mention_ella",
                     "type": "checkbox",
-                    "label": "Did your child talk about Ella or the stories today?",
+                    "label": "Did your child talk about Ella or the stories today? (Check all that apply)",
                     "options": [
                         "Shared story with caregiver",
                         "Shared story with others",
@@ -324,7 +332,7 @@ class DailyContentService:
                 {
                     "id": "no_engage_reason",
                     "type": "checkbox",
-                    "label": "If your child did not engage with Ella today, why? (Skip if your child did engage with Ella today)",
+                    "label": "If your child did not engage with Ella today, why? (Check all that apply; skip if your child did engage with Ella today)",
                     "options": [
                         "Child was not interested",
                         "Time constraints",

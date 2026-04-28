@@ -26,6 +26,7 @@ class DailyQuestion(BaseModel):
     label: str
     options: list[str] | None = None
     followup: FollowupConfig | None = None
+    followups: list[FollowupConfig] = Field(default_factory=list)
     showWhen: ConditionalShowWhen | None = None
 
 
