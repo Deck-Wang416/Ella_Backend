@@ -40,6 +40,7 @@ class DashboardContent(BaseModel):
 
 class ParentDashboardContent(BaseModel):
     hasInteraction: bool = False
+    book: str | None = None
     words: list[str] = Field(default_factory=list)
 
 

@@ -1,988 +1,14 @@
 {
   "1": {
-    "2026-04-14": {
-      "date": "2026-04-14",
-      "condition": "robot",
-      "dashboard": {
-        "hasInteraction": true,
-        "photos": [
-          "/assets/sample-photo.svg",
-          "/assets/sample-photo-2.svg"
-        ],
-        "words": [
-          "garden",
-          "butterfly",
-          "yellow"
-        ],
-        "highlight": [
-          "Ella connected the story to colors and outdoor routines.",
-          "The child repeated two target words without prompting."
-        ],
-        "ask": [
-          "What happened first in the story?",
-          "Which new word did your child repeat today?"
-        ]
-      },
-      "diary": {
-        "submitted": true,
-        "submittedAt": "2026-04-14T20:10:00Z",
-        "updatedAt": "2026-04-14T20:18:00Z",
-        "instructions": [
-          "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
-          "You may write short notes or longer reflections.",
-          "If your child does not interact with Ella on a given day, please still complete the entry."
-        ],
-        "questions": [
-          {
-            "id": "prompted",
-            "type": "checkbox",
-            "label": "What prompted the storytelling session? (Check all that apply)",
-            "options": [
-              "Child initiated",
-              "Parent prompted",
-              "Sibling encouraged",
-              "Scheduled routine",
-              "Unsure",
-              "My child did not engage in a session today",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "who_present",
-            "type": "checkbox",
-            "label": "Who was present or engaged during the session? (Check all that apply)",
-            "options": [
-              "Parent(s)",
-              "Other caregiver(s)",
-              "Sibling(s)",
-              "Friend(s)",
-              "Child was alone",
-              "Unsure",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "feelings",
-            "type": "checkbox",
-            "label": "How did your child feel about Ella today? (Check all that apply)",
-            "options": [
-              "Excited",
-              "Neutral",
-              "Frustrated",
-              "Hesitant",
-              "Want to continue beyond the session",
-              "Unsure",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "story_ideas",
-            "type": "checkbox",
-            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
-            "options": [
-              "Wanted related books",
-              "Wanted related tv show/movies",
-              "Asked related questions",
-              "No, my child did not use story ideas outside the session today",
-              "Unsure",
-              "Other"
-            ],
-            "followups": [
-              {
-                "label": "If Other, please specify:",
-                "showWhen": {
-                  "operator": "includesAny",
-                  "value": [
-                    "Other"
-                  ]
-                }
-              },
-              {
-                "label": "If yes, could you briefly describe how your child used the story ideas:",
-                "showWhen": {
-                  "operator": "includesAny",
-                  "value": [
-                    "Wanted related books",
-                    "Wanted related tv show/movies",
-                    "Asked related questions"
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            "id": "read_book",
-            "type": "radio",
-            "label": "Did you read a book or tell your child a story today?",
-            "options": [
-              "Yes",
-              "No"
-            ],
-            "followup": {
-              "label": "If not, please share if there was a particular reason:",
-              "showWhen": {
-                "operator": "equals",
-                "value": "No"
-              }
-            }
-          },
-          {
-            "id": "mention_ella",
-            "type": "checkbox",
-            "label": "Did your child talk about Ella or the stories today? (Check all that apply)",
-            "options": [
-              "Shared story with caregiver",
-              "Shared story with others",
-              "Talked about Ella with caregiver",
-              "Talked about Ella with others",
-              "No, my child did not mention Ella today",
-              "Unsure"
-            ],
-            "followup": {
-              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Shared story with caregiver",
-                  "Shared story with others",
-                  "Talked about Ella with caregiver",
-                  "Talked about Ella with others"
-                ]
-              }
-            }
-          },
-          {
-            "id": "target_words",
-            "type": "radio",
-            "label": "Did you or anyone else hear your child use any target words today?",
-            "options": [
-              "Yes, correctly",
-              "Yes, incorrectly",
-              "No, my child did not use the target words today",
-              "Unsure"
-            ],
-            "followup": {
-              "label": "If yes, could you briefly describe how your child used the target word:",
-              "showWhen": {
-                "operator": "equalsAny",
-                "value": [
-                  "Yes, correctly",
-                  "Yes, incorrectly"
-                ]
-              }
-            }
-          },
-          {
-            "id": "no_engage_reason",
-            "type": "checkbox",
-            "label": "If your child did not engage with Ella today, why? (Check all that apply)",
-            "options": [
-              "Child was not interested",
-              "Time constraints",
-              "Technical issue",
-              "Child was tired or upset",
-              "Unsure",
-              "Other"
-            ],
-            "showWhen": {
-              "questionId": "prompted",
-              "operator": "includesAny",
-              "value": [
-                "My child did not engage in a session today"
-              ]
-            },
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "notes",
-            "type": "textarea",
-            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
-          }
-        ],
-        "responses": {
-          "prompted": [
-            "Scheduled routine"
-          ],
-          "feelings": [
-            "Excited"
-          ],
-          "read_book": "Yes",
-          "notes": "Strong engagement with the robot story today."
-        }
-      }
-    },
-    "2026-04-15": {
-      "date": "2026-04-15",
-      "condition": "robot",
-      "dashboard": {
-        "hasInteraction": true,
-        "photos": [
-          "/assets/sample-photo.svg"
-        ],
-        "words": [
-          "bridge",
-          "river",
-          "count"
-        ],
-        "highlight": [
-          "Ella guided a short robot storytelling session with strong attention.",
-          "The child repeated one target word during the story."
-        ],
-        "ask": [
-          "Which part of the robot story did your child like most?",
-          "Did your child repeat any of the new words after the session?"
-        ]
-      },
-      "diary": {
-        "submitted": true,
-        "submittedAt": "2026-04-15T20:20:00Z",
-        "updatedAt": "2026-04-15T20:28:00Z",
-        "instructions": [
-          "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
-          "You may write short notes or longer reflections.",
-          "If your child does not interact with Ella on a given day, please still complete the entry."
-        ],
-        "questions": [
-          {
-            "id": "prompted",
-            "type": "checkbox",
-            "label": "What prompted the storytelling session? (Check all that apply)",
-            "options": [
-              "Child initiated",
-              "Parent prompted",
-              "Sibling encouraged",
-              "Scheduled routine",
-              "Unsure",
-              "My child did not engage in a session today",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "who_present",
-            "type": "checkbox",
-            "label": "Who was present or engaged during the session? (Check all that apply)",
-            "options": [
-              "Parent(s)",
-              "Other caregiver(s)",
-              "Sibling(s)",
-              "Friend(s)",
-              "Child was alone",
-              "Unsure",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "feelings",
-            "type": "checkbox",
-            "label": "How did your child feel about Ella today? (Check all that apply)",
-            "options": [
-              "Excited",
-              "Neutral",
-              "Frustrated",
-              "Hesitant",
-              "Want to continue beyond the session",
-              "Unsure",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "story_ideas",
-            "type": "checkbox",
-            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
-            "options": [
-              "Wanted related books",
-              "Wanted related tv show/movies",
-              "Asked related questions",
-              "No, my child did not use story ideas outside the session today",
-              "Unsure",
-              "Other"
-            ],
-            "followups": [
-              {
-                "label": "If Other, please specify:",
-                "showWhen": {
-                  "operator": "includesAny",
-                  "value": [
-                    "Other"
-                  ]
-                }
-              },
-              {
-                "label": "If yes, could you briefly describe how your child used the story ideas:",
-                "showWhen": {
-                  "operator": "includesAny",
-                  "value": [
-                    "Wanted related books",
-                    "Wanted related tv show/movies",
-                    "Asked related questions"
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            "id": "read_book",
-            "type": "radio",
-            "label": "Did you read a book or tell your child a story today?",
-            "options": [
-              "Yes",
-              "No"
-            ],
-            "followup": {
-              "label": "If not, please share if there was a particular reason:",
-              "showWhen": {
-                "operator": "equals",
-                "value": "No"
-              }
-            }
-          },
-          {
-            "id": "mention_ella",
-            "type": "checkbox",
-            "label": "Did your child talk about Ella or the stories today? (Check all that apply)",
-            "options": [
-              "Shared story with caregiver",
-              "Shared story with others",
-              "Talked about Ella with caregiver",
-              "Talked about Ella with others",
-              "No, my child did not mention Ella today",
-              "Unsure"
-            ],
-            "followup": {
-              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Shared story with caregiver",
-                  "Shared story with others",
-                  "Talked about Ella with caregiver",
-                  "Talked about Ella with others"
-                ]
-              }
-            }
-          },
-          {
-            "id": "target_words",
-            "type": "radio",
-            "label": "Did you or anyone else hear your child use any target words today?",
-            "options": [
-              "Yes, correctly",
-              "Yes, incorrectly",
-              "No, my child did not use the target words today",
-              "Unsure"
-            ],
-            "followup": {
-              "label": "If yes, could you briefly describe how your child used the target word:",
-              "showWhen": {
-                "operator": "equalsAny",
-                "value": [
-                  "Yes, correctly",
-                  "Yes, incorrectly"
-                ]
-              }
-            }
-          },
-          {
-            "id": "no_engage_reason",
-            "type": "checkbox",
-            "label": "If your child did not engage with Ella today, why? (Check all that apply)",
-            "options": [
-              "Child was not interested",
-              "Time constraints",
-              "Technical issue",
-              "Child was tired or upset",
-              "Unsure",
-              "Other"
-            ],
-            "showWhen": {
-              "questionId": "prompted",
-              "operator": "includesAny",
-              "value": [
-                "My child did not engage in a session today"
-              ]
-            },
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "notes",
-            "type": "textarea",
-            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
-          }
-        ],
-        "responses": {
-          "prompted": [
-            "Scheduled routine"
-          ],
-          "feelings": [
-            "Excited"
-          ],
-          "read_book": "Yes",
-          "notes": "Normal robot session with good participation."
-        }
-      }
-    },
-    "2026-04-16": {
-      "date": "2026-04-16",
-      "condition": "robot",
-      "dashboard": {
-        "hasInteraction": true,
-        "photos": [
-          "/assets/sample-photo.svg"
-        ],
-        "words": [
-          "market",
-          "apple",
-          "basket"
-        ],
-        "highlight": [
-          "Robot storytelling connected well to pretend shopping today.",
-          "The child repeated one food word after the story ended."
-        ],
-        "ask": [
-          "Which shopping word did your child remember later?",
-          "Did your child connect the story to a real routine at home?"
-        ]
-      },
-      "diary": {
-        "submitted": true,
-        "submittedAt": "2026-04-16T20:09:00Z",
-        "updatedAt": "2026-04-16T20:16:00Z",
-        "instructions": [
-          "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
-          "You may write short notes or longer reflections.",
-          "If your child does not interact with Ella on a given day, please still complete the entry."
-        ],
-        "questions": [
-          {
-            "id": "prompted",
-            "type": "checkbox",
-            "label": "What prompted the storytelling session? (Check all that apply)",
-            "options": [
-              "Child initiated",
-              "Parent prompted",
-              "Sibling encouraged",
-              "Scheduled routine",
-              "Unsure",
-              "My child did not engage in a session today",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "who_present",
-            "type": "checkbox",
-            "label": "Who was present or engaged during the session? (Check all that apply)",
-            "options": [
-              "Parent(s)",
-              "Other caregiver(s)",
-              "Sibling(s)",
-              "Friend(s)",
-              "Child was alone",
-              "Unsure",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "feelings",
-            "type": "checkbox",
-            "label": "How did your child feel about Ella today? (Check all that apply)",
-            "options": [
-              "Excited",
-              "Neutral",
-              "Frustrated",
-              "Hesitant",
-              "Want to continue beyond the session",
-              "Unsure",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "story_ideas",
-            "type": "checkbox",
-            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
-            "options": [
-              "Wanted related books",
-              "Wanted related tv show/movies",
-              "Asked related questions",
-              "No, my child did not use story ideas outside the session today",
-              "Unsure",
-              "Other"
-            ],
-            "followups": [
-              {
-                "label": "If Other, please specify:",
-                "showWhen": {
-                  "operator": "includesAny",
-                  "value": [
-                    "Other"
-                  ]
-                }
-              },
-              {
-                "label": "If yes, could you briefly describe how your child used the story ideas:",
-                "showWhen": {
-                  "operator": "includesAny",
-                  "value": [
-                    "Wanted related books",
-                    "Wanted related tv show/movies",
-                    "Asked related questions"
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            "id": "read_book",
-            "type": "radio",
-            "label": "Did you read a book or tell your child a story today?",
-            "options": [
-              "Yes",
-              "No"
-            ],
-            "followup": {
-              "label": "If not, please share if there was a particular reason:",
-              "showWhen": {
-                "operator": "equals",
-                "value": "No"
-              }
-            }
-          },
-          {
-            "id": "mention_ella",
-            "type": "checkbox",
-            "label": "Did your child talk about Ella or the stories today? (Check all that apply)",
-            "options": [
-              "Shared story with caregiver",
-              "Shared story with others",
-              "Talked about Ella with caregiver",
-              "Talked about Ella with others",
-              "No, my child did not mention Ella today",
-              "Unsure"
-            ],
-            "followup": {
-              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Shared story with caregiver",
-                  "Shared story with others",
-                  "Talked about Ella with caregiver",
-                  "Talked about Ella with others"
-                ]
-              }
-            }
-          },
-          {
-            "id": "target_words",
-            "type": "radio",
-            "label": "Did you or anyone else hear your child use any target words today?",
-            "options": [
-              "Yes, correctly",
-              "Yes, incorrectly",
-              "No, my child did not use the target words today",
-              "Unsure"
-            ],
-            "followup": {
-              "label": "If yes, could you briefly describe how your child used the target word:",
-              "showWhen": {
-                "operator": "equalsAny",
-                "value": [
-                  "Yes, correctly",
-                  "Yes, incorrectly"
-                ]
-              }
-            }
-          },
-          {
-            "id": "no_engage_reason",
-            "type": "checkbox",
-            "label": "If your child did not engage with Ella today, why? (Check all that apply)",
-            "options": [
-              "Child was not interested",
-              "Time constraints",
-              "Technical issue",
-              "Child was tired or upset",
-              "Unsure",
-              "Other"
-            ],
-            "showWhen": {
-              "questionId": "prompted",
-              "operator": "includesAny",
-              "value": [
-                "My child did not engage in a session today"
-              ]
-            },
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "notes",
-            "type": "textarea",
-            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
-          }
-        ],
-        "responses": {
-          "prompted": [
-            "Scheduled routine"
-          ],
-          "feelings": [
-            "Excited"
-          ],
-          "read_book": "Yes",
-          "notes": "Robot session felt smooth and easy to continue into pretend play."
-        }
-      }
-    },
-    "2026-04-17": {
-      "date": "2026-04-17",
+    "2026-05-05": {
+      "date": "2026-05-05",
       "condition": "parent",
       "dashboard": {
-        "hasInteraction": true,
-        "words": [
-          "forest",
-          "owl",
-          "quiet"
-        ]
-      },
-      "diary": {
-        "submitted": true,
-        "submittedAt": "2026-04-17T20:05:00Z",
-        "updatedAt": "2026-04-17T20:12:00Z",
-        "instructions": [
-          "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
-          "You may write short notes or longer reflections.",
-          "If your child does not interact with Ella on a given day, please still complete the entry."
-        ],
-        "questions": [
-          {
-            "id": "prompted",
-            "type": "checkbox",
-            "label": "What prompted the storytelling session? (Check all that apply)",
-            "options": [
-              "Child initiated",
-              "Parent prompted",
-              "Sibling encouraged",
-              "Scheduled routine",
-              "Unsure",
-              "My child did not engage in a session today",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "who_present",
-            "type": "checkbox",
-            "label": "Who was present or engaged during the session? (Check all that apply)",
-            "options": [
-              "Parent(s)",
-              "Other caregiver(s)",
-              "Sibling(s)",
-              "Friend(s)",
-              "Child was alone",
-              "Unsure",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "feelings",
-            "type": "checkbox",
-            "label": "How did your child feel about Ella today? (Check all that apply)",
-            "options": [
-              "Excited",
-              "Neutral",
-              "Frustrated",
-              "Hesitant",
-              "Want to continue beyond the session",
-              "Unsure",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "story_ideas",
-            "type": "checkbox",
-            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
-            "options": [
-              "Wanted related books",
-              "Wanted related tv show/movies",
-              "Asked related questions",
-              "No, my child did not use story ideas outside the session today",
-              "Unsure",
-              "Other"
-            ],
-            "followups": [
-              {
-                "label": "If Other, please specify:",
-                "showWhen": {
-                  "operator": "includesAny",
-                  "value": [
-                    "Other"
-                  ]
-                }
-              },
-              {
-                "label": "If yes, could you briefly describe how your child used the story ideas:",
-                "showWhen": {
-                  "operator": "includesAny",
-                  "value": [
-                    "Wanted related books",
-                    "Wanted related tv show/movies",
-                    "Asked related questions"
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            "id": "read_book",
-            "type": "radio",
-            "label": "Did you read a book or tell your child a story today?",
-            "options": [
-              "Yes",
-              "No"
-            ],
-            "followup": {
-              "label": "If not, please share if there was a particular reason:",
-              "showWhen": {
-                "operator": "equals",
-                "value": "No"
-              }
-            }
-          },
-          {
-            "id": "mention_ella",
-            "type": "checkbox",
-            "label": "Did your child talk about Ella or the stories today? (Check all that apply)",
-            "options": [
-              "Shared story with caregiver",
-              "Shared story with others",
-              "Talked about Ella with caregiver",
-              "Talked about Ella with others",
-              "No, my child did not mention Ella today",
-              "Unsure"
-            ],
-            "followup": {
-              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Shared story with caregiver",
-                  "Shared story with others",
-                  "Talked about Ella with caregiver",
-                  "Talked about Ella with others"
-                ]
-              }
-            }
-          },
-          {
-            "id": "target_words",
-            "type": "radio",
-            "label": "Did you or anyone else hear your child use any target words today?",
-            "options": [
-              "Yes, correctly",
-              "Yes, incorrectly",
-              "No, my child did not use the target words today",
-              "Unsure"
-            ],
-            "followup": {
-              "label": "If yes, could you briefly describe how your child used the target word:",
-              "showWhen": {
-                "operator": "equalsAny",
-                "value": [
-                  "Yes, correctly",
-                  "Yes, incorrectly"
-                ]
-              }
-            }
-          },
-          {
-            "id": "no_engage_reason",
-            "type": "checkbox",
-            "label": "If your child did not engage with Ella today, why? (Check all that apply)",
-            "options": [
-              "Child was not interested",
-              "Time constraints",
-              "Technical issue",
-              "Child was tired or upset",
-              "Unsure",
-              "Other"
-            ],
-            "showWhen": {
-              "questionId": "prompted",
-              "operator": "includesAny",
-              "value": [
-                "My child did not engage in a session today"
-              ]
-            },
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "notes",
-            "type": "textarea",
-            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
-          }
-        ],
-        "responses": {
-          "prompted": [
-            "Parent prompted"
-          ],
-          "feelings": [
-            "Neutral"
-          ],
-          "read_book": "Yes",
-          "notes": "Parent storytelling went smoothly and the child stayed seated for most of it."
-        }
-      }
-    },
-    "2026-04-18": {
-      "date": "2026-04-18",
-      "condition": "parent",
-      "dashboard": {
-        "hasInteraction": true,
+        "hasInteraction": false,
+        "book": "Kitchen Storytime",
         "words": [
           "river",
-          "soft",
-          "boat"
+          "soft"
         ]
       },
       "diary": {
@@ -991,7 +17,7 @@
         "updatedAt": null,
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -1200,24 +226,24 @@
         "responses": {}
       }
     },
-    "2026-04-19": {
-      "date": "2026-04-19",
+    "2026-05-06": {
+      "date": "2026-05-06",
       "condition": "parent",
       "dashboard": {
-        "hasInteraction": true,
+        "hasInteraction": false,
+        "book": "The River Boat",
         "words": [
-          "blanket",
-          "story",
-          "sleepy"
+          "forest",
+          "quiet"
         ]
       },
       "diary": {
-        "submitted": true,
-        "submittedAt": "2026-04-19T20:11:00Z",
-        "updatedAt": "2026-04-19T20:18:00Z",
+        "submitted": false,
+        "submittedAt": null,
+        "updatedAt": null,
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -1423,16 +449,1137 @@
             "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
-        "responses": {
-          "prompted": [
-            "Parent prompted"
-          ],
-          "feelings": [
-            "Neutral"
-          ],
-          "read_book": "Yes",
-          "notes": "Parent storytelling before bed was calm and easy to finish."
-        }
+        "responses": {}
+      }
+    },
+    "2026-05-07": {
+      "date": "2026-05-07",
+      "condition": "parent",
+      "dashboard": {
+        "hasInteraction": false,
+        "book": "Moonlight Path",
+        "words": [
+          "moon",
+          "silver"
+        ]
+      },
+      "diary": {
+        "submitted": false,
+        "submittedAt": null,
+        "updatedAt": null,
+        "instructions": [
+          "Please complete this diary once per day, preferably at the end of the day.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
+          "You may write short notes or longer reflections.",
+          "If your child does not interact with Ella on a given day, please still complete the entry."
+        ],
+        "questions": [
+          {
+            "id": "prompted",
+            "type": "checkbox",
+            "label": "What prompted the storytelling session? (Check all that apply)",
+            "options": [
+              "Child initiated",
+              "Parent prompted",
+              "Sibling encouraged",
+              "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "feelings",
+            "type": "checkbox",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
+            "options": [
+              "Excited",
+              "Neutral",
+              "Frustrated",
+              "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followups": [
+              {
+                "label": "If Other, please specify:",
+                "showWhen": {
+                  "operator": "includesAny",
+                  "value": [
+                    "Other"
+                  ]
+                }
+              },
+              {
+                "label": "If yes, could you briefly describe how your child used the story ideas:",
+                "showWhen": {
+                  "operator": "includesAny",
+                  "value": [
+                    "Wanted related books",
+                    "Wanted related tv show/movies",
+                    "Asked related questions"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "read_book",
+            "type": "radio",
+            "label": "Did you read a book or tell your child a story today?",
+            "options": [
+              "Yes",
+              "No"
+            ],
+            "followup": {
+              "label": "If not, please share if there was a particular reason:",
+              "showWhen": {
+                "operator": "equals",
+                "value": "No"
+              }
+            }
+          },
+          {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today? (Check all that apply)",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Check all that apply)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "notes",
+            "type": "textarea",
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "2026-05-08": {
+      "date": "2026-05-08",
+      "condition": "parent",
+      "dashboard": {
+        "hasInteraction": false,
+        "book": "The Garden Seed",
+        "words": [
+          "kitchen",
+          "mix"
+        ]
+      },
+      "diary": {
+        "submitted": false,
+        "submittedAt": null,
+        "updatedAt": null,
+        "instructions": [
+          "Please complete this diary once per day, preferably at the end of the day.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
+          "You may write short notes or longer reflections.",
+          "If your child does not interact with Ella on a given day, please still complete the entry."
+        ],
+        "questions": [
+          {
+            "id": "prompted",
+            "type": "checkbox",
+            "label": "What prompted the storytelling session? (Check all that apply)",
+            "options": [
+              "Child initiated",
+              "Parent prompted",
+              "Sibling encouraged",
+              "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "feelings",
+            "type": "checkbox",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
+            "options": [
+              "Excited",
+              "Neutral",
+              "Frustrated",
+              "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followups": [
+              {
+                "label": "If Other, please specify:",
+                "showWhen": {
+                  "operator": "includesAny",
+                  "value": [
+                    "Other"
+                  ]
+                }
+              },
+              {
+                "label": "If yes, could you briefly describe how your child used the story ideas:",
+                "showWhen": {
+                  "operator": "includesAny",
+                  "value": [
+                    "Wanted related books",
+                    "Wanted related tv show/movies",
+                    "Asked related questions"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "read_book",
+            "type": "radio",
+            "label": "Did you read a book or tell your child a story today?",
+            "options": [
+              "Yes",
+              "No"
+            ],
+            "followup": {
+              "label": "If not, please share if there was a particular reason:",
+              "showWhen": {
+                "operator": "equals",
+                "value": "No"
+              }
+            }
+          },
+          {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today? (Check all that apply)",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Check all that apply)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "notes",
+            "type": "textarea",
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "2026-05-09": {
+      "date": "2026-05-09",
+      "condition": "parent",
+      "dashboard": {
+        "hasInteraction": false,
+        "book": "Train Window Tale",
+        "words": [
+          "blanket",
+          "warm"
+        ]
+      },
+      "diary": {
+        "submitted": false,
+        "submittedAt": null,
+        "updatedAt": null,
+        "instructions": [
+          "Please complete this diary once per day, preferably at the end of the day.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
+          "You may write short notes or longer reflections.",
+          "If your child does not interact with Ella on a given day, please still complete the entry."
+        ],
+        "questions": [
+          {
+            "id": "prompted",
+            "type": "checkbox",
+            "label": "What prompted the storytelling session? (Check all that apply)",
+            "options": [
+              "Child initiated",
+              "Parent prompted",
+              "Sibling encouraged",
+              "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "feelings",
+            "type": "checkbox",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
+            "options": [
+              "Excited",
+              "Neutral",
+              "Frustrated",
+              "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followups": [
+              {
+                "label": "If Other, please specify:",
+                "showWhen": {
+                  "operator": "includesAny",
+                  "value": [
+                    "Other"
+                  ]
+                }
+              },
+              {
+                "label": "If yes, could you briefly describe how your child used the story ideas:",
+                "showWhen": {
+                  "operator": "includesAny",
+                  "value": [
+                    "Wanted related books",
+                    "Wanted related tv show/movies",
+                    "Asked related questions"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "read_book",
+            "type": "radio",
+            "label": "Did you read a book or tell your child a story today?",
+            "options": [
+              "Yes",
+              "No"
+            ],
+            "followup": {
+              "label": "If not, please share if there was a particular reason:",
+              "showWhen": {
+                "operator": "equals",
+                "value": "No"
+              }
+            }
+          },
+          {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today? (Check all that apply)",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Check all that apply)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "notes",
+            "type": "textarea",
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "2026-05-10": {
+      "date": "2026-05-10",
+      "condition": "parent",
+      "dashboard": {
+        "hasInteraction": false,
+        "book": "Blanket Bedtime Story",
+        "words": [
+          "garden",
+          "green"
+        ]
+      },
+      "diary": {
+        "submitted": false,
+        "submittedAt": null,
+        "updatedAt": null,
+        "instructions": [
+          "Please complete this diary once per day, preferably at the end of the day.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
+          "You may write short notes or longer reflections.",
+          "If your child does not interact with Ella on a given day, please still complete the entry."
+        ],
+        "questions": [
+          {
+            "id": "prompted",
+            "type": "checkbox",
+            "label": "What prompted the storytelling session? (Check all that apply)",
+            "options": [
+              "Child initiated",
+              "Parent prompted",
+              "Sibling encouraged",
+              "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "feelings",
+            "type": "checkbox",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
+            "options": [
+              "Excited",
+              "Neutral",
+              "Frustrated",
+              "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followups": [
+              {
+                "label": "If Other, please specify:",
+                "showWhen": {
+                  "operator": "includesAny",
+                  "value": [
+                    "Other"
+                  ]
+                }
+              },
+              {
+                "label": "If yes, could you briefly describe how your child used the story ideas:",
+                "showWhen": {
+                  "operator": "includesAny",
+                  "value": [
+                    "Wanted related books",
+                    "Wanted related tv show/movies",
+                    "Asked related questions"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "read_book",
+            "type": "radio",
+            "label": "Did you read a book or tell your child a story today?",
+            "options": [
+              "Yes",
+              "No"
+            ],
+            "followup": {
+              "label": "If not, please share if there was a particular reason:",
+              "showWhen": {
+                "operator": "equals",
+                "value": "No"
+              }
+            }
+          },
+          {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today? (Check all that apply)",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Check all that apply)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "notes",
+            "type": "textarea",
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "2026-05-11": {
+      "date": "2026-05-11",
+      "condition": "parent",
+      "dashboard": {
+        "hasInteraction": false,
+        "book": "Forest Friends",
+        "words": [
+          "train",
+          "window"
+        ]
+      },
+      "diary": {
+        "submitted": false,
+        "submittedAt": null,
+        "updatedAt": null,
+        "instructions": [
+          "Please complete this diary once per day, preferably at the end of the day.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
+          "You may write short notes or longer reflections.",
+          "If your child does not interact with Ella on a given day, please still complete the entry."
+        ],
+        "questions": [
+          {
+            "id": "prompted",
+            "type": "checkbox",
+            "label": "What prompted the storytelling session? (Check all that apply)",
+            "options": [
+              "Child initiated",
+              "Parent prompted",
+              "Sibling encouraged",
+              "Scheduled routine",
+              "Unsure",
+              "My child did not engage in a session today",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "who_present",
+            "type": "checkbox",
+            "label": "Who was present or engaged during the session? (Check all that apply)",
+            "options": [
+              "Parent(s)",
+              "Other caregiver(s)",
+              "Sibling(s)",
+              "Friend(s)",
+              "Child was alone",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "feelings",
+            "type": "checkbox",
+            "label": "How did your child feel about Ella today? (Check all that apply)",
+            "options": [
+              "Excited",
+              "Neutral",
+              "Frustrated",
+              "Hesitant",
+              "Want to continue beyond the session",
+              "Unsure",
+              "Other"
+            ],
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "story_ideas",
+            "type": "checkbox",
+            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
+            "options": [
+              "Wanted related books",
+              "Wanted related tv show/movies",
+              "Asked related questions",
+              "No, my child did not use story ideas outside the session today",
+              "Unsure",
+              "Other"
+            ],
+            "followups": [
+              {
+                "label": "If Other, please specify:",
+                "showWhen": {
+                  "operator": "includesAny",
+                  "value": [
+                    "Other"
+                  ]
+                }
+              },
+              {
+                "label": "If yes, could you briefly describe how your child used the story ideas:",
+                "showWhen": {
+                  "operator": "includesAny",
+                  "value": [
+                    "Wanted related books",
+                    "Wanted related tv show/movies",
+                    "Asked related questions"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "read_book",
+            "type": "radio",
+            "label": "Did you read a book or tell your child a story today?",
+            "options": [
+              "Yes",
+              "No"
+            ],
+            "followup": {
+              "label": "If not, please share if there was a particular reason:",
+              "showWhen": {
+                "operator": "equals",
+                "value": "No"
+              }
+            }
+          },
+          {
+            "id": "mention_ella",
+            "type": "checkbox",
+            "label": "Did your child talk about Ella or the stories today? (Check all that apply)",
+            "options": [
+              "Shared story with caregiver",
+              "Shared story with others",
+              "Talked about Ella with caregiver",
+              "Talked about Ella with others",
+              "No, my child did not mention Ella today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Shared story with caregiver",
+                  "Shared story with others",
+                  "Talked about Ella with caregiver",
+                  "Talked about Ella with others"
+                ]
+              }
+            }
+          },
+          {
+            "id": "target_words",
+            "type": "radio",
+            "label": "Did you or anyone else hear your child use any target words today?",
+            "options": [
+              "Yes, correctly",
+              "Yes, incorrectly",
+              "No, my child did not use the target words today",
+              "Unsure"
+            ],
+            "followup": {
+              "label": "If yes, could you briefly describe how your child used the target word:",
+              "showWhen": {
+                "operator": "equalsAny",
+                "value": [
+                  "Yes, correctly",
+                  "Yes, incorrectly"
+                ]
+              }
+            }
+          },
+          {
+            "id": "no_engage_reason",
+            "type": "checkbox",
+            "label": "If your child did not engage with Ella today, why? (Check all that apply)",
+            "options": [
+              "Child was not interested",
+              "Time constraints",
+              "Technical issue",
+              "Child was tired or upset",
+              "Unsure",
+              "Other"
+            ],
+            "showWhen": {
+              "questionId": "prompted",
+              "operator": "includesAny",
+              "value": [
+                "My child did not engage in a session today"
+              ]
+            },
+            "followup": {
+              "label": "If Other, please specify:",
+              "showWhen": {
+                "operator": "includesAny",
+                "value": [
+                  "Other"
+                ]
+              }
+            }
+          },
+          {
+            "id": "notes",
+            "type": "textarea",
+            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
+          }
+        ],
+        "responses": {}
       }
     }
   },
@@ -1448,8 +1595,7 @@
         ],
         "words": [
           "train",
-          "station",
-          "ticket"
+          "station"
         ],
         "highlight": [
           "Robot storytelling worked best with short prompts today.",
@@ -1466,7 +1612,7 @@
         "updatedAt": "2026-04-14T20:18:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -1694,8 +1840,7 @@
         ],
         "words": [
           "spaceship",
-          "moon",
-          "helmet"
+          "moon"
         ],
         "highlight": [
           "The child stayed engaged for the full robot story.",
@@ -1712,7 +1857,7 @@
         "updatedAt": "2026-04-15T20:28:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -1940,8 +2085,7 @@
         ],
         "words": [
           "planet",
-          "ring",
-          "stars"
+          "ring"
         ],
         "highlight": [
           "The robot story supported sustained attention for a longer stretch today.",
@@ -1958,7 +2102,7 @@
         "updatedAt": "2026-04-16T20:20:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -2183,9 +2327,9 @@
         "hasInteraction": true,
         "words": [
           "kitchen",
-          "mix",
-          "spoon"
-        ]
+          "mix"
+        ],
+        "book": "Kitchen Storytime"
       },
       "diary": {
         "submitted": true,
@@ -2193,7 +2337,7 @@
         "updatedAt": "2026-04-17T20:12:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -2418,9 +2562,9 @@
         "hasInteraction": true,
         "words": [
           "blanket",
-          "lamp",
-          "sleep"
-        ]
+          "lamp"
+        ],
+        "book": "Train Window Tale"
       },
       "diary": {
         "submitted": true,
@@ -2428,7 +2572,7 @@
         "updatedAt": "2026-04-18T20:15:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -2653,9 +2797,9 @@
         "hasInteraction": true,
         "words": [
           "quiet",
-          "window",
-          "rain"
-        ]
+          "window"
+        ],
+        "book": "Blanket Bedtime Story"
       },
       "diary": {
         "submitted": false,
@@ -2663,7 +2807,7 @@
         "updatedAt": null,
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -2885,8 +3029,7 @@
         ],
         "words": [
           "puzzle",
-          "corner",
-          "match"
+          "corner"
         ],
         "highlight": [
           "Robot narration held attention in short bursts.",
@@ -2903,7 +3046,7 @@
         "updatedAt": "2026-04-14T20:18:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -3131,8 +3274,7 @@
         ],
         "words": [
           "castle",
-          "dragon",
-          "shield"
+          "dragon"
         ],
         "highlight": [
           "Robot mode sparked imaginative pretend play afterward.",
@@ -3149,7 +3291,7 @@
         "updatedAt": "2026-04-15T20:28:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -3377,8 +3519,7 @@
         ],
         "words": [
           "tunnel",
-          "light",
-          "train"
+          "light"
         ],
         "highlight": [
           "Robot prompts worked better after a slower warm-up.",
@@ -3395,7 +3536,7 @@
         "updatedAt": "2026-04-16T20:31:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -3620,9 +3761,9 @@
         "hasInteraction": true,
         "words": [
           "window",
-          "rain",
-          "tap"
-        ]
+          "rain"
+        ],
+        "book": "Kitchen Storytime"
       },
       "diary": {
         "submitted": false,
@@ -3630,7 +3771,7 @@
         "updatedAt": null,
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -3846,9 +3987,9 @@
         "hasInteraction": true,
         "words": [
           "river",
-          "soft",
-          "boat"
-        ]
+          "soft"
+        ],
+        "book": "Train Window Tale"
       },
       "diary": {
         "submitted": false,
@@ -3856,7 +3997,7 @@
         "updatedAt": null,
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -4072,9 +4213,9 @@
         "hasInteraction": true,
         "words": [
           "cushion",
-          "lamp",
-          "slow"
-        ]
+          "lamp"
+        ],
+        "book": "Blanket Bedtime Story"
       },
       "diary": {
         "submitted": true,
@@ -4082,7 +4223,7 @@
         "updatedAt": "2026-04-19T20:13:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -4313,8 +4454,7 @@
         ],
         "words": [
           "bakery",
-          "bread",
-          "warm"
+          "bread"
         ],
         "highlight": [
           "Robot story linked well to daily routines.",
@@ -4331,7 +4471,7 @@
         "updatedAt": "2026-04-14T20:18:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -4559,8 +4699,7 @@
         ],
         "words": [
           "doctor",
-          "listen",
-          "heart"
+          "listen"
         ],
         "highlight": [
           "Robot prompts helped with turn-taking language.",
@@ -4577,7 +4716,7 @@
         "updatedAt": "2026-04-15T20:28:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -4805,8 +4944,7 @@
         ],
         "words": [
           "doctor",
-          "bandage",
-          "help"
+          "bandage"
         ],
         "highlight": [
           "Robot story led naturally into pretend play with toy tools.",
@@ -4823,7 +4961,7 @@
         "updatedAt": "2026-04-16T20:12:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -5048,9 +5186,9 @@
         "hasInteraction": true,
         "words": [
           "garden",
-          "seed",
-          "water"
-        ]
+          "seed"
+        ],
+        "book": "Kitchen Storytime"
       },
       "diary": {
         "submitted": true,
@@ -5058,7 +5196,7 @@
         "updatedAt": "2026-04-17T20:12:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -5283,9 +5421,9 @@
         "hasInteraction": true,
         "words": [
           "pillow",
-          "quiet",
-          "hug"
-        ]
+          "quiet"
+        ],
+        "book": "Train Window Tale"
       },
       "diary": {
         "submitted": true,
@@ -5293,7 +5431,7 @@
         "updatedAt": "2026-04-18T20:27:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -5518,9 +5656,9 @@
         "hasInteraction": true,
         "words": [
           "book",
-          "soft",
-          "cuddle"
-        ]
+          "soft"
+        ],
+        "book": "Blanket Bedtime Story"
       },
       "diary": {
         "submitted": true,
@@ -5528,7 +5666,7 @@
         "updatedAt": "2026-04-19T20:20:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -5759,8 +5897,7 @@
         ],
         "words": [
           "bus",
-          "stop",
-          "wait"
+          "stop"
         ],
         "highlight": [
           "Robot story needed one restart but recovered well.",
@@ -5777,7 +5914,7 @@
         "updatedAt": "2026-04-14T20:18:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -6005,8 +6142,7 @@
         ],
         "words": [
           "bridge",
-          "map",
-          "follow"
+          "map"
         ],
         "highlight": [
           "Robot mode supported more pointing and shared attention today.",
@@ -6023,7 +6159,7 @@
         "updatedAt": "2026-04-15T20:28:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -6251,8 +6387,7 @@
         ],
         "words": [
           "bridge",
-          "cross",
-          "follow"
+          "cross"
         ],
         "highlight": [
           "Robot mode supported more shared attention today than earlier in the week.",
@@ -6269,7 +6404,7 @@
         "updatedAt": "2026-04-16T20:24:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -6494,9 +6629,9 @@
         "hasInteraction": true,
         "words": [
           "soap",
-          "bubbles",
-          "sink"
-        ]
+          "bubbles"
+        ],
+        "book": "Kitchen Storytime"
       },
       "diary": {
         "submitted": true,
@@ -6504,7 +6639,7 @@
         "updatedAt": "2026-04-17T20:12:00Z",
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -6729,9 +6864,9 @@
         "hasInteraction": true,
         "words": [
           "moon",
-          "quiet",
-          "blanket"
-        ]
+          "quiet"
+        ],
+        "book": "Train Window Tale"
       },
       "diary": {
         "submitted": false,
@@ -6739,7 +6874,7 @@
         "updatedAt": null,
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
@@ -6955,9 +7090,9 @@
         "hasInteraction": true,
         "words": [
           "moon",
-          "quiet",
-          "blanket"
-        ]
+          "quiet"
+        ],
+        "book": "Blanket Bedtime Story"
       },
       "diary": {
         "submitted": false,
@@ -6965,7 +7100,7 @@
         "updatedAt": null,
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers — we are interested in your observations.",
+          "There are no right or wrong answers \u2014 we are interested in your observations.",
           "You may write short notes or longer reflections.",
           "If your child does not interact with Ella on a given day, please still complete the entry."
         ],
