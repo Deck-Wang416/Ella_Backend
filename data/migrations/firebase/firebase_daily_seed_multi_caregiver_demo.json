@@ -5,10 +5,10 @@
       "condition": "parent",
       "dashboard": {
         "hasInteraction": false,
-        "book": "Kitchen Storytime",
+        "book": "Clever Jack Takes the Cake",
         "words": [
-          "river",
-          "soft"
+          "realm",
+          "succulent"
         ]
       },
       "diary": {
@@ -231,10 +231,10 @@
       "condition": "parent",
       "dashboard": {
         "hasInteraction": false,
-        "book": "The River Boat",
+        "book": "Mirette on the High Wire",
         "words": [
-          "forest",
-          "quiet"
+          "devour",
+          "astonished"
         ]
       },
       "diary": {
@@ -457,10 +457,10 @@
       "condition": "parent",
       "dashboard": {
         "hasInteraction": false,
-        "book": "Moonlight Path",
+        "book": "Cloudy With a Chance of Meatballs",
         "words": [
-          "moon",
-          "silver"
+          "occasional",
+          "necessity"
         ]
       },
       "diary": {
@@ -683,10 +683,10 @@
       "condition": "parent",
       "dashboard": {
         "hasInteraction": false,
-        "book": "The Garden Seed",
+        "book": "Hello Lighthouse",
         "words": [
-          "kitchen",
-          "mix"
+          "tend(ing)",
+          "disaster"
         ]
       },
       "diary": {
@@ -909,10 +909,10 @@
       "condition": "parent",
       "dashboard": {
         "hasInteraction": false,
-        "book": "Train Window Tale",
+        "book": "The Day You Begin",
         "words": [
-          "blanket",
-          "warm"
+          "fragile",
+          "souvenir"
         ]
       },
       "diary": {
@@ -1135,236 +1135,10 @@
       "condition": "parent",
       "dashboard": {
         "hasInteraction": false,
-        "book": "Blanket Bedtime Story",
+        "book": "Madeline",
         "words": [
-          "garden",
-          "green"
-        ]
-      },
-      "diary": {
-        "submitted": false,
-        "submittedAt": null,
-        "updatedAt": null,
-        "instructions": [
-          "Please complete this diary once per day, preferably at the end of the day.",
-          "There are no right or wrong answers \u2014 we are interested in your observations.",
-          "You may write short notes or longer reflections.",
-          "If your child does not interact with Ella on a given day, please still complete the entry."
-        ],
-        "questions": [
-          {
-            "id": "prompted",
-            "type": "checkbox",
-            "label": "What prompted the storytelling session? (Check all that apply)",
-            "options": [
-              "Child initiated",
-              "Parent prompted",
-              "Sibling encouraged",
-              "Scheduled routine",
-              "Unsure",
-              "My child did not engage in a session today",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "who_present",
-            "type": "checkbox",
-            "label": "Who was present or engaged during the session? (Check all that apply)",
-            "options": [
-              "Parent(s)",
-              "Other caregiver(s)",
-              "Sibling(s)",
-              "Friend(s)",
-              "Child was alone",
-              "Unsure",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "feelings",
-            "type": "checkbox",
-            "label": "How did your child feel about Ella today? (Check all that apply)",
-            "options": [
-              "Excited",
-              "Neutral",
-              "Frustrated",
-              "Hesitant",
-              "Want to continue beyond the session",
-              "Unsure",
-              "Other"
-            ],
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "story_ideas",
-            "type": "checkbox",
-            "label": "Did your child use story ideas outside the session today? (Check all that apply)",
-            "options": [
-              "Wanted related books",
-              "Wanted related tv show/movies",
-              "Asked related questions",
-              "No, my child did not use story ideas outside the session today",
-              "Unsure",
-              "Other"
-            ],
-            "followups": [
-              {
-                "label": "If Other, please specify:",
-                "showWhen": {
-                  "operator": "includesAny",
-                  "value": [
-                    "Other"
-                  ]
-                }
-              },
-              {
-                "label": "If yes, could you briefly describe how your child used the story ideas:",
-                "showWhen": {
-                  "operator": "includesAny",
-                  "value": [
-                    "Wanted related books",
-                    "Wanted related tv show/movies",
-                    "Asked related questions"
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            "id": "read_book",
-            "type": "radio",
-            "label": "Did you read a book or tell your child a story today?",
-            "options": [
-              "Yes",
-              "No"
-            ],
-            "followup": {
-              "label": "If not, please share if there was a particular reason:",
-              "showWhen": {
-                "operator": "equals",
-                "value": "No"
-              }
-            }
-          },
-          {
-            "id": "mention_ella",
-            "type": "checkbox",
-            "label": "Did your child talk about Ella or the stories today? (Check all that apply)",
-            "options": [
-              "Shared story with caregiver",
-              "Shared story with others",
-              "Talked about Ella with caregiver",
-              "Talked about Ella with others",
-              "No, my child did not mention Ella today",
-              "Unsure"
-            ],
-            "followup": {
-              "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Shared story with caregiver",
-                  "Shared story with others",
-                  "Talked about Ella with caregiver",
-                  "Talked about Ella with others"
-                ]
-              }
-            }
-          },
-          {
-            "id": "target_words",
-            "type": "radio",
-            "label": "Did you or anyone else hear your child use any target words today?",
-            "options": [
-              "Yes, correctly",
-              "Yes, incorrectly",
-              "No, my child did not use the target words today",
-              "Unsure"
-            ],
-            "followup": {
-              "label": "If yes, could you briefly describe how your child used the target word:",
-              "showWhen": {
-                "operator": "equalsAny",
-                "value": [
-                  "Yes, correctly",
-                  "Yes, incorrectly"
-                ]
-              }
-            }
-          },
-          {
-            "id": "no_engage_reason",
-            "type": "checkbox",
-            "label": "If your child did not engage with Ella today, why? (Check all that apply)",
-            "options": [
-              "Child was not interested",
-              "Time constraints",
-              "Technical issue",
-              "Child was tired or upset",
-              "Unsure",
-              "Other"
-            ],
-            "showWhen": {
-              "questionId": "prompted",
-              "operator": "includesAny",
-              "value": [
-                "My child did not engage in a session today"
-              ]
-            },
-            "followup": {
-              "label": "If Other, please specify:",
-              "showWhen": {
-                "operator": "includesAny",
-                "value": [
-                  "Other"
-                ]
-              }
-            }
-          },
-          {
-            "id": "notes",
-            "type": "textarea",
-            "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
-          }
-        ],
-        "responses": {}
-      }
-    },
-    "2026-05-11": {
-      "date": "2026-05-11",
-      "condition": "parent",
-      "dashboard": {
-        "hasInteraction": false,
-        "book": "Forest Friends",
-        "words": [
-          "train",
-          "window"
+          "crank",
+          "solemn"
         ]
       },
       "diary": {
@@ -1584,32 +1358,21 @@
     }
   },
   "2": {
-    "2026-04-14": {
-      "date": "2026-04-14",
-      "condition": "robot",
+    "2026-05-05": {
+      "date": "2026-05-05",
+      "condition": "parent",
       "dashboard": {
-        "hasInteraction": true,
-        "photos": [
-          "/assets/sample-photo.svg",
-          "/assets/sample-photo-2.svg"
-        ],
+        "hasInteraction": false,
+        "book": "A Bus Called Heaven",
         "words": [
-          "train",
-          "station"
-        ],
-        "highlight": [
-          "Robot storytelling worked best with short prompts today.",
-          "The child echoed one transportation word after a delay."
-        ],
-        "ask": [
-          "Which transportation word did your child remember?",
-          "Was your child more interested in the robot voice or the story itself?"
+          "regulation",
+          "nudge"
         ]
       },
       "diary": {
-        "submitted": true,
-        "submittedAt": "2026-04-14T20:10:00Z",
-        "updatedAt": "2026-04-14T20:18:00Z",
+        "submitted": false,
+        "submittedAt": null,
+        "updatedAt": null,
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
           "There are no right or wrong answers \u2014 we are interested in your observations.",
@@ -1818,43 +1581,24 @@
             "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
-        "responses": {
-          "prompted": [
-            "Parent prompted"
-          ],
-          "feelings": [
-            "Neutral"
-          ],
-          "read_book": "Yes",
-          "notes": "Needed extra setup time before the robot session started."
-        }
+        "responses": {}
       }
     },
-    "2026-04-15": {
-      "date": "2026-04-15",
-      "condition": "robot",
+    "2026-05-06": {
+      "date": "2026-05-06",
+      "condition": "parent",
       "dashboard": {
-        "hasInteraction": true,
-        "photos": [
-          "/assets/sample-photo.svg"
-        ],
+        "hasInteraction": false,
+        "book": "The Carpenter's Gift",
         "words": [
-          "spaceship",
-          "moon"
-        ],
-        "highlight": [
-          "The child stayed engaged for the full robot story.",
-          "The robot prompts led to two spontaneous comments."
-        ],
-        "ask": [
-          "Which part of the space story did your child comment on?",
-          "Did your child repeat any new vocabulary after the session?"
+          "skilled",
+          "reluctant"
         ]
       },
       "diary": {
-        "submitted": true,
-        "submittedAt": "2026-04-15T20:20:00Z",
-        "updatedAt": "2026-04-15T20:28:00Z",
+        "submitted": false,
+        "submittedAt": null,
+        "updatedAt": null,
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
           "There are no right or wrong answers \u2014 we are interested in your observations.",
@@ -2063,43 +1807,24 @@
             "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
-        "responses": {
-          "prompted": [
-            "Child initiated"
-          ],
-          "feelings": [
-            "Excited"
-          ],
-          "read_book": "Yes",
-          "notes": "This was one of the smoother robot sessions of the week."
-        }
+        "responses": {}
       }
     },
-    "2026-04-16": {
-      "date": "2026-04-16",
-      "condition": "robot",
+    "2026-05-07": {
+      "date": "2026-05-07",
+      "condition": "parent",
       "dashboard": {
-        "hasInteraction": true,
-        "photos": [
-          "/assets/sample-photo.svg"
-        ],
+        "hasInteraction": false,
+        "book": "Dreamers",
         "words": [
-          "planet",
-          "ring"
-        ],
-        "highlight": [
-          "The robot story supported sustained attention for a longer stretch today.",
-          "The child repeated one space word independently."
-        ],
-        "ask": [
-          "Which space word came back later in the day?",
-          "Did your child comment on any picture or sound in the story?"
+          "resplendent",
+          "resilience"
         ]
       },
       "diary": {
-        "submitted": true,
-        "submittedAt": "2026-04-16T20:13:00Z",
-        "updatedAt": "2026-04-16T20:20:00Z",
+        "submitted": false,
+        "submittedAt": null,
+        "updatedAt": null,
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
           "There are no right or wrong answers \u2014 we are interested in your observations.",
@@ -2308,33 +2033,24 @@
             "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
-        "responses": {
-          "prompted": [
-            "Child initiated"
-          ],
-          "feelings": [
-            "Excited"
-          ],
-          "read_book": "Yes",
-          "notes": "The child asked for the robot story again after dinner."
-        }
+        "responses": {}
       }
     },
-    "2026-04-17": {
-      "date": "2026-04-17",
+    "2026-05-08": {
+      "date": "2026-05-08",
       "condition": "parent",
       "dashboard": {
-        "hasInteraction": true,
+        "hasInteraction": false,
+        "book": "The House on East 88th Street",
         "words": [
-          "kitchen",
-          "mix"
-        ],
-        "book": "Kitchen Storytime"
+          "delighted",
+          "appreciative(ly)"
+        ]
       },
       "diary": {
-        "submitted": true,
-        "submittedAt": "2026-04-17T20:05:00Z",
-        "updatedAt": "2026-04-17T20:12:00Z",
+        "submitted": false,
+        "submittedAt": null,
+        "updatedAt": null,
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
           "There are no right or wrong answers \u2014 we are interested in your observations.",
@@ -2543,33 +2259,24 @@
             "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
-        "responses": {
-          "prompted": [
-            "Scheduled routine"
-          ],
-          "feelings": [
-            "Excited"
-          ],
-          "read_book": "Yes",
-          "notes": "Parent storytelling felt playful and connected to dinner prep."
-        }
+        "responses": {}
       }
     },
-    "2026-04-18": {
-      "date": "2026-04-18",
+    "2026-05-09": {
+      "date": "2026-05-09",
       "condition": "parent",
       "dashboard": {
-        "hasInteraction": true,
+        "hasInteraction": false,
+        "book": "Miss Nelson Is Missing!",
         "words": [
-          "blanket",
-          "lamp"
-        ],
-        "book": "Train Window Tale"
+          "unpleasant",
+          "wicked"
+        ]
       },
       "diary": {
-        "submitted": true,
-        "submittedAt": "2026-04-18T20:08:00Z",
-        "updatedAt": "2026-04-18T20:15:00Z",
+        "submitted": false,
+        "submittedAt": null,
+        "updatedAt": null,
         "instructions": [
           "Please complete this diary once per day, preferably at the end of the day.",
           "There are no right or wrong answers \u2014 we are interested in your observations.",
@@ -2778,28 +2485,19 @@
             "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days)."
           }
         ],
-        "responses": {
-          "prompted": [
-            "Parent prompted"
-          ],
-          "feelings": [
-            "Neutral"
-          ],
-          "read_book": "Yes",
-          "notes": "Parent session was calm but shorter than usual."
-        }
+        "responses": {}
       }
     },
-    "2026-04-19": {
-      "date": "2026-04-19",
+    "2026-05-10": {
+      "date": "2026-05-10",
       "condition": "parent",
       "dashboard": {
-        "hasInteraction": true,
+        "hasInteraction": false,
+        "book": "Last Stop on Market Street",
         "words": [
-          "quiet",
-          "window"
-        ],
-        "book": "Blanket Bedtime Story"
+          "graffiti",
+          "lurch"
+        ]
       },
       "diary": {
         "submitted": false,
