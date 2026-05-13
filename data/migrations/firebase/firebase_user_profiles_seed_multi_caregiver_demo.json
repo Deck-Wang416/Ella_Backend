@@ -1,24 +1,18 @@
 {
   "1": {
     "caregiverId": 1,
-    "robot_condition_range": {
-      "startDate": "2026-04-14",
-      "endDate": "2026-04-16"
-    },
+    "robot_condition_range": null,
     "parent_condition_range": {
-      "startDate": "2026-04-17",
-      "endDate": "2026-04-30"
+      "startDate": "2026-05-12",
+      "endDate": "2026-05-18"
     }
   },
   "2": {
     "caregiverId": 2,
-    "robot_condition_range": {
-      "startDate": "2026-04-14",
-      "endDate": "2026-04-16"
-    },
+    "robot_condition_range": null,
     "parent_condition_range": {
-      "startDate": "2026-04-17",
-      "endDate": "2026-04-19"
+      "startDate": "2026-05-12",
+      "endDate": "2026-05-18"
     }
   },
   "3": {
