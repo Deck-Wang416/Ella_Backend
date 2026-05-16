@@ -36,7 +36,7 @@ class DailyContentService:
         return daily
 
     def build_empty_daily(self, caregiver_id: int, target_date: date, condition: ConditionType = "robot") -> DailyContent:
-        template = self._current_diary_template()
+        template = self._diary_template_for_condition(condition)
         dashboard = (
             ParentDashboardContent(hasInteraction=False, book=None, words=[])
             if condition == "parent"
@@ -138,7 +138,7 @@ class DailyContentService:
             else DashboardContent.model_validate(dashboard_payload)
         )
         diary = DiaryContent.model_validate(payload.get("diary") or {})
-        template = self._current_diary_template()
+        template = self._diary_template_for_condition(condition)
         diary.instructions = template["instructions"]
         diary.questions = template["questions"]
         resolved_date = payload.get("date") or (target_date.isoformat() if target_date else "")
@@ -154,97 +154,40 @@ class DailyContentService:
         ref = get_rtdb_reference(f"{self._daily_root(caregiver_id)}/{target_date.isoformat()}")
         ref.set(daily.model_dump(mode="json", exclude_none=True))
 
-    def _current_diary_template(self) -> dict[str, list]:
+    def _parent_diary_template(self) -> dict[str, list]:
         instructions = [
             "Please complete this diary once per day, preferably at the end of the day.",
             "There are no right or wrong answers — we are interested in your observations.",
             "You may write short notes or longer reflections.",
-            "If your child does not interact with Ella on a given day, please still complete the entry.",
         ]
         questions = [
             DailyQuestion.model_validate(
                 {
-                    "id": "prompted",
+                    "id": "story_outside_session",
                     "type": "checkbox",
-                    "label": "What prompted the storytelling session? (Check all that apply)",
+                    "label": "Did your child talk about the stories outside of the story session today?",
                     "options": [
-                        "Child initiated",
-                        "Parent prompted",
-                        "Sibling encouraged",
-                        "Scheduled routine",
-                        "Unsure",
-                        "My child did not engage in a session today",
-                        "Other",
-                    ],
-                    "followup": {
-                        "label": "If Other, please specify:",
-                        "showWhen": {
-                            "operator": "includesAny",
-                            "value": ["Other"],
-                        },
-                    },
-                }
-            ),
-            DailyQuestion.model_validate(
-                {
-                    "id": "who_present",
-                    "type": "checkbox",
-                    "label": "Who was present or engaged during the session? (Check all that apply)",
-                    "options": [
-                        "Parent(s)",
-                        "Other caregiver(s)",
-                        "Sibling(s)",
-                        "Friend(s)",
-                        "Child was alone",
-                        "Unsure",
-                        "Other",
-                    ],
-                    "followup": {
-                        "label": "If Other, please specify:",
-                        "showWhen": {
-                            "operator": "includesAny",
-                            "value": ["Other"],
-                        },
-                    },
-                }
-            ),
-            DailyQuestion.model_validate(
-                {
-                    "id": "feelings",
-                    "type": "checkbox",
-                    "label": "How did your child feel about Ella today? (Check all that apply)",
-                    "options": [
-                        "Excited",
-                        "Neutral",
-                        "Frustrated",
-                        "Hesitant",
-                        "Want to continue beyond the session",
-                        "Unsure",
-                        "Other",
-                    ],
-                    "followup": {
-                        "label": "If Other, please specify:",
-                        "showWhen": {
-                            "operator": "includesAny",
-                            "value": ["Other"],
-                        },
-                    },
-                }
-            ),
-            DailyQuestion.model_validate(
-                {
-                    "id": "story_ideas",
-                    "type": "checkbox",
-                    "label": "Did your child use story ideas outside the session today? (Check all that apply)",
-                    "options": [
-                        "Wanted related books",
-                        "Wanted related tv show/movies",
+                        "Shared story with parents, siblings, or others",
+                        "Asked for related books",
+                        "Asked for related TV shows/movies",
                         "Asked related questions",
-                        "No, my child did not use story ideas outside the session today",
+                        "No, my child did not mention the stories today",
                         "Unsure",
                         "Other",
                     ],
                     "followups": [
+                        {
+                            "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+                            "showWhen": {
+                                "operator": "includesAny",
+                                "value": [
+                                    "Shared story with parents, siblings, or others",
+                                    "Asked for related books",
+                                    "Asked for related TV shows/movies",
+                                    "Asked related questions",
+                                ],
+                            },
+                        },
                         {
                             "label": "If Other, please specify:",
                             "showWhen": {
@@ -252,60 +195,7 @@ class DailyContentService:
                                 "value": ["Other"],
                             },
                         },
-                        {
-                            "label": "If yes, could you briefly describe how your child used the story ideas:",
-                            "showWhen": {
-                                "operator": "includesAny",
-                                "value": [
-                                    "Wanted related books",
-                                    "Wanted related tv show/movies",
-                                    "Asked related questions",
-                                ],
-                            },
-                        },
                     ],
-                }
-            ),
-            DailyQuestion.model_validate(
-                {
-                    "id": "read_book",
-                    "type": "radio",
-                    "label": "Did you read a book or tell your child a story today?",
-                    "options": ["Yes", "No"],
-                    "followup": {
-                        "label": "If not, please share if there was a particular reason:",
-                        "showWhen": {
-                            "operator": "equals",
-                            "value": "No",
-                        },
-                    },
-                }
-            ),
-            DailyQuestion.model_validate(
-                {
-                    "id": "mention_ella",
-                    "type": "checkbox",
-                    "label": "Did your child talk about Ella or the stories today? (Check all that apply)",
-                    "options": [
-                        "Shared story with caregiver",
-                        "Shared story with others",
-                        "Talked about Ella with caregiver",
-                        "Talked about Ella with others",
-                        "No, my child did not mention Ella today",
-                        "Unsure",
-                    ],
-                    "followup": {
-                        "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
-                        "showWhen": {
-                            "operator": "includesAny",
-                            "value": [
-                                "Shared story with caregiver",
-                                "Shared story with others",
-                                "Talked about Ella with caregiver",
-                                "Talked about Ella with others",
-                            ],
-                        },
-                    },
                 }
             ),
             DailyQuestion.model_validate(
@@ -330,27 +220,15 @@ class DailyContentService:
             ),
             DailyQuestion.model_validate(
                 {
-                    "id": "no_engage_reason",
-                    "type": "checkbox",
-                    "label": "If your child did not engage with Ella today, why? (Check all that apply)",
-                    "options": [
-                        "Child was not interested",
-                        "Time constraints",
-                        "Technical issue",
-                        "Child was tired or upset",
-                        "Unsure",
-                        "Other",
-                    ],
-                    "showWhen": {
-                        "questionId": "prompted",
-                        "operator": "includesAny",
-                        "value": ["My child did not engage in a session today"],
-                    },
+                    "id": "read_book_outside_session",
+                    "type": "radio",
+                    "label": "Did you read a book to your child outside of the story session today?",
+                    "options": ["Yes", "No"],
                     "followup": {
-                        "label": "If Other, please specify:",
+                        "label": "If not, please share if there was a particular reason:",
                         "showWhen": {
-                            "operator": "includesAny",
-                            "value": ["Other"],
+                            "operator": "equals",
+                            "value": "No",
                         },
                     },
                 }
@@ -364,6 +242,102 @@ class DailyContentService:
             ),
         ]
         return {"instructions": instructions, "questions": questions}
+
+    def _robot_diary_template(self) -> dict[str, list]:
+        instructions = [
+            "Please complete this diary once per day, preferably at the end of the day.",
+            "There are no right or wrong answers — we are interested in your observations.",
+            "You may write short notes or longer reflections.",
+        ]
+        questions = [
+            DailyQuestion.model_validate(
+                {
+                    "id": "ella_or_story_outside_session",
+                    "type": "checkbox",
+                    "label": "Did your child talk about Ella or the stories outside of the story session today?",
+                    "options": [
+                        "Shared story with parents, siblings, or others",
+                        "Talked about Ella with parents, siblings, or others",
+                        "Asked for related books",
+                        "Asked for related TV shows/movies",
+                        "Asked related questions",
+                        "No, my child did not mention Ella or the stories today",
+                        "Unsure",
+                        "Other",
+                    ],
+                    "followups": [
+                        {
+                            "label": "If yes, could you briefly describe how your child mentioned Ella or the stories:",
+                            "showWhen": {
+                                "operator": "includesAny",
+                                "value": [
+                                    "Shared story with parents, siblings, or others",
+                                    "Talked about Ella with parents, siblings, or others",
+                                    "Asked for related books",
+                                    "Asked for related TV shows/movies",
+                                    "Asked related questions",
+                                ],
+                            },
+                        },
+                        {
+                            "label": "If Other, please specify:",
+                            "showWhen": {
+                                "operator": "includesAny",
+                                "value": ["Other"],
+                            },
+                        },
+                    ],
+                }
+            ),
+            DailyQuestion.model_validate(
+                {
+                    "id": "target_words",
+                    "type": "radio",
+                    "label": "Did you or anyone else hear your child use any target words today?",
+                    "options": [
+                        "Yes, correctly",
+                        "Yes, incorrectly",
+                        "No, my child did not use the target words today",
+                        "Unsure",
+                    ],
+                    "followup": {
+                        "label": "If yes, could you briefly describe how your child used the target word:",
+                        "showWhen": {
+                            "operator": "equalsAny",
+                            "value": ["Yes, correctly", "Yes, incorrectly"],
+                        },
+                    },
+                }
+            ),
+            DailyQuestion.model_validate(
+                {
+                    "id": "read_book_today",
+                    "type": "radio",
+                    "label": "Did you read a book to your child today?",
+                    "options": ["Yes", "No"],
+                    "followup": {
+                        "label": "If not, please share if there was a particular reason:",
+                        "showWhen": {
+                            "operator": "equals",
+                            "value": "No",
+                        },
+                    },
+                }
+            ),
+            DailyQuestion.model_validate(
+                {
+                    "id": "notes",
+                    "type": "textarea",
+                    "label": "Any other observations, feedback, or notes from today (e.g., surprises, changes over time, comparisons to previous days).",
+                }
+            ),
+        ]
+        return {"instructions": instructions, "questions": questions}
+
+    def _diary_template_for_condition(self, condition: ConditionType) -> dict[str, list]:
+        if condition == "parent":
+            return self._parent_diary_template()
+        return self._robot_diary_template()
 
     def _local_today(self, timezone_name: str) -> date:
         try:
