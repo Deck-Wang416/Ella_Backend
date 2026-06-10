@@ -30,18 +30,28 @@ class DailyQuestion(BaseModel):
     showWhen: ConditionalShowWhen | None = None
 
 
+class WeeklyProgress(BaseModel):
+    startDate: str
+    endDate: str
+    currentValue: float
+    targetValue: float
+    unit: Literal["stories", "hours"]
+
+
 class DashboardContent(BaseModel):
     hasInteraction: bool = False
     photos: list[str] = Field(default_factory=list)
     words: list[str] = Field(default_factory=list)
     highlight: list[str] = Field(default_factory=list)
     ask: list[str] = Field(default_factory=list)
+    weeklyProgress: WeeklyProgress | None = None
 
 
 class ParentDashboardContent(BaseModel):
     hasInteraction: bool = False
     book: str | None = None
     words: list[str] = Field(default_factory=list)
+    weeklyProgress: WeeklyProgress | None = None
 
 
 class DiaryContent(BaseModel):

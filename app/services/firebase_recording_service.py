@@ -44,6 +44,7 @@ class FirebaseRecordingService:
             "lastChunkIndex": -1,
             "receivedChunkIndexes": {},
             "storagePrefix": storage_prefix,
+            "durationSeconds": None,
             "createdAt": now,
             "updatedAt": now,
             "completedAt": None,
@@ -86,7 +87,7 @@ class FirebaseRecordingService:
             "lastChunkIndex": session["lastChunkIndex"],
         }
 
-    def complete_session(self, session_id: str, final_chunk_index: int) -> dict:
+    def complete_session(self, session_id: str, final_chunk_index: int, duration_seconds: int | None = None) -> dict:
         session = self.get_session(session_id)
         if session is None:
             raise FileNotFoundError(session_id)
@@ -94,6 +95,7 @@ class FirebaseRecordingService:
         now = self._now_iso()
         session["status"] = "completed"
         session["lastChunkIndex"] = max(int(session.get("lastChunkIndex", -1)), final_chunk_index)
+        session["durationSeconds"] = duration_seconds
         session["updatedAt"] = now
         session["completedAt"] = now
         self._session_ref(session_id).set(session)

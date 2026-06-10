@@ -64,6 +64,7 @@ def complete_recording_session(session_id: str, payload: RecordingSessionComplet
         return service.complete_session(
             session_id=session_id,
             final_chunk_index=payload.finalChunkIndex,
+            duration_seconds=payload.durationSeconds,
         )
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Recording session not found") from None

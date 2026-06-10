@@ -21,6 +21,7 @@ class RecordingSessionRead(BaseModel):
     uploadedChunks: int
     lastChunkIndex: int
     storagePrefix: str
+    durationSeconds: int | None = None
     createdAt: datetime
     updatedAt: datetime
     completedAt: datetime | None = None
@@ -37,3 +38,4 @@ class RecordingChunkUploadResponse(BaseModel):
 
 class RecordingSessionCompleteRequest(BaseModel):
     finalChunkIndex: int = Field(ge=-1)
+    durationSeconds: int | None = Field(default=None, ge=0)

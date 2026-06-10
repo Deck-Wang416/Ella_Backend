@@ -1,9 +1,18 @@
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from app.core.config import get_settings
 from app.core.firebase_client import get_rtdb_reference
-from app.schemas.daily import ConditionType, DailyContent, DailyQuestion, DailySummary, DiaryContent, DashboardContent, ParentDashboardContent
+from app.schemas.daily import (
+    ConditionType,
+    DailyContent,
+    DailyQuestion,
+    DailySummary,
+    DiaryContent,
+    DashboardContent,
+    ParentDashboardContent,
+    WeeklyProgress,
+)
 from app.services.user_profile_service import UserProfileService
 
 
@@ -33,6 +42,15 @@ class DailyContentService:
             return self.normalize_daily_payload(payload, target_date)
         daily = self.build_empty_daily(caregiver_id, target_date, condition=expected_condition)
         self._save_daily(caregiver_id, target_date, daily)
+        return daily
+
+    def enrich_dashboard_with_weekly_progress(self, caregiver_id: int, daily: DailyContent) -> DailyContent:
+        progress = self.get_weekly_progress(
+            caregiver_id=caregiver_id,
+            target_date=date.fromisoformat(daily.date),
+            condition=daily.condition,
+        )
+        daily.dashboard.weeklyProgress = progress
         return daily
 
     def build_empty_daily(self, caregiver_id: int, target_date: date, condition: ConditionType = "robot") -> DailyContent:
@@ -149,6 +167,111 @@ class DailyContentService:
             dashboard=dashboard,
             diary=diary,
         )
+
+    def get_weekly_progress(
+        self,
+        caregiver_id: int,
+        target_date: date,
+        condition: ConditionType,
+    ) -> WeeklyProgress:
+        week_start, week_end = self._resolve_condition_week_range(caregiver_id, target_date, condition)
+        if condition == "robot":
+            current_value = float(self._count_robot_stories(caregiver_id, week_start, week_end))
+            target_value = 14.0
+            unit = "stories"
+        else:
+            current_value = self._display_parent_hours(
+                self._sum_parent_recording_seconds(caregiver_id, week_start, week_end)
+            )
+            target_value = 1.5
+            unit = "hours"
+
+        return WeeklyProgress(
+            startDate=week_start.isoformat(),
+            endDate=week_end.isoformat(),
+            currentValue=current_value,
+            targetValue=target_value,
+            unit=unit,
+        )
+
+    def _resolve_condition_week_range(
+        self,
+        caregiver_id: int,
+        target_date: date,
+        condition: ConditionType,
+    ) -> tuple[date, date]:
+        profile = self.profile_service.get_profile(caregiver_id)
+        if profile is None:
+            raise FileNotFoundError(caregiver_id)
+
+        condition_range = (
+            profile.robot_condition_range if condition == "robot" else profile.parent_condition_range
+        )
+        if condition_range is None:
+            raise FileNotFoundError(target_date.isoformat())
+
+        range_start = date.fromisoformat(condition_range.startDate)
+        range_end = date.fromisoformat(condition_range.endDate)
+        if not (range_start <= target_date <= range_end):
+            raise FileNotFoundError(target_date.isoformat())
+
+        delta_days = (target_date - range_start).days
+        week_index = delta_days // 7
+        week_start = range_start + timedelta(days=week_index * 7)
+        week_end = min(week_start + timedelta(days=6), range_end)
+        return week_start, week_end
+
+    def _count_robot_stories(self, caregiver_id: int, week_start: date, week_end: date) -> int:
+        count = 0
+        current = week_start
+        while current <= week_end:
+            payload = self._get_daily_payload(caregiver_id, current)
+            if isinstance(payload, dict) and payload.get("condition") == "robot":
+                dashboard_payload = payload.get("dashboard") or {}
+                if bool(dashboard_payload.get("hasInteraction")):
+                    count += 1
+            current += timedelta(days=1)
+        return count
+
+    def _sum_parent_recording_seconds(self, caregiver_id: int, week_start: date, week_end: date) -> int:
+        sessions = get_rtdb_reference("recordingSessions").get()
+        if not isinstance(sessions, dict):
+            return 0
+
+        total_seconds = 0
+        for session in sessions.values():
+            if not isinstance(session, dict):
+                continue
+            if session.get("caregiverId") != caregiver_id:
+                continue
+            if session.get("condition") != "parent":
+                continue
+            if session.get("status") != "completed":
+                continue
+            session_date_raw = session.get("date")
+            duration_seconds = session.get("durationSeconds")
+            if not session_date_raw or duration_seconds is None:
+                continue
+            try:
+                session_date = date.fromisoformat(str(session_date_raw))
+                seconds = int(duration_seconds)
+            except (TypeError, ValueError):
+                continue
+            if week_start <= session_date <= week_end:
+                total_seconds += max(seconds, 0)
+        return total_seconds
+
+    def _display_parent_hours(self, total_seconds: int) -> float:
+        if total_seconds <= 0:
+            return 0.0
+        total_hours = total_seconds / 3600.0
+        if total_hours < 0.1:
+            return 0.0
+        return round(total_hours, 1)
+
+    def _get_daily_payload(self, caregiver_id: int, target_date: date) -> dict | None:
+        payload = get_rtdb_reference(f"{self._daily_root(caregiver_id)}/{target_date.isoformat()}").get()
+        return payload if isinstance(payload, dict) else None
 
     def _save_daily(self, caregiver_id: int, target_date: date, daily: DailyContent) -> None:
         ref = get_rtdb_reference(f"{self._daily_root(caregiver_id)}/{target_date.isoformat()}")

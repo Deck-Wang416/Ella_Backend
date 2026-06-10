@@ -29,7 +29,8 @@ def _resolve_timezone(caregiver_id: int | None, fallback_timezone: str | None) -
     return "UTC"
 
 
-def _to_detail_response(service: DailyContentService, daily, timezone_name: str) -> DailyDetailResponse:
+def _to_detail_response(service: DailyContentService, caregiver_id: int, daily, timezone_name: str) -> DailyDetailResponse:
+    daily = service.enrich_dashboard_with_weekly_progress(caregiver_id=caregiver_id, daily=daily)
     summary = service.build_summary(daily, timezone_name=timezone_name)
     return DailyDetailResponse(
         date=daily.date,
@@ -66,7 +67,7 @@ def get_daily(
     service = DailyContentService()
     try:
         daily = service.get_daily(caregiver_id, entry_date)
-        return _to_detail_response(service, daily, tz_name)
+        return _to_detail_response(service, caregiver_id, daily, tz_name)
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Daily content not found") from None
 
@@ -86,7 +87,7 @@ def initialize_daily(
             target_date=entry_date,
             timezone_name=tz_name,
         )
-        return _to_detail_response(service, daily, tz_name)
+        return _to_detail_response(service, caregiver_id, daily, tz_name)
     except PermissionError:
         raise HTTPException(
             status_code=409,
@@ -111,7 +112,7 @@ def update_daily(
             responses=payload.responses,
             submitted=payload.submitted,
         )
-        return _to_detail_response(service, daily, tz_name)
+        return _to_detail_response(service, caregiver_id, daily, tz_name)
     except PermissionError:
         raise HTTPException(status_code=409, detail="Edit not allowed for non-today date") from None
     except FileNotFoundError:
