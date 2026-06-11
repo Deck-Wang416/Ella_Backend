@@ -48,10 +48,14 @@ class UserProfileService:
             return None
 
         payload = get_rtdb_reference(self.root).get()
-        if not isinstance(payload, dict):
+        if isinstance(payload, list):
+            iterable = enumerate(payload)
+        elif isinstance(payload, dict):
+            iterable = payload.items()
+        else:
             return None
 
-        for raw_caregiver_id, raw_profile in payload.items():
+        for raw_caregiver_id, raw_profile in iterable:
             if not isinstance(raw_profile, dict):
                 continue
             profile_username = self._normalize_username(raw_profile.get("username"))
