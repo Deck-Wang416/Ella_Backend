@@ -12,3 +12,4 @@ __pycache__/
 # Local Data
 secrets/
 docs/
+data/
