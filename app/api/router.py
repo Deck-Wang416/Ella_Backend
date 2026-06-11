@@ -2,6 +2,7 @@ from fastapi import APIRouter
 
 from app.api.daily import router as daily_router
 from app.api.internal import router as internal_router
+from app.api.internal_robot import router as internal_robot_router
 from app.api.notifications import router as notifications_router
 from app.api.profiles import router as profiles_router
 from app.api.recordings import router as recordings_router
@@ -20,4 +21,5 @@ legacy_notifications_router = APIRouter(prefix="/notifications")
 legacy_notifications_router.include_router(subscriptions_router)
 api_router.include_router(legacy_notifications_router)
 api_router.include_router(internal_router)
+api_router.include_router(internal_robot_router)
 api_router.include_router(notifications_router)

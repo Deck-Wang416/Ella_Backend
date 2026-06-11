@@ -39,8 +39,8 @@ class WeeklyProgress(BaseModel):
 
 
 class DashboardContent(BaseModel):
-    hasInteraction: bool = False
     photos: list[str] = Field(default_factory=list)
+    storyCount: int = 0
     words: list[str] = Field(default_factory=list)
     highlight: list[str] = Field(default_factory=list)
     ask: list[str] = Field(default_factory=list)
@@ -48,7 +48,6 @@ class DashboardContent(BaseModel):
 
 
 class ParentDashboardContent(BaseModel):
-    hasInteraction: bool = False
     book: str | None = None
     words: list[str] = Field(default_factory=list)
     weeklyProgress: WeeklyProgress | None = None

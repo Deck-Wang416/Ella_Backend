@@ -56,9 +56,9 @@ class DailyContentService:
     def build_empty_daily(self, caregiver_id: int, target_date: date, condition: ConditionType = "robot") -> DailyContent:
         template = self._diary_template_for_condition(condition)
         dashboard = (
-            ParentDashboardContent(hasInteraction=False, book=None, words=[])
+            ParentDashboardContent(book=None, words=[])
             if condition == "parent"
-            else DashboardContent(hasInteraction=False, photos=[], words=[], highlight=[], ask=[])
+            else DashboardContent(photos=[], storyCount=0, words=[], highlight=[], ask=[])
         )
         return DailyContent(
             date=target_date.isoformat(),
@@ -130,7 +130,7 @@ class DailyContentService:
         day = date.fromisoformat(daily.date)
         today = self._local_today(timezone_name)
         submitted = bool(daily.diary.submitted)
-        has_interaction = bool(daily.dashboard.hasInteraction)
+        has_interaction = self._has_dashboard_interaction(daily)
         is_today = day == today
         return DailySummary(
             date=daily.date,
@@ -228,10 +228,27 @@ class DailyContentService:
             payload = self._get_daily_payload(caregiver_id, current)
             if isinstance(payload, dict) and payload.get("condition") == "robot":
                 dashboard_payload = payload.get("dashboard") or {}
-                if bool(dashboard_payload.get("hasInteraction")):
-                    count += 1
+                try:
+                    story_count = int(dashboard_payload.get("storyCount", 0) or 0)
+                except (TypeError, ValueError):
+                    story_count = 0
+                count += max(story_count, 0)
             current += timedelta(days=1)
         return count
+
+    def upsert_robot_story_count(
+        self,
+        caregiver_id: int,
+        target_date: date,
+        story_count: int,
+    ) -> DailyContent:
+        daily = self.get_daily(caregiver_id, target_date)
+        if daily.condition != "robot":
+            raise PermissionError("Story count can only be updated for robot-mode daily content")
+
+        daily.dashboard.storyCount = max(story_count, 0)
+        self._save_daily(caregiver_id, target_date, daily)
+        return daily
 
     def _sum_parent_recording_seconds(self, caregiver_id: int, week_start: date, week_end: date) -> int:
         sessions = get_rtdb_reference("recordingSessions").get()
@@ -276,6 +293,18 @@ class DailyContentService:
     def _save_daily(self, caregiver_id: int, target_date: date, daily: DailyContent) -> None:
         ref = get_rtdb_reference(f"{self._daily_root(caregiver_id)}/{target_date.isoformat()}")
         ref.set(daily.model_dump(mode="json", exclude_none=True))
+
+    def _has_dashboard_interaction(self, daily: DailyContent) -> bool:
+        dashboard = daily.dashboard
+        if daily.condition == "robot":
+            return bool(
+                getattr(dashboard, "storyCount", 0)
+                or getattr(dashboard, "photos", [])
+                or getattr(dashboard, "words", [])
+                or getattr(dashboard, "highlight", [])
+                or getattr(dashboard, "ask", [])
+            )
+        return bool(getattr(dashboard, "book", None) or getattr(dashboard, "words", []))
 
     def _parent_diary_template(self) -> dict[str, list]:
         instructions = [
