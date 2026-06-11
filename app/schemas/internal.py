@@ -13,8 +13,14 @@ class RobotStoryCountUpsertRequest(BaseModel):
 
 
 class RobotStoryCountUpsertResponse(BaseModel):
+    ok: bool
     username: str
-    caregiverId: int
     date: str
-    condition: str
     storyCount: int
+
+
+class RobotPhotoUploadResponse(BaseModel):
+    ok: bool
+    username: str
+    date: str
+    photoUrl: str

@@ -250,6 +250,30 @@ class DailyContentService:
         self._save_daily(caregiver_id, target_date, daily)
         return daily
 
+    def ensure_robot_daily(
+        self,
+        caregiver_id: int,
+        target_date: date,
+    ) -> DailyContent:
+        daily = self.get_daily(caregiver_id, target_date)
+        if daily.condition != "robot":
+            raise PermissionError("Robot data can only be updated for robot-mode daily content")
+        return daily
+
+    def append_robot_photo(
+        self,
+        caregiver_id: int,
+        target_date: date,
+        photo_url: str,
+    ) -> DailyContent:
+        daily = self.ensure_robot_daily(caregiver_id, target_date)
+
+        photos = list(daily.dashboard.photos)
+        photos.append(photo_url)
+        daily.dashboard.photos = photos
+        self._save_daily(caregiver_id, target_date, daily)
+        return daily
+
     def _sum_parent_recording_seconds(self, caregiver_id: int, week_start: date, week_end: date) -> int:
         sessions = get_rtdb_reference("recordingSessions").get()
         if not isinstance(sessions, dict):
