@@ -21,6 +21,7 @@ def upsert_profile(caregiver_id: int, payload: UserProfileUpdateRequest):
     try:
         profile = service.upsert_profile(
             caregiver_id=caregiver_id,
+            username=payload.username,
             robot_condition_range=payload.robot_condition_range,
             parent_condition_range=payload.parent_condition_range,
         )

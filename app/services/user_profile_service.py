@@ -20,12 +20,19 @@ class UserProfileService:
     def upsert_profile(
         self,
         caregiver_id: int,
+        username: str | None,
         robot_condition_range: ConditionRange | None,
         parent_condition_range: ConditionRange | None,
     ) -> UserProfileContent:
         self._validate_ranges(robot_condition_range, parent_condition_range)
+        existing = self.get_profile(caregiver_id)
+        resolved_username = self._normalize_username(username)
+        if resolved_username is None and existing is not None:
+            resolved_username = existing.username
+
         payload = UserProfileContent(
             caregiverId=caregiver_id,
+            username=resolved_username,
             robot_condition_range=robot_condition_range,
             parent_condition_range=parent_condition_range,
             updatedAt=datetime.now(timezone.utc),
@@ -34,6 +41,27 @@ class UserProfileService:
             payload.model_dump(mode="json", exclude_none=True)
         )
         return payload
+
+    def get_caregiver_id_by_username(self, username: str) -> int | None:
+        normalized = self._normalize_username(username)
+        if normalized is None:
+            return None
+
+        payload = get_rtdb_reference(self.root).get()
+        if not isinstance(payload, dict):
+            return None
+
+        for raw_caregiver_id, raw_profile in payload.items():
+            if not isinstance(raw_profile, dict):
+                continue
+            profile_username = self._normalize_username(raw_profile.get("username"))
+            if profile_username != normalized:
+                continue
+            try:
+                return int(raw_profile.get("caregiverId", raw_caregiver_id))
+            except (TypeError, ValueError):
+                continue
+        return None
 
     def resolve_condition_for_date(self, caregiver_id: int, target_date: date) -> ConditionType | None:
         profile = self.get_profile(caregiver_id)
@@ -96,3 +124,9 @@ class UserProfileService:
             return False
         start, end = bounds
         return start <= target_date <= end
+
+    def _normalize_username(self, username: str | None) -> str | None:
+        if username is None:
+            return None
+        normalized = username.strip().lower()
+        return normalized or None

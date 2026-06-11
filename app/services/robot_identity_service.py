@@ -1,12 +1,9 @@
+from app.services.user_profile_service import UserProfileService
+
+
 class RobotIdentityService:
     def __init__(self):
-        self._username_to_caregiver_id = {
-            "leyun": 1,
-            "yoonjae": 2,
-        }
+        self.profile_service = UserProfileService()
 
     def resolve_caregiver_id(self, username: str) -> int | None:
-        normalized = username.strip().lower()
-        if not normalized:
-            return None
-        return self._username_to_caregiver_id.get(normalized)
+        return self.profile_service.get_caregiver_id_by_username(username)
