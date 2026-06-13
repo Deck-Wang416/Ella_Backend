@@ -15,12 +15,15 @@ class UserProfileService:
         if not isinstance(payload, dict):
             return None
         payload.setdefault("caregiverId", caregiver_id)
-        return UserProfileContent.model_validate(payload)
+        profile = UserProfileContent.model_validate(payload)
+        profile.dayCount = self._compute_day_count(profile)
+        return profile
 
     def upsert_profile(
         self,
         caregiver_id: int,
         username: str | None,
+        themes: list[str] | None,
         robot_condition_range: ConditionRange | None,
         parent_condition_range: ConditionRange | None,
     ) -> UserProfileContent:
@@ -29,10 +32,17 @@ class UserProfileService:
         resolved_username = self._normalize_username(username)
         if resolved_username is None and existing is not None:
             resolved_username = existing.username
+        resolved_themes = self._normalize_themes(themes)
+        if resolved_themes is None and existing is not None:
+            resolved_themes = existing.themes
+        elif resolved_themes is None:
+            resolved_themes = []
 
         payload = UserProfileContent(
             caregiverId=caregiver_id,
             username=resolved_username,
+            themes=resolved_themes,
+            dayCount=None,
             robot_condition_range=robot_condition_range,
             parent_condition_range=parent_condition_range,
             updatedAt=datetime.now(timezone.utc),
@@ -40,6 +50,7 @@ class UserProfileService:
         get_rtdb_reference(f"{self.root}/{caregiver_id}").set(
             payload.model_dump(mode="json", exclude_none=True)
         )
+        payload.dayCount = self._compute_day_count(payload)
         return payload
 
     def get_caregiver_id_by_username(self, username: str) -> int | None:
@@ -134,3 +145,30 @@ class UserProfileService:
             return None
         normalized = username.strip().lower()
         return normalized or None
+
+    def _normalize_themes(self, themes: list[str] | None) -> list[str] | None:
+        if themes is None:
+            return None
+        normalized: list[str] = []
+        seen: set[str] = set()
+        for theme in themes:
+            cleaned = str(theme).strip()
+            if not cleaned or cleaned in seen:
+                continue
+            seen.add(cleaned)
+            normalized.append(cleaned)
+        return normalized
+
+    def _compute_day_count(self, profile: UserProfileContent) -> int | None:
+        today = datetime.now(timezone.utc).date()
+        active_range: ConditionRange | None = None
+        if self._date_in_range(today, profile.robot_condition_range):
+            active_range = profile.robot_condition_range
+        elif self._date_in_range(today, profile.parent_condition_range):
+            active_range = profile.parent_condition_range
+
+        if active_range is None:
+            return None
+
+        start = date.fromisoformat(active_range.startDate)
+        return (today - start).days + 1
