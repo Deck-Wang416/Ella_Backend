@@ -19,32 +19,23 @@ class UserProfileService:
         profile.dayCount = self._compute_day_count(profile)
         return profile
 
-    def upsert_profile(
+    def update_themes(
         self,
         caregiver_id: int,
-        username: str | None,
-        themes: list[str] | None,
-        robot_condition_range: ConditionRange | None,
-        parent_condition_range: ConditionRange | None,
+        themes: list[str],
     ) -> UserProfileContent:
-        self._validate_ranges(robot_condition_range, parent_condition_range)
         existing = self.get_profile(caregiver_id)
-        resolved_username = self._normalize_username(username)
-        if resolved_username is None and existing is not None:
-            resolved_username = existing.username
-        resolved_themes = self._normalize_themes(themes)
-        if resolved_themes is None and existing is not None:
-            resolved_themes = existing.themes
-        elif resolved_themes is None:
-            resolved_themes = []
+        if existing is None:
+            raise FileNotFoundError(caregiver_id)
+        resolved_themes = self._normalize_themes(themes) or []
 
         payload = UserProfileContent(
             caregiverId=caregiver_id,
-            username=resolved_username,
+            username=existing.username,
             themes=resolved_themes,
             dayCount=None,
-            robot_condition_range=robot_condition_range,
-            parent_condition_range=parent_condition_range,
+            robot_condition_range=existing.robot_condition_range,
+            parent_condition_range=existing.parent_condition_range,
             updatedAt=datetime.now(timezone.utc),
         )
         get_rtdb_reference(f"{self.root}/{caregiver_id}").set(
@@ -110,19 +101,6 @@ class UserProfileService:
                 days.add(current)
                 current += timedelta(days=1)
         return sorted(days)
-
-    def _validate_ranges(
-        self,
-        robot_condition_range: ConditionRange | None,
-        parent_condition_range: ConditionRange | None,
-    ) -> None:
-        robot_bounds = self._normalized_bounds(robot_condition_range)
-        parent_bounds = self._normalized_bounds(parent_condition_range)
-        if robot_bounds and parent_bounds:
-            robot_start, robot_end = robot_bounds
-            parent_start, parent_end = parent_bounds
-            if not (robot_end < parent_start or parent_end < robot_start):
-                raise ValueError("robot_condition_range and parent_condition_range must not overlap")
 
     def _normalized_bounds(self, rng: ConditionRange | None) -> tuple[date, date] | None:
         if rng is None:

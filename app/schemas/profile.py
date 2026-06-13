@@ -19,7 +19,4 @@ class UserProfileContent(BaseModel):
 
 
 class UserProfileUpdateRequest(BaseModel):
-    username: str | None = None
-    themes: list[str] | None = None
-    robot_condition_range: ConditionRange | None = None
-    parent_condition_range: ConditionRange | None = None
+    themes: list[str]
