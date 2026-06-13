@@ -1,13 +1,16 @@
 from datetime import date, datetime, timedelta, timezone
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from app.core.firebase_client import get_rtdb_reference
 from app.schemas.daily import ConditionType
 from app.schemas.profile import ConditionRange, UserProfileContent
+from app.services.firebase_notification_state_service import FirebaseNotificationStateService
 
 
 class UserProfileService:
     def __init__(self):
         self.root = "userProfiles"
+        self.notification_state_service = FirebaseNotificationStateService()
 
     def get_profile(self, caregiver_id: int) -> UserProfileContent | None:
         ref = get_rtdb_reference(f"{self.root}/{caregiver_id}")
@@ -16,7 +19,7 @@ class UserProfileService:
             return None
         payload.setdefault("caregiverId", caregiver_id)
         profile = UserProfileContent.model_validate(payload)
-        profile.dayCount = self._compute_day_count(profile)
+        profile.dayCount = self._compute_day_count(caregiver_id, profile)
         return profile
 
     def update_themes(
@@ -41,7 +44,7 @@ class UserProfileService:
         get_rtdb_reference(f"{self.root}/{caregiver_id}").set(
             payload.model_dump(mode="json", exclude_none=True)
         )
-        payload.dayCount = self._compute_day_count(payload)
+        payload.dayCount = self._compute_day_count(caregiver_id, payload)
         return payload
 
     def get_caregiver_id_by_username(self, username: str) -> int | None:
@@ -137,8 +140,8 @@ class UserProfileService:
             normalized.append(cleaned)
         return normalized
 
-    def _compute_day_count(self, profile: UserProfileContent) -> int | None:
-        today = datetime.now(timezone.utc).date()
+    def _compute_day_count(self, caregiver_id: int, profile: UserProfileContent) -> int | None:
+        today = self._local_today(caregiver_id)
         active_range: ConditionRange | None = None
         if self._date_in_range(today, profile.robot_condition_range):
             active_range = profile.robot_condition_range
@@ -150,3 +153,13 @@ class UserProfileService:
 
         start = date.fromisoformat(active_range.startDate)
         return (today - start).days + 1
+
+    def _local_today(self, caregiver_id: int) -> date:
+        timezone_name = "UTC"
+        settings = self.notification_state_service.get_reminder(caregiver_id)
+        if isinstance(settings, dict) and settings.get("timezone"):
+            timezone_name = str(settings["timezone"])
+        try:
+            return datetime.now(ZoneInfo(timezone_name)).date()
+        except ZoneInfoNotFoundError:
+            return datetime.now(timezone.utc).date()
