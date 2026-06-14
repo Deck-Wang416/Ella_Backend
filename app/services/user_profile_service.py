@@ -52,15 +52,7 @@ class UserProfileService:
         if normalized is None:
             return None
 
-        payload = get_rtdb_reference(self.root).get()
-        if isinstance(payload, list):
-            iterable = enumerate(payload)
-        elif isinstance(payload, dict):
-            iterable = payload.items()
-        else:
-            return None
-
-        for raw_caregiver_id, raw_profile in iterable:
+        for raw_caregiver_id, raw_profile in self._iter_profiles():
             if not isinstance(raw_profile, dict):
                 continue
             profile_username = self._normalize_username(raw_profile.get("username"))
@@ -70,6 +62,26 @@ class UserProfileService:
                 return int(raw_profile.get("caregiverId", raw_caregiver_id))
             except (TypeError, ValueError):
                 continue
+        return None
+
+    def authenticate(self, username: str, password: str) -> UserProfileContent | None:
+        normalized = self._normalize_username(username)
+        if normalized is None:
+            return None
+
+        for raw_caregiver_id, raw_profile in self._iter_profiles():
+            if not isinstance(raw_profile, dict):
+                continue
+            profile_username = self._normalize_username(raw_profile.get("username"))
+            if profile_username != normalized:
+                continue
+            if str(raw_profile.get("password") or "") != password:
+                return None
+            try:
+                caregiver_id = int(raw_profile.get("caregiverId", raw_caregiver_id))
+            except (TypeError, ValueError):
+                continue
+            return self.get_profile(caregiver_id)
         return None
 
     def resolve_condition_for_date(self, caregiver_id: int, target_date: date) -> ConditionType | None:
@@ -139,6 +151,14 @@ class UserProfileService:
             seen.add(cleaned)
             normalized.append(cleaned)
         return normalized
+
+    def _iter_profiles(self):
+        payload = get_rtdb_reference(self.root).get()
+        if isinstance(payload, list):
+            return enumerate(payload)
+        if isinstance(payload, dict):
+            return payload.items()
+        return ()
 
     def _compute_day_count(self, caregiver_id: int, profile: UserProfileContent) -> int | None:
         today = self._local_today(caregiver_id)

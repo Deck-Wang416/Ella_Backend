@@ -20,3 +20,8 @@ class UserProfileContent(BaseModel):
 
 class UserProfileUpdateRequest(BaseModel):
     themes: list[str]
+
+
+class UserProfileLoginRequest(BaseModel):
+    username: str
+    password: str

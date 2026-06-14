@@ -1,9 +1,19 @@
 from fastapi import APIRouter, HTTPException
 
-from app.schemas.profile import UserProfileContent, UserProfileUpdateRequest
+from app.schemas.profile import UserProfileContent, UserProfileLoginRequest, UserProfileUpdateRequest
 from app.services.user_profile_service import UserProfileService
 
 router = APIRouter(prefix="/profiles", tags=["profiles"])
+
+@router.post("/login", response_model=UserProfileContent)
+def login(payload: UserProfileLoginRequest):
+    profile = UserProfileService().authenticate(
+        username=payload.username,
+        password=payload.password,
+    )
+    if profile is None:
+        raise HTTPException(status_code=401, detail="Invalid username or password")
+    return profile
 
 
 @router.get("/{caregiver_id}", response_model=UserProfileContent)
