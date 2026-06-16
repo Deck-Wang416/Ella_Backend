@@ -41,15 +41,11 @@ class WeeklyProgress(BaseModel):
 class DashboardContent(BaseModel):
     photos: list[str] = Field(default_factory=list)
     storyCount: int = 0
-    words: list[str] = Field(default_factory=list)
-    highlight: list[str] = Field(default_factory=list)
-    ask: list[str] = Field(default_factory=list)
     weeklyProgress: WeeklyProgress | None = None
 
 
 class ParentDashboardContent(BaseModel):
     book: str | None = None
-    words: list[str] = Field(default_factory=list)
     weeklyProgress: WeeklyProgress | None = None
 
 
