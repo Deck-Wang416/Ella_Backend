@@ -19,6 +19,7 @@ class UserProfileService:
             return None
         payload.setdefault("caregiverId", caregiver_id)
         profile = UserProfileContent.model_validate(payload)
+        self._apply_mode_scoped_fields(caregiver_id, profile)
         profile.dayCount = self._compute_day_count(caregiver_id, profile)
         return profile
 
@@ -27,23 +28,23 @@ class UserProfileService:
         caregiver_id: int,
         themes: list[str],
     ) -> UserProfileContent:
-        existing = self.get_profile(caregiver_id)
-        if existing is None:
+        ref = get_rtdb_reference(f"{self.root}/{caregiver_id}")
+        raw_payload = ref.get()
+        if not isinstance(raw_payload, dict):
             raise FileNotFoundError(caregiver_id)
+        raw_payload.setdefault("caregiverId", caregiver_id)
+        existing = UserProfileContent.model_validate(raw_payload)
+        self._apply_mode_scoped_fields(caregiver_id, existing)
+        if self._active_condition_for_today(caregiver_id, existing) != "robot":
+            raise ValueError("Themes can only be updated during robot mode")
         resolved_themes = self._normalize_themes(themes) or []
 
-        payload = UserProfileContent(
-            caregiverId=caregiver_id,
-            username=existing.username,
-            themes=resolved_themes,
-            dayCount=None,
-            robot_condition_range=existing.robot_condition_range,
-            parent_condition_range=existing.parent_condition_range,
-            updatedAt=datetime.now(timezone.utc),
-        )
-        get_rtdb_reference(f"{self.root}/{caregiver_id}").set(
-            payload.model_dump(mode="json", exclude_none=True)
-        )
+        raw_payload["themes"] = resolved_themes
+        raw_payload["updatedAt"] = datetime.now(timezone.utc).isoformat()
+        ref.set(raw_payload)
+
+        payload = UserProfileContent.model_validate(raw_payload)
+        self._apply_mode_scoped_fields(caregiver_id, payload)
         payload.dayCount = self._compute_day_count(caregiver_id, payload)
         return payload
 
@@ -163,9 +164,9 @@ class UserProfileService:
     def _compute_day_count(self, caregiver_id: int, profile: UserProfileContent) -> int | None:
         today = self._local_today(caregiver_id)
         active_range: ConditionRange | None = None
-        if self._date_in_range(today, profile.robot_condition_range):
+        if self._active_condition_for_date(today, profile) == "robot":
             active_range = profile.robot_condition_range
-        elif self._date_in_range(today, profile.parent_condition_range):
+        elif self._active_condition_for_date(today, profile) == "parent":
             active_range = profile.parent_condition_range
 
         if active_range is None:
@@ -173,6 +174,32 @@ class UserProfileService:
 
         start = date.fromisoformat(active_range.startDate)
         return (today - start).days + 1
+
+    def _apply_mode_scoped_fields(self, caregiver_id: int, profile: UserProfileContent) -> None:
+        if self._active_condition_for_today(caregiver_id, profile) != "robot":
+            profile.themes = []
+
+    def _active_condition_for_today(
+        self,
+        caregiver_id: int,
+        profile: UserProfileContent,
+    ) -> ConditionType | None:
+        return self._active_condition_for_date(self._local_today(caregiver_id), profile)
+
+    def _active_condition_for_date(
+        self,
+        target_date: date,
+        profile: UserProfileContent,
+    ) -> ConditionType | None:
+        robot_hit = self._date_in_range(target_date, profile.robot_condition_range)
+        parent_hit = self._date_in_range(target_date, profile.parent_condition_range)
+        if robot_hit and parent_hit:
+            raise ValueError("robot_condition_range and parent_condition_range must not overlap")
+        if robot_hit:
+            return "robot"
+        if parent_hit:
+            return "parent"
+        return None
 
     def _local_today(self, caregiver_id: int) -> date:
         timezone_name = "UTC"
