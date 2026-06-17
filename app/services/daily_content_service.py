@@ -177,7 +177,7 @@ class DailyContentService:
         week_start, week_end = self._resolve_condition_week_range(caregiver_id, target_date, condition)
         if condition == "robot":
             current_value = float(self._count_robot_stories(caregiver_id, week_start, week_end))
-            target_value = 14.0
+            target_value = 15.0
             unit = "stories"
         else:
             current_value = self._display_parent_hours(
