@@ -91,6 +91,10 @@ class FirebaseRecordingService:
         session = self.get_session(session_id)
         if session is None:
             raise FileNotFoundError(session_id)
+        if session.get("status") != "recording":
+            raise ValueError("Recording session is not active")
+        if int(session.get("uploadedChunks", 0) or 0) <= 0:
+            raise ValueError("Recording session cannot be completed without uploaded chunks")
 
         now = self._now_iso()
         session["status"] = "completed"

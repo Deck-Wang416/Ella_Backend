@@ -68,5 +68,7 @@ def complete_recording_session(session_id: str, payload: RecordingSessionComplet
         )
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Recording session not found") from None
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
     except PermissionError as exc:
         raise HTTPException(status_code=409, detail=str(exc)) from exc
