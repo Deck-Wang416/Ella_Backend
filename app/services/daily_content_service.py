@@ -56,7 +56,7 @@ class DailyContentService:
     def build_empty_daily(self, caregiver_id: int, target_date: date, condition: ConditionType = "robot") -> DailyContent:
         template = self._diary_template_for_condition(condition)
         dashboard = (
-            ParentDashboardContent(book=None)
+            ParentDashboardContent()
             if condition == "parent"
             else DashboardContent(photos=[], storyCount=0)
         )
@@ -322,7 +322,7 @@ class DailyContentService:
         dashboard = daily.dashboard
         if daily.condition == "robot":
             return bool(getattr(dashboard, "storyCount", 0) or getattr(dashboard, "photos", []))
-        return bool(getattr(dashboard, "book", None))
+        return False
 
     def _parent_diary_template(self) -> dict[str, list]:
         instructions = [

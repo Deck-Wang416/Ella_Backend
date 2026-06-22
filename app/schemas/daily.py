@@ -45,7 +45,6 @@ class DashboardContent(BaseModel):
 
 
 class ParentDashboardContent(BaseModel):
-    book: str | None = None
     weeklyProgress: WeeklyProgress | None = None
 
 
