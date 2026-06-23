@@ -66,8 +66,14 @@ def get_daily(
     tz_name = _resolve_timezone(caregiver_id, timezone)
     service = DailyContentService()
     try:
+        today = service._local_today(tz_name)
+        if entry_date > today:
+            raise HTTPException(status_code=404, detail="Daily content not available yet")
         daily = service.get_daily(caregiver_id, entry_date)
-        return _to_detail_response(service, caregiver_id, daily, tz_name)
+        detail = _to_detail_response(service, caregiver_id, daily, tz_name)
+        if not detail.meta.diarySelectable:
+            raise HTTPException(status_code=404, detail="Daily content not available for this date")
+        return detail
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Daily content not found") from None
 

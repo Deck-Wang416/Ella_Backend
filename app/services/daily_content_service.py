@@ -25,7 +25,10 @@ class DailyContentService:
 
     def list_summaries(self, caregiver_id: int, timezone_name: str = "UTC") -> list[DailySummary]:
         result: list[DailySummary] = []
+        today = self._local_today(timezone_name)
         for day in self.profile_service.list_scheduled_dates(caregiver_id):
+            if day > today:
+                continue
             daily = self.get_daily(caregiver_id, day)
             result.append(self.build_summary(daily, timezone_name))
         result.sort(key=lambda item: item.date)
