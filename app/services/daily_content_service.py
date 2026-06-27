@@ -179,7 +179,9 @@ class DailyContentService:
     ) -> WeeklyProgress:
         week_start, week_end = self._resolve_condition_week_range(caregiver_id, target_date, condition)
         if condition == "robot":
-            current_value = float(self._count_robot_stories(caregiver_id, week_start, week_end))
+            current_value = float(
+                self._latest_robot_story_count(caregiver_id, week_start, min(target_date, week_end))
+            )
             target_value = 15.0
             unit = "stories"
         else:
@@ -224,8 +226,8 @@ class DailyContentService:
         week_end = min(week_start + timedelta(days=6), range_end)
         return week_start, week_end
 
-    def _count_robot_stories(self, caregiver_id: int, week_start: date, week_end: date) -> int:
-        count = 0
+    def _latest_robot_story_count(self, caregiver_id: int, week_start: date, week_end: date) -> int:
+        latest_count = 0
         current = week_start
         while current <= week_end:
             payload = self._get_daily_payload(caregiver_id, current)
@@ -235,9 +237,10 @@ class DailyContentService:
                     story_count = int(dashboard_payload.get("storyCount", 0) or 0)
                 except (TypeError, ValueError):
                     story_count = 0
-                count += max(story_count, 0)
+                if max(story_count, 0) > 0:
+                    latest_count = max(story_count, 0)
             current += timedelta(days=1)
-        return count
+        return latest_count
 
     def upsert_robot_story_count(
         self,
