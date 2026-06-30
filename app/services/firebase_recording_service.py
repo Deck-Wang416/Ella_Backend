@@ -91,10 +91,23 @@ class FirebaseRecordingService:
         session = self.get_session(session_id)
         if session is None:
             raise FileNotFoundError(session_id)
-        if session.get("status") != "recording":
-            raise ValueError("Recording session is not active")
-        if int(session.get("uploadedChunks", 0) or 0) <= 0:
+
+        status = session.get("status")
+        uploaded_chunks = int(session.get("uploadedChunks", 0) or 0)
+        if uploaded_chunks <= 0:
             raise ValueError("Recording session cannot be completed without uploaded chunks")
+
+        if status == "completed":
+            if duration_seconds is None:
+                raise ValueError("durationSeconds is required when backfilling a completed recording session")
+            session["durationSeconds"] = duration_seconds
+            session["lastChunkIndex"] = max(int(session.get("lastChunkIndex", -1)), final_chunk_index)
+            session["updatedAt"] = self._now_iso()
+            self._session_ref(session_id).set(session)
+            return session
+
+        if status != "recording":
+            raise ValueError("Recording session is not active")
 
         now = self._now_iso()
         session["status"] = "completed"
