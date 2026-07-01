@@ -9,7 +9,6 @@ from app.schemas.internal import (
     RobotStoryCountIncrementRequest,
     RobotStoryCountIncrementResponse,
 )
-from app.services.daily_content_service import DailyContentService
 from app.services.robot_identity_service import RobotIdentityService
 from app.services.robot_photo_service import RobotPhotoService
 from app.services.robot_story_progress_service import (
@@ -37,16 +36,6 @@ def _increment_robot_story_count_impl(payload: RobotStoryCountIncrementRequest, 
     except PermissionError as exc:
         raise HTTPException(status_code=409, detail=str(exc)) from exc
 
-    caregiver_id = RobotIdentityService().resolve_caregiver_id(payload.username)
-    if caregiver_id is None:
-        raise HTTPException(status_code=404, detail="Unknown robot username") from None
-
-    service = DailyContentService()
-    service.upsert_robot_story_count(
-        caregiver_id=caregiver_id,
-        target_date=result.story_date,
-        story_count=result.daily_story_count,
-    )
     response.status_code = status.HTTP_201_CREATED if result.applied else status.HTTP_200_OK
 
     return RobotStoryCountIncrementResponse(
@@ -61,15 +50,6 @@ def _increment_robot_story_count_impl(payload: RobotStoryCountIncrementRequest, 
         weeklyStoryCount=result.weekly_story_count,
         applied=result.applied,
     )
-
-
-@router.post(
-    "/robot-story-count",
-    response_model=RobotStoryCountIncrementResponse,
-    dependencies=[Depends(validate_internal_api_key)],
-)
-def increment_robot_story_count_legacy(payload: RobotStoryCountIncrementRequest, response: Response):
-    return _increment_robot_story_count_impl(payload, response)
 
 
 @router.post(

@@ -231,20 +231,6 @@ class DailyContentService:
         week_end = min(week_start + timedelta(days=6), range_end)
         return week_start, week_end
 
-    def upsert_robot_story_count(
-        self,
-        caregiver_id: int,
-        target_date: date,
-        story_count: int,
-    ) -> DailyContent:
-        daily = self.get_daily(caregiver_id, target_date)
-        if daily.condition != "robot":
-            raise PermissionError("Story count can only be updated for robot-mode daily content")
-
-        daily.dashboard.storyCount = max(story_count, 0)
-        self._save_daily(caregiver_id, target_date, daily)
-        return daily
-
     def ensure_robot_daily(
         self,
         caregiver_id: int,
@@ -329,7 +315,12 @@ class DailyContentService:
 
     def _save_daily(self, caregiver_id: int, target_date: date, daily: DailyContent) -> None:
         ref = get_rtdb_reference(f"{self._daily_root(caregiver_id)}/{target_date.isoformat()}")
-        ref.set(daily.model_dump(mode="json", exclude_none=True))
+        payload = daily.model_dump(mode="json", exclude_none=True)
+        if daily.condition == "robot":
+            dashboard_payload = payload.get("dashboard")
+            if isinstance(dashboard_payload, dict):
+                dashboard_payload.pop("storyCount", None)
+        ref.set(payload)
 
     def _has_dashboard_interaction(self, daily: DailyContent) -> bool:
         dashboard = daily.dashboard
