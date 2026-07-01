@@ -6,17 +6,23 @@ class RunDueResult(BaseModel):
     triggered_notifications: int
 
 
-class RobotStoryCountUpsertRequest(BaseModel):
+class RobotStoryCountIncrementRequest(BaseModel):
     username: str = Field(min_length=1)
-    date: str
-    storyCount: int = Field(ge=0)
+    eventId: str = Field(min_length=1)
+    completedAt: str = Field(min_length=1)
 
 
-class RobotStoryCountUpsertResponse(BaseModel):
+class RobotStoryCountIncrementResponse(BaseModel):
     ok: bool
     username: str
-    date: str
-    storyCount: int
+    eventId: str
+    storyDate: str
+    dailyStoryCount: int
+    weekNumber: int
+    weekStartDate: str
+    weekEndDate: str
+    weeklyStoryCount: int
+    applied: bool
 
 
 class RobotPhotoUploadResponse(BaseModel):

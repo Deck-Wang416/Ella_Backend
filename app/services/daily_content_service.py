@@ -13,6 +13,7 @@ from app.schemas.daily import (
     ParentDashboardContent,
     WeeklyProgress,
 )
+from app.services.robot_story_progress_service import RobotStoryProgressService
 from app.services.user_profile_service import UserProfileService
 
 
@@ -20,6 +21,7 @@ class DailyContentService:
     def __init__(self):
         self.settings = get_settings()
         self.profile_service = UserProfileService()
+        self.robot_story_progress_service = RobotStoryProgressService()
         if not self.settings.firebase_database_url or not self.settings.firebase_credentials_path:
             raise RuntimeError("Firebase is required. Set FIREBASE_DATABASE_URL and FIREBASE_CREDENTIALS_PATH.")
 
@@ -42,7 +44,7 @@ class DailyContentService:
         ref = get_rtdb_reference(f"{self._daily_root(caregiver_id)}/{target_date.isoformat()}")
         payload = ref.get()
         if payload:
-            return self.normalize_daily_payload(payload, target_date)
+            return self.normalize_daily_payload(payload, target_date, caregiver_id)
         daily = self.build_empty_daily(caregiver_id, target_date, condition=expected_condition)
         self._save_daily(caregiver_id, target_date, daily)
         return daily
@@ -147,7 +149,12 @@ class DailyContentService:
             diaryEditable=is_today,
         )
 
-    def normalize_daily_payload(self, payload: dict, target_date: date | None = None) -> DailyContent:
+    def normalize_daily_payload(
+        self,
+        payload: dict,
+        target_date: date | None = None,
+        caregiver_id: int | None = None,
+    ) -> DailyContent:
         condition: ConditionType = payload.get("condition", "robot")
         if condition not in ("robot", "parent"):
             condition = "robot"
@@ -167,7 +174,7 @@ class DailyContentService:
         return DailyContent(
             date=resolved_date,
             condition=condition,
-            dashboard=dashboard,
+            dashboard=self._populate_robot_dashboard_metrics(caregiver_id, target_date, condition, dashboard),
             diary=diary,
         )
 
@@ -179,9 +186,7 @@ class DailyContentService:
     ) -> WeeklyProgress:
         week_start, week_end = self._resolve_condition_week_range(caregiver_id, target_date, condition)
         if condition == "robot":
-            current_value = float(
-                self._latest_robot_story_count(caregiver_id, week_start, min(target_date, week_end))
-            )
+            current_value = float(self.robot_story_progress_service.get_week_total_for_date(caregiver_id, target_date))
             target_value = 15.0
             unit = "stories"
         else:
@@ -225,22 +230,6 @@ class DailyContentService:
         week_start = range_start + timedelta(days=week_index * 7)
         week_end = min(week_start + timedelta(days=6), range_end)
         return week_start, week_end
-
-    def _latest_robot_story_count(self, caregiver_id: int, week_start: date, week_end: date) -> int:
-        latest_count = 0
-        current = week_start
-        while current <= week_end:
-            payload = self._get_daily_payload(caregiver_id, current)
-            if isinstance(payload, dict) and payload.get("condition") == "robot":
-                dashboard_payload = payload.get("dashboard") or {}
-                try:
-                    story_count = int(dashboard_payload.get("storyCount", 0) or 0)
-                except (TypeError, ValueError):
-                    story_count = 0
-                if max(story_count, 0) > 0:
-                    latest_count = max(story_count, 0)
-            current += timedelta(days=1)
-        return latest_count
 
     def upsert_robot_story_count(
         self,
@@ -319,6 +308,24 @@ class DailyContentService:
     def _get_daily_payload(self, caregiver_id: int, target_date: date) -> dict | None:
         payload = get_rtdb_reference(f"{self._daily_root(caregiver_id)}/{target_date.isoformat()}").get()
         return payload if isinstance(payload, dict) else None
+
+    def _populate_robot_dashboard_metrics(
+        self,
+        caregiver_id: int | None,
+        target_date: date | None,
+        condition: ConditionType,
+        dashboard: ParentDashboardContent | DashboardContent,
+    ) -> ParentDashboardContent | DashboardContent:
+        if (
+            caregiver_id is None
+            or target_date is None
+            or condition != "robot"
+            or not isinstance(dashboard, DashboardContent)
+        ):
+            return dashboard
+
+        dashboard.storyCount = self.robot_story_progress_service.get_daily_count_for_date(caregiver_id, target_date)
+        return dashboard
 
     def _save_daily(self, caregiver_id: int, target_date: date, daily: DailyContent) -> None:
         ref = get_rtdb_reference(f"{self._daily_root(caregiver_id)}/{target_date.isoformat()}")
