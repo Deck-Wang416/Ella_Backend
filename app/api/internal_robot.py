@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, File, Form, HTTPException, Response, Upl
 
 from app.core.security import validate_internal_api_key
 from app.schemas.internal import (
+    RobotCurrentWeekResponse,
     RobotPhotoUploadResponse,
     RobotStoryCountIncrementRequest,
     RobotStoryCountIncrementResponse,
@@ -19,13 +20,7 @@ from app.services.robot_story_progress_service import (
 
 router = APIRouter(prefix="/internal", tags=["internal-robot"])
 
-
-@router.post(
-    "/robot-story-count",
-    response_model=RobotStoryCountIncrementResponse,
-    dependencies=[Depends(validate_internal_api_key)],
-)
-def increment_robot_story_count(payload: RobotStoryCountIncrementRequest, response: Response):
+def _increment_robot_story_count_impl(payload: RobotStoryCountIncrementRequest, response: Response):
     progress_service = RobotStoryProgressService()
     try:
         result = progress_service.increment_story_count(
@@ -65,6 +60,47 @@ def increment_robot_story_count(payload: RobotStoryCountIncrementRequest, respon
         weekEndDate=result.week_end.isoformat(),
         weeklyStoryCount=result.weekly_story_count,
         applied=result.applied,
+    )
+
+
+@router.post(
+    "/robot-story-count",
+    response_model=RobotStoryCountIncrementResponse,
+    dependencies=[Depends(validate_internal_api_key)],
+)
+def increment_robot_story_count_legacy(payload: RobotStoryCountIncrementRequest, response: Response):
+    return _increment_robot_story_count_impl(payload, response)
+
+
+@router.post(
+    "/robot-story-count/increment",
+    response_model=RobotStoryCountIncrementResponse,
+    dependencies=[Depends(validate_internal_api_key)],
+)
+def increment_robot_story_count(payload: RobotStoryCountIncrementRequest, response: Response):
+    return _increment_robot_story_count_impl(payload, response)
+
+
+@router.get(
+    "/robot-story-count/current-week",
+    response_model=RobotCurrentWeekResponse,
+    dependencies=[Depends(validate_internal_api_key)],
+)
+def get_robot_story_count_current_week(username: str):
+    try:
+        result = RobotStoryProgressService().get_current_week(username)
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="DEPLOYMENT_NOT_FOUND") from None
+    except PermissionError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+
+    return RobotCurrentWeekResponse(
+        ok=True,
+        username=result.username,
+        weekNumber=result.week_number,
+        weekStartDate=result.week_start.isoformat(),
+        weekEndDate=result.week_end.isoformat(),
+        storyCount=result.story_count,
     )
 
 

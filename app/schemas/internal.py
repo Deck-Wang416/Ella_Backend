@@ -25,6 +25,15 @@ class RobotStoryCountIncrementResponse(BaseModel):
     applied: bool
 
 
+class RobotCurrentWeekResponse(BaseModel):
+    ok: bool
+    username: str
+    weekNumber: int
+    weekStartDate: str
+    weekEndDate: str
+    storyCount: int
+
+
 class RobotPhotoUploadResponse(BaseModel):
     ok: bool
     username: str
