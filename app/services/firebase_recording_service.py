@@ -4,18 +4,20 @@ from uuid import uuid4
 from app.core.firebase_client import get_rtdb_reference, get_storage_bucket
 from app.schemas.daily import DailyContent
 from app.services.daily_content_service import DailyContentService
+from app.services.user_profile_service import UserProfileService
 
 
 class FirebaseRecordingService:
     def __init__(self):
         self.sessions_root = "recordingSessions"
         self.daily_service = DailyContentService()
+        self.user_profile_service = UserProfileService()
 
     def _now_iso(self) -> str:
         return datetime.now(timezone.utc).isoformat()
 
-    def _build_storage_prefix(self, entry_date: date, session_id: str) -> str:
-        return f"audio/{entry_date.isoformat()}/{session_id}/"
+    def _build_storage_prefix(self, username: str, entry_date: date, session_id: str) -> str:
+        return f"audio/{username}/{entry_date.isoformat()}/{session_id}/"
 
     def _session_ref(self, session_id: str):
         return get_rtdb_reference(f"{self.sessions_root}/{session_id}")
@@ -26,12 +28,20 @@ class FirebaseRecordingService:
             raise PermissionError("Recording session is only allowed when daily.condition is 'parent'")
         return daily
 
+    def _get_username_for_caregiver(self, caregiver_id: int) -> str:
+        profile = self.user_profile_service.get_profile(caregiver_id)
+        username = str(profile.username).strip() if profile and profile.username is not None else ""
+        if not username:
+            raise ValueError(f"Username is required before creating recording sessions for caregiverId={caregiver_id}")
+        return username
+
     def create_session(self, entry_date: date, caregiver_id: int, child_id: int) -> dict:
         self._get_existing_parent_daily(caregiver_id, entry_date)
 
         now = self._now_iso()
         session_id = f"rec_{entry_date.strftime('%Y%m%d')}_{uuid4().hex[:8]}"
-        storage_prefix = self._build_storage_prefix(entry_date, session_id)
+        username = self._get_username_for_caregiver(caregiver_id)
+        storage_prefix = self._build_storage_prefix(username, entry_date, session_id)
         payload = {
             "sessionId": session_id,
             "date": entry_date.isoformat(),

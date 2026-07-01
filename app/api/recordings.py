@@ -23,6 +23,8 @@ def create_recording_session(payload: RecordingSessionCreateRequest):
         raise HTTPException(status_code=404, detail="Daily content not found") from None
     except PermissionError as exc:
         raise HTTPException(status_code=409, detail=str(exc)) from exc
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
 
 
 @router.get("/sessions/{session_id}", response_model=RecordingSessionRead)
