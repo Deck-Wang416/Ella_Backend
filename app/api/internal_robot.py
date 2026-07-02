@@ -9,6 +9,7 @@ from app.schemas.internal import (
     RobotStoryCountIncrementRequest,
     RobotStoryCountIncrementResponse,
 )
+from app.services.daily_content_service import DailyContentService
 from app.services.robot_identity_service import RobotIdentityService
 from app.services.robot_photo_service import RobotPhotoService
 from app.services.robot_story_progress_service import (
@@ -122,6 +123,10 @@ async def upload_robot_photo(
         )
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Daily content not found") from None
+    except PermissionError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
 
     try:
         daily = service.append_robot_photo(
