@@ -40,6 +40,7 @@ class WeeklyProgress(BaseModel):
 
 class DashboardContent(BaseModel):
     photos: list[str] = Field(default_factory=list)
+    recentPhotos: list[str] = Field(default_factory=list)
     storyCount: int = 0
     weeklyProgress: WeeklyProgress | None = None
 

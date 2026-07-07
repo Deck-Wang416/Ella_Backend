@@ -310,8 +310,34 @@ class DailyContentService:
         ):
             return dashboard
 
+        dashboard.recentPhotos = self._get_recent_robot_photos(caregiver_id, target_date, limit=5)
         dashboard.storyCount = self.robot_story_progress_service.get_daily_count_for_date(caregiver_id, target_date)
         return dashboard
+
+    def _get_recent_robot_photos(self, caregiver_id: int, target_date: date, limit: int = 5) -> list[str]:
+        profile = self.profile_service.get_profile(caregiver_id)
+        if profile is None or profile.robot_condition_range is None:
+            return []
+
+        range_start = date.fromisoformat(profile.robot_condition_range.startDate)
+        range_end = date.fromisoformat(profile.robot_condition_range.endDate)
+        if not (range_start <= target_date <= range_end):
+            return []
+
+        photos: list[str] = []
+        current_day = target_date
+        while current_day >= range_start and len(photos) < limit:
+            payload = self._get_daily_payload(caregiver_id, current_day)
+            if isinstance(payload, dict):
+                dashboard_payload = payload.get("dashboard")
+                if isinstance(dashboard_payload, dict):
+                    day_photos = dashboard_payload.get("photos")
+                    if isinstance(day_photos, list):
+                        normalized = [value for value in day_photos if isinstance(value, str) and value]
+                        photos.extend(reversed(normalized))
+            current_day -= timedelta(days=1)
+
+        return photos[:limit]
 
     def _save_daily(self, caregiver_id: int, target_date: date, daily: DailyContent) -> None:
         ref = get_rtdb_reference(f"{self._daily_root(caregiver_id)}/{target_date.isoformat()}")
@@ -320,6 +346,7 @@ class DailyContentService:
             dashboard_payload = payload.get("dashboard")
             if isinstance(dashboard_payload, dict):
                 dashboard_payload.pop("storyCount", None)
+                dashboard_payload.pop("recentPhotos", None)
         ref.set(payload)
 
     def _has_dashboard_interaction(self, daily: DailyContent) -> bool:
