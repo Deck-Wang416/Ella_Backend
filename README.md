@@ -1,6 +1,12 @@
 # ELLA Backend Service
 
-FastAPI backend for daily diary content, push notifications, and parent-mode audio recording.
+FastAPI backend for:
+
+- daily dashboard + diary content
+- caregiver profile + login
+- reminder and push notification delivery
+- parent-mode audio recording
+- robot-side story count and photo upload
 
 ## Run
 
@@ -41,6 +47,10 @@ MOBILE_PUSH_DRY_RUN=true
 
 Base: `/api`
 
+- `GET /health`
+- `POST /profiles/login`
+- `GET /profiles/{caregiver_id}`
+- `PUT /profiles/{caregiver_id}`
 - `GET /daily/summaries`
 - `GET /daily/{date}`
 - `POST /daily/{date}/initialize`
@@ -55,10 +65,21 @@ Base: `/api`
 - `GET /recordings/sessions/{session_id}`
 - `POST /recordings/sessions/{session_id}/chunks`
 - `POST /recordings/sessions/{session_id}/complete`
+- `POST /internal/robot-story-count/increment` (`X-Internal-API-Key`)
+- `GET /internal/robot-story-count/current-week` (`X-Internal-API-Key`)
+- `POST /internal/robot-photo` (`X-Internal-API-Key`)
 - `POST /internal/notifications/test-send` (`X-Internal-API-Key`)
 - `GET /internal/notifications/logs` (`X-Internal-API-Key`)
 - `GET /internal/notifications/deliveries` (`X-Internal-API-Key`)
 - `GET /internal/notifications/metrics` (`X-Internal-API-Key`)
+
+## Data Notes
+
+- `dailyData` is still the main RTDB root for daily content.
+- Robot story progress is stored separately under `robotStoryProgress/{caregiverId}/{weekStartDate}`.
+- `userProfiles` stores username, password, themes, and condition ranges.
+- `dayCount` is computed dynamically by the backend and is not stored in RTDB.
+- Robot dashboard `recentPhotos` is computed dynamically from the current active robot period and is not stored in RTDB.
 
 ## Scheduler Rules
 
@@ -88,10 +109,10 @@ gcloud auth login
 Export chunks:
 
 ```bash
-gsutil -o "GSUtil:parallel_process_count=1" cp -r gs://ella-development-464ea.firebasestorage.app/audio/<YYYY-MM-DD>/<session_id>/ /path/to/output/
+gsutil -o "GSUtil:parallel_process_count=1" cp -r gs://ella-development-464ea.firebasestorage.app/audio/<username>/<YYYY-MM-DD>/<session_id>/ /path/to/output/
 ```
 
-A script locally assembled chunks:
+Merge chunks locally:
 
 ```bash
 python3 merge_recording_chunks.py /path/to/output/<session_id>/
