@@ -100,24 +100,3 @@ Set frontend API base URL to backend tunnel domain: `https://<backend-tunnel>/ap
 ## Recording Merge
 
 `/recordings/sessions/{session_id}/complete` checks contiguous acknowledged indexes and queues a WebM/MP4 byte-stream merge. The backend verifies the stored final audio before deleting source chunks. Session `finalAudio` and `mergeStatus` record the outcome; on failure, chunks remain for retry. The scheduler retries interrupted or failed merges up to three attempts. The Render runtime must provide `ffmpeg` and `ffprobe`.
-
-## Local Chunk Merge
-
-Google Cloud SDK:
-
-```bash
-brew install --cask google-cloud-sdk
-gcloud auth login
-```
-
-Export chunks:
-
-```bash
-gsutil -o "GSUtil:parallel_process_count=1" cp -r gs://ella-development-464ea.firebasestorage.app/audio/<username>/<YYYY-MM-DD>/<session_id>/ /path/to/output/
-```
-
-Merge chunks locally:
-
-```bash
-python3 merge_recording_chunks.py /path/to/output/<session_id>/
-```

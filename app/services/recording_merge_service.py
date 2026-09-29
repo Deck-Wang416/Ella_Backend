@@ -1,6 +1,7 @@
 import hashlib
 import json
 import re
+import shutil
 import subprocess
 import tempfile
 from datetime import datetime, timedelta, timezone
@@ -8,7 +9,6 @@ from pathlib import Path
 from uuid import uuid4
 
 from app.core.firebase_client import get_rtdb_reference, get_storage_bucket
-from merge_recording_chunks import run_ffmpeg_from_concatenated_bytes
 
 
 CHUNK_NAME = re.compile(r"^chunk_(\d{6})\.([a-z0-9]+)$")
@@ -19,6 +19,38 @@ LEASE_DURATION = timedelta(minutes=30)
 
 class MergeAlreadyRunning(Exception):
     pass
+
+
+def _merge_mediarecorder_chunks(chunks: list[Path], output_path: Path, extension: str) -> None:
+    ffmpeg = shutil.which("ffmpeg")
+    if not ffmpeg:
+        raise RuntimeError("ffmpeg is not installed or not on PATH")
+
+    # MediaRecorder chunks are slices of one stream, not standalone media files.
+    with tempfile.TemporaryDirectory(prefix="ella-concat-") as directory:
+        combined = Path(directory) / f"combined.{extension}"
+        with combined.open("wb") as target:
+            for chunk in chunks:
+                with chunk.open("rb") as source:
+                    shutil.copyfileobj(source, target, length=1024 * 1024)
+
+        remux = subprocess.run(
+            [ffmpeg, "-y", "-i", str(combined), "-c", "copy", str(output_path)],
+            capture_output=True, text=True,
+        )
+        if remux.returncode == 0:
+            return
+
+        codec = "aac" if extension == "m4a" else "libopus"
+        transcode = subprocess.run(
+            [ffmpeg, "-y", "-fflags", "+genpts", "-i", str(combined), "-c:a", codec, str(output_path)],
+            capture_output=True, text=True,
+        )
+        if transcode.returncode != 0:
+            raise RuntimeError(
+                "ffmpeg could not merge recording chunks: "
+                f"remux={remux.stderr[-1000:]} transcode={transcode.stderr[-1000:]}"
+            )
 
 
 def _probe_audio(path: Path) -> float:
@@ -50,11 +82,6 @@ class RecordingMergeService:
 
     def _session_ref(self, session_id):
         return get_rtdb_reference(f"{self.sessions_root}/{session_id}")
-
-    def completed_ids(self):
-        sessions = get_rtdb_reference(self.sessions_root).get() or {}
-        return sorted(session_id for session_id, data in sessions.items()
-                      if isinstance(data, dict) and data.get("status") == "completed")
 
     def retryable_ids(self, limit=2):
         sessions = get_rtdb_reference(self.sessions_root).get() or {}
@@ -167,7 +194,7 @@ class RecordingMergeService:
                 local_chunks.append(local)
 
             merged = folder / f"recording.{extension}"
-            run_ffmpeg_from_concatenated_bytes(local_chunks, merged, extension)
+            _merge_mediarecorder_chunks(local_chunks, merged, extension)
             local_duration = _probe_audio(merged)
             size = merged.stat().st_size
             checksum = _sha256(merged)
