@@ -105,6 +105,9 @@ class FirebaseRecordingService:
             raise ValueError("Recording session is not active")
         if int(session.get("uploadedChunks", 0) or 0) <= 0:
             raise ValueError("Recording session cannot be completed without uploaded chunks")
+        received = self._normalize_received_chunk_indexes(session.get("receivedChunkIndexes"))
+        if final_chunk_index < 0 or sorted(int(index) for index, present in received.items() if present) != list(range(final_chunk_index + 1)):
+            raise ValueError("Recording session has missing or unexpected chunks")
 
         now = self._now_iso()
         session["status"] = "completed"
@@ -112,6 +115,7 @@ class FirebaseRecordingService:
         session["durationSeconds"] = duration_seconds
         session["updatedAt"] = now
         session["completedAt"] = now
+        session["mergeStatus"] = "pending"
         self._session_ref(session_id).set(session)
         return session
 

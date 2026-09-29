@@ -96,7 +96,7 @@ def run_ffmpeg_from_concatenated_bytes(chunks: list[Path], output_path: Path, me
             "-i",
             str(combined_input),
             "-c:a",
-            "libopus",
+            "aac" if media_extension in {"m4a", "mp4"} else "libopus",
             str(output_path),
         ]
         transcode_result = subprocess.run(transcode_cmd, capture_output=True, text=True)

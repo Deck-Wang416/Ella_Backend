@@ -97,6 +97,10 @@ cloudflared tunnel --url http://localhost:5173
 
 Set frontend API base URL to backend tunnel domain: `https://<backend-tunnel>/api`.
 
+## Recording Merge
+
+`/recordings/sessions/{session_id}/complete` checks contiguous acknowledged indexes and queues a WebM/MP4 byte-stream merge. The backend verifies the stored final audio before deleting source chunks. Session `finalAudio` and `mergeStatus` record the outcome; on failure, chunks remain for retry. The scheduler retries interrupted or failed merges up to three attempts. The Render runtime must provide `ffmpeg` and `ffprobe`.
+
 ## Local Chunk Merge
 
 Google Cloud SDK:

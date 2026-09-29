@@ -1,4 +1,7 @@
-from fastapi import APIRouter, HTTPException, Query, Request, status
+from fastapi import APIRouter, BackgroundTasks, HTTPException, Query, Request, status
+import logging
+
+from starlette.concurrency import run_in_threadpool
 
 from app.schemas.recording import (
     RecordingChunkUploadResponse,
@@ -7,6 +10,9 @@ from app.schemas.recording import (
     RecordingSessionRead,
 )
 from app.services.firebase_recording_service import FirebaseRecordingService
+from app.services.recording_merge_service import RecordingMergeService
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/recordings", tags=["recordings"])
 
@@ -47,7 +53,7 @@ async def upload_recording_chunk(
         blob = await request.body()
         if not blob:
             raise HTTPException(status_code=400, detail="Chunk body is required")
-        return service.upload_chunk(
+        return await run_in_threadpool(service.upload_chunk,
             session_id=session_id,
             chunk_index=chunkIndex,
             mime_type=mimeType,
@@ -60,17 +66,26 @@ async def upload_recording_chunk(
 
 
 @router.post("/sessions/{session_id}/complete", response_model=RecordingSessionRead)
-def complete_recording_session(session_id: str, payload: RecordingSessionCompleteRequest):
+def complete_recording_session(session_id: str, payload: RecordingSessionCompleteRequest, background_tasks: BackgroundTasks):
     service = FirebaseRecordingService()
     try:
-        return service.complete_session(
+        completed = service.complete_session(
             session_id=session_id,
             final_chunk_index=payload.finalChunkIndex,
             duration_seconds=payload.durationSeconds,
         )
+        background_tasks.add_task(_merge_completed_session, session_id)
+        return completed
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Recording session not found") from None
     except ValueError as exc:
         raise HTTPException(status_code=409, detail=str(exc)) from exc
     except PermissionError as exc:
         raise HTTPException(status_code=409, detail=str(exc)) from exc
+
+
+def _merge_completed_session(session_id: str) -> None:
+    try:
+        RecordingMergeService().merge_session(session_id)
+    except Exception:
+        logger.exception("Recording merge failed for %s; source chunks retained", session_id)
