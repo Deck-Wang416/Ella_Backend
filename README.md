@@ -99,4 +99,6 @@ Set frontend API base URL to backend tunnel domain: `https://<backend-tunnel>/ap
 
 ## Recording Merge
 
-`/recordings/sessions/{session_id}/complete` checks contiguous acknowledged indexes and queues a WebM/MP4 byte-stream merge. The backend verifies the stored final audio before deleting source chunks. Session `finalAudio` and `mergeStatus` record the outcome; on failure, chunks remain for retry. The scheduler retries interrupted or failed merges up to three attempts. The Render runtime must provide `ffmpeg` and `ffprobe`.
+`POST /recordings/sessions` accepts optional `chunkFormat`: `byte_stream` (default, existing Web and post-stop file slices) or `standalone` (native App, each chunk is a sealed playable `audio/mp4` or `audio/webm` segment). All chunks in one session must use the same MIME type. Uploads still use `POST /recordings/sessions/{session_id}/chunks?chunkIndex=...&mimeType=...` with raw audio bytes.
+
+`POST /recordings/sessions/{session_id}/complete` requires contiguous acknowledged indexes and starts the format-specific merge. `GET /recordings/sessions/{session_id}` returns `mergeStatus` and `finalAudio`; a `completed` session is **not** necessarily merged yet. Delete device-local audio only after `mergeStatus=completed` and `finalAudio` is present. The backend verifies final audio before deleting Storage chunks; failures retain chunks for retry. The Render runtime must provide `ffmpeg` and `ffprobe`.

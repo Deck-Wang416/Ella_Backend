@@ -5,6 +5,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
+from app.schemas.recording import RecordingSessionCreateRequest, RecordingSessionRead
 from app.services.recording_merge_service import RecordingMergeService
 
 
@@ -81,6 +82,23 @@ class RecordingMergeTests(unittest.TestCase):
                 "-c:a", "libopus", str(source),
             ], check=True)
             cls.audio = source.read_bytes()
+            cls.standalone_segments = []
+            cls.standalone_webm_segments = []
+            for index, duration in enumerate((1.1, 1.4)):
+                segment = Path(directory) / f"segment_{index}.m4a"
+                subprocess.run([
+                    "ffmpeg", "-v", "error", "-f", "lavfi", "-i",
+                    f"sine=frequency={440 + index * 110}:duration={duration}",
+                    "-c:a", "aac", str(segment),
+                ], check=True)
+                cls.standalone_segments.append(segment.read_bytes())
+                webm_segment = Path(directory) / f"segment_{index}.webm"
+                subprocess.run([
+                    "ffmpeg", "-v", "error", "-f", "lavfi", "-i",
+                    f"sine=frequency={440 + index * 110}:duration={duration}",
+                    "-c:a", "libopus", str(webm_segment),
+                ], check=True)
+                cls.standalone_webm_segments.append(webm_segment.read_bytes())
 
     def setUp(self):
         self.session_id = "rec_20260929_abcdef12"
@@ -143,6 +161,67 @@ class RecordingMergeTests(unittest.TestCase):
             self.service.merge_session(self.session_id)
         self.assertEqual(self.ref.value["mergeToken"], token)
         self.assertEqual(len(self.bucket.objects), 3)
+
+    def test_standalone_segments_merge_and_cleanup(self):
+        self.bucket.objects.clear()
+        for index, data in enumerate(self.standalone_segments):
+            self.bucket.add(f"{self.prefix}chunk_{index:06d}.m4a", data)
+        self.ref.value.update({
+            "chunkFormat": "standalone",
+            "mimeType": "audio/mp4",
+            "lastChunkIndex": 1,
+            "receivedChunkIndexes": {"0": True, "1": True},
+        })
+
+        result = self.service.merge_session(self.session_id)
+        self.assertEqual(result["storagePath"], f"{self.prefix}recording.m4a")
+        self.assertAlmostEqual(result["durationSeconds"], 2.5, delta=0.25)
+        self.assertEqual(self.ref.value["mergeStatus"], "completed")
+        self.assertEqual(set(self.bucket.objects), {result["storagePath"]})
+
+    def test_invalid_standalone_segment_retains_chunks(self):
+        self.bucket.objects.clear()
+        self.bucket.add(f"{self.prefix}chunk_000000.m4a", self.standalone_segments[0])
+        self.bucket.add(f"{self.prefix}chunk_000001.m4a", b"not-audio")
+        self.ref.value.update({
+            "chunkFormat": "standalone",
+            "mimeType": "audio/mp4",
+            "lastChunkIndex": 1,
+            "receivedChunkIndexes": {"0": True, "1": True},
+        })
+
+        with self.assertRaises(Exception):
+            self.service.merge_session(self.session_id)
+        self.assertEqual(self.ref.value["mergeStatus"], "failed")
+        self.assertEqual(len(self.bucket.objects), 2)
+        self.assertNotIn("finalAudio", self.ref.value)
+
+    def test_standalone_webm_segments_merge_and_cleanup(self):
+        self.bucket.objects.clear()
+        for index, data in enumerate(self.standalone_webm_segments):
+            self.bucket.add(f"{self.prefix}chunk_{index:06d}.webm", data)
+        self.ref.value.update({
+            "chunkFormat": "standalone",
+            "mimeType": "audio/webm",
+            "lastChunkIndex": 1,
+            "receivedChunkIndexes": {"0": True, "1": True},
+        })
+
+        result = self.service.merge_session(self.session_id)
+        self.assertEqual(result["storagePath"], f"{self.prefix}recording.webm")
+        self.assertAlmostEqual(result["durationSeconds"], 2.5, delta=0.25)
+        self.assertEqual(set(self.bucket.objects), {result["storagePath"]})
+
+    def test_legacy_create_contract_defaults_to_byte_stream(self):
+        request = RecordingSessionCreateRequest(date="2026-09-29", caregiverId=1, childId=1)
+        self.assertEqual(request.chunkFormat, "byte_stream")
+        read = RecordingSessionRead.model_validate({
+            "sessionId": self.session_id, "date": "2026-09-29", "caregiverId": 1, "childId": 1,
+            "condition": "parent", "status": "recording", "uploadedChunks": 0,
+            "lastChunkIndex": -1, "storagePrefix": self.prefix,
+            "createdAt": "2026-09-29T00:00:00Z", "updatedAt": "2026-09-29T00:00:00Z",
+        })
+        self.assertEqual(read.chunkFormat, "byte_stream")
 
 
 if __name__ == "__main__":

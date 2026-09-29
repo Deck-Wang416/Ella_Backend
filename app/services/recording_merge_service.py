@@ -53,6 +53,45 @@ def _merge_mediarecorder_chunks(chunks: list[Path], output_path: Path, extension
             )
 
 
+def _merge_standalone_segments(chunks: list[Path], output_path: Path, extension: str) -> float:
+    ffmpeg = shutil.which("ffmpeg")
+    if not ffmpeg:
+        raise RuntimeError("ffmpeg is not installed or not on PATH")
+
+    expected_signature = None
+    total_duration = 0.0
+    for chunk in chunks:
+        result = subprocess.run(
+            ["ffprobe", "-v", "error", "-show_entries",
+             "format=duration:stream=codec_type,codec_name,sample_rate,channels,time_base", "-of", "json", str(chunk)],
+            capture_output=True, text=True, check=True,
+        )
+        data = json.loads(result.stdout)
+        audio = [stream for stream in data.get("streams", []) if stream.get("codec_type") == "audio"]
+        if len(audio) != 1 or len(data.get("streams", [])) != 1:
+            raise ValueError(f"Segment {chunk.name} must contain exactly one audio stream")
+        duration = float(data.get("format", {}).get("duration") or 0)
+        if duration <= 0:
+            raise ValueError(f"Segment {chunk.name} has no duration")
+        signature = tuple(audio[0].get(key) for key in ("codec_name", "sample_rate", "channels", "time_base"))
+        if expected_signature is None:
+            expected_signature = signature
+        elif signature != expected_signature:
+            raise ValueError("Recording segments must use the same codec, sample rate, channels, and time base")
+        total_duration += duration
+
+    # Only sealed, individually playable segments use the concat demuxer.
+    manifest = chunks[0].parent / "segments.ffconcat"
+    manifest.write_text("ffconcat version 1.0\n" + "".join(f"file {chunk.name}\n" for chunk in chunks))
+    codec = "aac" if extension == "m4a" else "libopus"
+    command = [ffmpeg, "-v", "error", "-xerror", "-y", "-f", "concat", "-safe", "1",
+               "-i", str(manifest), "-map", "0:a:0", "-vn", "-c:a", codec, str(output_path)]
+    result = subprocess.run(command, capture_output=True, text=True)
+    if result.returncode != 0:
+        raise RuntimeError(f"ffmpeg could not merge standalone segments: {result.stderr[-1500:]}")
+    return total_duration
+
+
 def _probe_audio(path: Path) -> float:
     result = subprocess.run(
         ["ffprobe", "-v", "error", "-show_entries", "format=duration:stream=codec_type", "-of", "json", str(path)],
@@ -159,6 +198,9 @@ class RecordingMergeService:
         mime = str(session.get("mimeType") or "").split(";", 1)[0].strip().lower()
         if mime not in SUPPORTED_MIME:
             raise ValueError(f"Unsupported recording mime type: {mime}")
+        chunk_format = session.get("chunkFormat", "byte_stream")
+        if chunk_format not in ("byte_stream", "standalone"):
+            raise ValueError(f"Unsupported recording chunk format: {chunk_format}")
         extension = SUPPORTED_MIME[mime]
         final_path = f"{prefix}recording.{extension}"
         final_blob = self.bucket.blob(final_path)
@@ -194,8 +236,14 @@ class RecordingMergeService:
                 local_chunks.append(local)
 
             merged = folder / f"recording.{extension}"
-            _merge_mediarecorder_chunks(local_chunks, merged, extension)
+            expected_duration = None
+            if chunk_format == "standalone":
+                expected_duration = _merge_standalone_segments(local_chunks, merged, extension)
+            else:
+                _merge_mediarecorder_chunks(local_chunks, merged, extension)
             local_duration = _probe_audio(merged)
+            if expected_duration is not None and abs(local_duration - expected_duration) > max(1.0, expected_duration * 0.02):
+                raise ValueError("Merged audio duration does not match source segments")
             size = merged.stat().st_size
             checksum = _sha256(merged)
             final_blob.upload_from_filename(str(merged), content_type=mime)

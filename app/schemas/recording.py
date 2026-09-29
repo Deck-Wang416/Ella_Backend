@@ -8,6 +8,17 @@ class RecordingSessionCreateRequest(BaseModel):
     date: date
     caregiverId: int = Field(gt=0)
     childId: int = Field(gt=0)
+    chunkFormat: Literal["byte_stream", "standalone"] = "byte_stream"
+
+
+class FinalAudioRead(BaseModel):
+    storagePath: str
+    mimeType: str
+    sizeBytes: int
+    durationSeconds: float
+    sha256: str
+    sourceChunkCount: int
+    mergedAt: datetime
 
 
 class RecordingSessionRead(BaseModel):
@@ -18,6 +29,7 @@ class RecordingSessionRead(BaseModel):
     condition: Literal["parent"]
     status: Literal["recording", "completed", "failed"]
     mimeType: str | None = None
+    chunkFormat: Literal["byte_stream", "standalone"] = "byte_stream"
     uploadedChunks: int
     lastChunkIndex: int
     storagePrefix: str
@@ -25,6 +37,8 @@ class RecordingSessionRead(BaseModel):
     createdAt: datetime
     updatedAt: datetime
     completedAt: datetime | None = None
+    mergeStatus: Literal["pending", "processing", "failed", "completed"] | None = None
+    finalAudio: FinalAudioRead | None = None
 
 
 class RecordingChunkUploadResponse(BaseModel):

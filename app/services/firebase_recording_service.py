@@ -35,8 +35,10 @@ class FirebaseRecordingService:
             raise ValueError(f"Username is required before creating recording sessions for caregiverId={caregiver_id}")
         return username
 
-    def create_session(self, entry_date: date, caregiver_id: int, child_id: int) -> dict:
+    def create_session(self, entry_date: date, caregiver_id: int, child_id: int, chunk_format: str = "byte_stream") -> dict:
         self._get_existing_parent_daily(caregiver_id, entry_date)
+        if chunk_format not in ("byte_stream", "standalone"):
+            raise ValueError("Unsupported chunk format")
 
         now = self._now_iso()
         session_id = f"rec_{entry_date.strftime('%Y%m%d')}_{uuid4().hex[:8]}"
@@ -50,6 +52,7 @@ class FirebaseRecordingService:
             "condition": "parent",
             "status": "recording",
             "mimeType": None,
+            "chunkFormat": chunk_format,
             "uploadedChunks": 0,
             "lastChunkIndex": -1,
             "receivedChunkIndexes": {},
@@ -72,6 +75,12 @@ class FirebaseRecordingService:
             raise FileNotFoundError(session_id)
         if session.get("status") != "recording":
             raise ValueError("Recording session is not active")
+        base_mime = mime_type.split(";", 1)[0].strip().lower()
+        if base_mime not in ("audio/webm", "audio/mp4"):
+            raise ValueError("Unsupported audio MIME type")
+        prior_mime = session.get("mimeType")
+        if prior_mime and prior_mime.split(";", 1)[0].strip().lower() != base_mime:
+            raise ValueError("All chunks in a session must use the same audio MIME type")
 
         extension = self._guess_extension(mime_type)
         storage_path = f"{session['storagePrefix']}chunk_{chunk_index:06d}.{extension}"

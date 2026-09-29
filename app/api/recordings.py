@@ -24,6 +24,7 @@ def create_recording_session(payload: RecordingSessionCreateRequest):
             entry_date=payload.date,
             caregiver_id=payload.caregiverId,
             child_id=payload.childId,
+            chunk_format=payload.chunkFormat,
         )
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="Daily content not found") from None
