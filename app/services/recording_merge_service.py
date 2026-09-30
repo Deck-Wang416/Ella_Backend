@@ -13,7 +13,7 @@ from app.core.firebase_client import get_rtdb_reference, get_storage_bucket
 
 CHUNK_NAME = re.compile(r"^chunk_(\d{6})\.([a-z0-9]+)$")
 SESSION_ID = re.compile(r"^rec_\d{8}_[0-9a-f]{8}$")
-SUPPORTED_MIME = {"audio/webm": "webm", "audio/mp4": "m4a"}
+SUPPORTED_MIME = {"audio/webm": "webm", "audio/mp4": "m4a", "audio/wav": "wav"}
 LEASE_DURATION = timedelta(minutes=30)
 
 
@@ -201,19 +201,23 @@ class RecordingMergeService:
         chunk_format = session.get("chunkFormat", "byte_stream")
         if chunk_format not in ("byte_stream", "standalone"):
             raise ValueError(f"Unsupported recording chunk format: {chunk_format}")
-        extension = SUPPORTED_MIME[mime]
-        final_path = f"{prefix}recording.{extension}"
+        if mime == "audio/wav" and chunk_format != "standalone":
+            raise ValueError("WAV chunks must be standalone")
+        source_extension = SUPPORTED_MIME[mime]
+        output_extension = "m4a" if mime == "audio/wav" else source_extension
+        output_mime = "audio/mp4" if mime == "audio/wav" else mime
+        final_path = f"{prefix}recording.{output_extension}"
         final_blob = self.bucket.blob(final_path)
         # A previous attempt may have stored the final file and crashed during cleanup.
         stored = session.get("finalAudio")
         has_verified_record = isinstance(stored, dict) and stored.get("storagePath") == final_path and final_blob.exists()
-        chunks = self._ordered_chunks(prefix, session, extension, allow_partial=has_verified_record)
+        chunks = self._ordered_chunks(prefix, session, source_extension, allow_partial=has_verified_record)
         if has_verified_record:
             final_blob.reload()
             if final_blob.size != stored.get("sizeBytes"):
                 raise ValueError("Stored final audio size does not match the verified record")
             with tempfile.TemporaryDirectory(prefix="ella-verify-") as directory:
-                verified = Path(directory) / f"recording.{extension}"
+                verified = Path(directory) / f"recording.{output_extension}"
                 final_blob.download_to_filename(str(verified))
                 if _sha256(verified) != stored.get("sha256"):
                     raise ValueError("Stored final audio checksum does not match")
@@ -235,29 +239,29 @@ class RecordingMergeService:
                     raise ValueError(f"Chunk {index} was not downloaded intact")
                 local_chunks.append(local)
 
-            merged = folder / f"recording.{extension}"
+            merged = folder / f"recording.{output_extension}"
             expected_duration = None
             if chunk_format == "standalone":
-                expected_duration = _merge_standalone_segments(local_chunks, merged, extension)
+                expected_duration = _merge_standalone_segments(local_chunks, merged, output_extension)
             else:
-                _merge_mediarecorder_chunks(local_chunks, merged, extension)
+                _merge_mediarecorder_chunks(local_chunks, merged, source_extension)
             local_duration = _probe_audio(merged)
             if expected_duration is not None and abs(local_duration - expected_duration) > max(1.0, expected_duration * 0.02):
                 raise ValueError("Merged audio duration does not match source segments")
             size = merged.stat().st_size
             checksum = _sha256(merged)
-            final_blob.upload_from_filename(str(merged), content_type=mime)
+            final_blob.upload_from_filename(str(merged), content_type=output_mime)
             final_blob.reload()
             if final_blob.size != size:
                 raise ValueError("Stored final audio size mismatch")
-            verified = folder / f"verified.{extension}"
+            verified = folder / f"verified.{output_extension}"
             final_blob.download_to_filename(str(verified))
             if _sha256(verified) != checksum or abs(_probe_audio(verified) - local_duration) > 1:
                 raise ValueError("Stored final audio verification failed")
 
         record = {
             "storagePath": final_path,
-            "mimeType": mime,
+            "mimeType": output_mime,
             "sizeBytes": size,
             "durationSeconds": local_duration,
             "sha256": checksum,
@@ -283,6 +287,8 @@ class RecordingMergeService:
                 raise ValueError("Unexpected WebM chunk extension")
             if extension == "m4a" and match.group(2) not in ("bin", "m4a", "mp4"):
                 raise ValueError("Unexpected MP4 chunk extension")
+            if extension == "wav" and match.group(2) != "wav":
+                raise ValueError("Unexpected WAV chunk extension")
             indexed[index] = blob
         if not indexed:
             return []

@@ -13,6 +13,7 @@ from app.services.firebase_recording_service import FirebaseRecordingService
 from app.services.recording_merge_service import RecordingMergeService
 
 logger = logging.getLogger(__name__)
+MAX_CHUNK_BYTES = 10 * 1024 * 1024
 
 router = APIRouter(prefix="/recordings", tags=["recordings"])
 
@@ -51,7 +52,14 @@ async def upload_recording_chunk(
 ):
     service = FirebaseRecordingService()
     try:
-        blob = await request.body()
+        parts = []
+        size = 0
+        async for part in request.stream():
+            size += len(part)
+            if size > MAX_CHUNK_BYTES:
+                raise HTTPException(status_code=413, detail="Audio chunk is too large")
+            parts.append(part)
+        blob = b"".join(parts)
         if not blob:
             raise HTTPException(status_code=400, detail="Chunk body is required")
         return await run_in_threadpool(service.upload_chunk,

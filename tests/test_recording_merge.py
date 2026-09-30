@@ -84,6 +84,7 @@ class RecordingMergeTests(unittest.TestCase):
             cls.audio = source.read_bytes()
             cls.standalone_segments = []
             cls.standalone_webm_segments = []
+            cls.standalone_wav_segments = []
             for index, duration in enumerate((1.1, 1.4)):
                 segment = Path(directory) / f"segment_{index}.m4a"
                 subprocess.run([
@@ -99,6 +100,13 @@ class RecordingMergeTests(unittest.TestCase):
                     "-c:a", "libopus", str(webm_segment),
                 ], check=True)
                 cls.standalone_webm_segments.append(webm_segment.read_bytes())
+                wav_segment = Path(directory) / f"segment_{index}.wav"
+                subprocess.run([
+                    "ffmpeg", "-v", "error", "-f", "lavfi", "-i",
+                    f"sine=frequency={440 + index * 110}:duration={duration}",
+                    "-c:a", "pcm_s16le", str(wav_segment),
+                ], check=True)
+                cls.standalone_wav_segments.append(wav_segment.read_bytes())
 
     def setUp(self):
         self.session_id = "rec_20260929_abcdef12"
@@ -209,6 +217,22 @@ class RecordingMergeTests(unittest.TestCase):
 
         result = self.service.merge_session(self.session_id)
         self.assertEqual(result["storagePath"], f"{self.prefix}recording.webm")
+        self.assertAlmostEqual(result["durationSeconds"], 2.5, delta=0.25)
+        self.assertEqual(set(self.bucket.objects), {result["storagePath"]})
+
+    def test_standalone_wav_segments_merge_to_m4a_and_cleanup(self):
+        self.bucket.objects.clear()
+        for index, data in enumerate(self.standalone_wav_segments):
+            self.bucket.add(f"{self.prefix}chunk_{index:06d}.wav", data)
+        self.ref.value.update({
+            "chunkFormat": "standalone",
+            "mimeType": "audio/wav",
+            "lastChunkIndex": 1,
+            "receivedChunkIndexes": {"0": True, "1": True},
+        })
+        result = self.service.merge_session(self.session_id)
+        self.assertEqual(result["storagePath"], f"{self.prefix}recording.m4a")
+        self.assertEqual(result["mimeType"], "audio/mp4")
         self.assertAlmostEqual(result["durationSeconds"], 2.5, delta=0.25)
         self.assertEqual(set(self.bucket.objects), {result["storagePath"]})
 

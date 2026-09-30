@@ -1,5 +1,8 @@
 from datetime import date, datetime, timezone
+from hashlib import sha256
 from uuid import uuid4
+
+from google.api_core.exceptions import PreconditionFailed
 
 from app.core.firebase_client import get_rtdb_reference, get_storage_bucket
 from app.schemas.daily import DailyContent
@@ -76,8 +79,10 @@ class FirebaseRecordingService:
         if session.get("status") != "recording":
             raise ValueError("Recording session is not active")
         base_mime = mime_type.split(";", 1)[0].strip().lower()
-        if base_mime not in ("audio/webm", "audio/mp4"):
+        if base_mime not in ("audio/webm", "audio/mp4", "audio/wav"):
             raise ValueError("Unsupported audio MIME type")
+        if base_mime == "audio/wav" and session.get("chunkFormat", "byte_stream") != "standalone":
+            raise ValueError("WAV chunks must be standalone")
         prior_mime = session.get("mimeType")
         if prior_mime and prior_mime.split(";", 1)[0].strip().lower() != base_mime:
             raise ValueError("All chunks in a session must use the same audio MIME type")
@@ -86,16 +91,36 @@ class FirebaseRecordingService:
         storage_path = f"{session['storagePrefix']}chunk_{chunk_index:06d}.{extension}"
         bucket = get_storage_bucket()
         storage_blob = bucket.blob(storage_path)
-        storage_blob.upload_from_string(blob, content_type=mime_type)
+        checksum = sha256(blob).hexdigest()
+        try:
+            # An acknowledged chunk must never be silently replaced by a retry.
+            storage_blob.upload_from_string(blob, content_type=mime_type, if_generation_match=0)
+        except PreconditionFailed:
+            storage_blob.reload()
+            if sha256(storage_blob.download_as_bytes()).hexdigest() != checksum:
+                raise ValueError("Chunk index already contains different audio") from None
 
-        received = self._normalize_received_chunk_indexes(session.get("receivedChunkIndexes"))
-        received[str(chunk_index)] = True
-        session["receivedChunkIndexes"] = received
-        session["mimeType"] = mime_type
-        session["uploadedChunks"] = len(received)
-        session["lastChunkIndex"] = max(int(i) for i in received.keys())
-        session["updatedAt"] = self._now_iso()
-        self._session_ref(session_id).set(session)
+        def acknowledge(current):
+            if not isinstance(current, dict) or current.get("status") != "recording":
+                raise ValueError("Recording session is not active")
+            current_mime = str(current.get("mimeType") or "").split(";", 1)[0].strip().lower()
+            if current_mime and current_mime != base_mime:
+                raise ValueError("All chunks in a session must use the same audio MIME type")
+            received = self._normalize_received_chunk_indexes(current.get("receivedChunkIndexes"))
+            hashes = current.get("chunkSha256") or {}
+            if not isinstance(hashes, dict) or (hashes.get(str(chunk_index)) not in (None, checksum)):
+                raise ValueError("Chunk index already contains different audio")
+            received[str(chunk_index)] = True
+            hashes[str(chunk_index)] = checksum
+            current["receivedChunkIndexes"] = received
+            current["chunkSha256"] = hashes
+            current["mimeType"] = mime_type
+            current["uploadedChunks"] = len(received)
+            current["lastChunkIndex"] = max(int(i) for i in received)
+            current["updatedAt"] = self._now_iso()
+            return current
+
+        session = self._session_ref(session_id).transaction(acknowledge)
 
         return {
             "sessionId": session_id,
@@ -155,11 +180,8 @@ class FirebaseRecordingService:
         return {}
 
     def _guess_extension(self, mime_type: str) -> str:
-        mapping = {
+        return {
             "audio/webm": "webm",
             "audio/mp4": "m4a",
-            "audio/mpeg": "mp3",
             "audio/wav": "wav",
-            "audio/ogg": "ogg",
-        }
-        return mapping.get(mime_type, "bin")
+        }.get(mime_type, "bin")
