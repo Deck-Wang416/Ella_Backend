@@ -27,7 +27,7 @@ class RecordingSessionRead(BaseModel):
     caregiverId: int
     childId: int
     condition: Literal["parent"]
-    status: Literal["recording", "completed", "failed"]
+    status: Literal["recording", "completed", "failed", "cancelled"]
     mimeType: str | None = None
     chunkFormat: Literal["byte_stream", "standalone"] = "byte_stream"
     uploadedChunks: int
@@ -53,3 +53,7 @@ class RecordingChunkUploadResponse(BaseModel):
 class RecordingSessionCompleteRequest(BaseModel):
     finalChunkIndex: int = Field(ge=-1)
     durationSeconds: int | None = Field(default=None, ge=0)
+
+
+class RecordingSessionCancelRequest(BaseModel):
+    caregiverId: int = Field(gt=0)

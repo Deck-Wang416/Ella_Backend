@@ -5,6 +5,7 @@ from starlette.concurrency import run_in_threadpool
 
 from app.schemas.recording import (
     RecordingChunkUploadResponse,
+    RecordingSessionCancelRequest,
     RecordingSessionCompleteRequest,
     RecordingSessionCreateRequest,
     RecordingSessionRead,
@@ -90,6 +91,16 @@ def complete_recording_session(session_id: str, payload: RecordingSessionComplet
     except ValueError as exc:
         raise HTTPException(status_code=409, detail=str(exc)) from exc
     except PermissionError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+
+
+@router.post("/sessions/{session_id}/cancel", response_model=RecordingSessionRead)
+def cancel_recording_session(session_id: str, payload: RecordingSessionCancelRequest):
+    try:
+        return FirebaseRecordingService().cancel_session(session_id, payload.caregiverId)
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Recording session not found") from None
+    except (PermissionError, ValueError) as exc:
         raise HTTPException(status_code=409, detail=str(exc)) from exc
 
 

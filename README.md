@@ -65,6 +65,7 @@ Base: `/api`
 - `GET /recordings/sessions/{session_id}`
 - `POST /recordings/sessions/{session_id}/chunks`
 - `POST /recordings/sessions/{session_id}/complete`
+- `POST /recordings/sessions/{session_id}/cancel`
 - `POST /internal/robot-story-count/increment` (`X-Internal-API-Key`)
 - `GET /internal/robot-story-count/current-week` (`X-Internal-API-Key`)
 - `POST /internal/robot-photo` (`X-Internal-API-Key`)
@@ -99,6 +100,8 @@ Set frontend API base URL to backend tunnel domain: `https://<backend-tunnel>/ap
 
 ## Recording Merge
 
-`POST /recordings/sessions` accepts optional `chunkFormat`: `byte_stream` (default, existing Web and iOS post-stop file slices) or `standalone` (native live upload). Native iOS and Android use the same `audio/wav` standalone-segment contract; the backend produces one AAC/M4A final file. Standalone M4A and WebM segments are also supported. Both formats use the same session/chunk/complete endpoints and format-specific merge service. A session cannot mix MIME types. Uploads use `POST /recordings/sessions/{session_id}/chunks?chunkIndex=...&mimeType=...` with raw audio bytes; each request is limited to 10 MB. Clients must serialize uploads, use contiguous indexes from 0, and wait for all acknowledgements before calling complete. Retrying the same index with identical bytes is safe; different bytes at that index are rejected.
+`POST /recordings/sessions` accepts optional `chunkFormat`: `byte_stream` (default, Web MediaRecorder) or `standalone` (native live upload). Native iOS and Android use the same `audio/wav` standalone-segment contract; the backend produces one AAC/M4A final file. Standalone M4A and WebM segments are also supported. Both formats use the same session/chunk/complete endpoints and format-specific merge service. A session cannot mix MIME types. Uploads use `POST /recordings/sessions/{session_id}/chunks?chunkIndex=...&mimeType=...` with raw audio bytes; each request is limited to 10 MB. Clients must serialize uploads, use contiguous indexes from 0, and wait for all acknowledgements before calling complete. Retrying the same index with identical bytes is safe; different bytes at that index are rejected.
 
 `POST /recordings/sessions/{session_id}/complete` requires contiguous acknowledged indexes and starts the format-specific merge. `GET /recordings/sessions/{session_id}` returns `mergeStatus` and `finalAudio`; a `completed` session is **not** necessarily merged yet. Delete device-local audio only after `mergeStatus=completed` and `finalAudio` is present. The backend verifies final audio before deleting Storage chunks; failures retain chunks for retry. The Render runtime must provide `ffmpeg` and `ffprobe`.
+
+`POST /recordings/sessions/{session_id}/cancel` accepts `{ "caregiverId": 1 }` for an unfinished recording. It marks only that session `cancelled` and removes its Storage chunks. It is safe to retry if cleanup fails; completed sessions cannot be cancelled. Clients should delete local audio only after cancellation succeeds. There is no automatic age-based deletion of unfinished sessions.

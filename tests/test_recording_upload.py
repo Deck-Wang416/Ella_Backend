@@ -24,8 +24,12 @@ class FakeRef:
 
 
 class FakeBlob:
-    def __init__(self):
+    def __init__(self, bucket=None, path=None):
+        self.bucket = bucket
+        self.path = path
         self.data = None
+        self.generation = 1
+        self.fail_delete_once = False
 
     def upload_from_string(self, data, content_type, if_generation_match):
         assert if_generation_match == 0
@@ -39,13 +43,23 @@ class FakeBlob:
     def download_as_bytes(self):
         return self.data
 
+    def delete(self, if_generation_match):
+        assert if_generation_match == self.generation
+        if self.fail_delete_once:
+            self.fail_delete_once = False
+            raise RuntimeError("Storage unavailable")
+        del self.bucket.blobs[self.path]
+
 
 class FakeBucket:
     def __init__(self):
         self.blobs = {}
 
     def blob(self, path):
-        return self.blobs.setdefault(path, FakeBlob())
+        return self.blobs.setdefault(path, FakeBlob(self, path))
+
+    def list_blobs(self, prefix):
+        return [blob for path, blob in list(self.blobs.items()) if path.startswith(prefix)]
 
 
 class RecordingUploadTests(unittest.TestCase):
@@ -128,6 +142,56 @@ class RecordingUploadTests(unittest.TestCase):
             asyncio.run(upload_recording_chunk(self.session_id, request, chunkIndex=0, mimeType="audio/mp4"))
         self.assertEqual(error.exception.status_code, 413)
         self.assertEqual(self.bucket.blobs, {})
+
+    def test_explicit_cancel_removes_only_its_chunks_and_can_be_retried(self):
+        self.ref.value["caregiverId"] = 1
+        own_path = f"{self.ref.value['storagePrefix']}chunk_000000.m4a"
+        other_path = "audio/other/2026-09-29/rec_other/chunk_000000.m4a"
+        self.bucket.blob(own_path).data = b"audio"
+        self.bucket.blob(other_path).data = b"keep"
+
+        result = self.service.cancel_session(self.session_id, 1)
+        self.assertEqual(result["status"], "cancelled")
+        self.assertNotIn(own_path, self.bucket.blobs)
+        self.assertIn(other_path, self.bucket.blobs)
+        self.service.cancel_session(self.session_id, 1)
+
+    def test_cancel_rejects_wrong_caregiver_and_completed_session(self):
+        self.ref.value["caregiverId"] = 1
+        with self.assertRaises(PermissionError):
+            self.service.cancel_session(self.session_id, 2)
+        self.ref.value["status"] = "completed"
+        with self.assertRaises(PermissionError):
+            self.service.cancel_session(self.session_id, 1)
+
+    def test_failed_storage_cleanup_keeps_cancel_retryable(self):
+        self.ref.value["caregiverId"] = 1
+        path = f"{self.ref.value['storagePrefix']}chunk_000000.m4a"
+        blob = self.bucket.blob(path)
+        blob.data = b"audio"
+        blob.fail_delete_once = True
+        with self.assertRaisesRegex(RuntimeError, "Storage unavailable"):
+            self.service.cancel_session(self.session_id, 1)
+        self.assertEqual(self.ref.value["status"], "cancelled")
+        self.service.cancel_session(self.session_id, 1)
+        self.assertNotIn(path, self.bucket.blobs)
+
+    def test_chunk_finishing_after_cancel_does_not_leave_a_blob(self):
+        self.ref.value["caregiverId"] = 1
+        def cancel_before_acknowledgement(callback):
+            self.ref.value["status"] = "cancelled"
+            return callback(copy.deepcopy(self.ref.value))
+        self.ref.transaction = cancel_before_acknowledgement
+        with self.assertRaisesRegex(ValueError, "not active"):
+            self.service.upload_chunk(self.session_id, 0, "audio/mp4", b"audio")
+        self.assertEqual(self.bucket.blobs, {})
+
+    def test_cancelled_session_cannot_be_completed(self):
+        self.ref.value.update({"caregiverId": 1, "uploadedChunks": 1,
+                               "receivedChunkIndexes": {"0": True}})
+        self.service.cancel_session(self.session_id, 1)
+        with self.assertRaisesRegex(ValueError, "not active"):
+            self.service.complete_session(self.session_id, 0, 3)
 
 
 if __name__ == "__main__":

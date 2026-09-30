@@ -92,9 +92,11 @@ class FirebaseRecordingService:
         bucket = get_storage_bucket()
         storage_blob = bucket.blob(storage_path)
         checksum = sha256(blob).hexdigest()
+        created_blob = False
         try:
             # An acknowledged chunk must never be silently replaced by a retry.
             storage_blob.upload_from_string(blob, content_type=mime_type, if_generation_match=0)
+            created_blob = True
         except PreconditionFailed:
             storage_blob.reload()
             if sha256(storage_blob.download_as_bytes()).hexdigest() != checksum:
@@ -120,7 +122,14 @@ class FirebaseRecordingService:
             current["updatedAt"] = self._now_iso()
             return current
 
-        session = self._session_ref(session_id).transaction(acknowledge)
+        try:
+            session = self._session_ref(session_id).transaction(acknowledge)
+        except ValueError:
+            # A concurrent cancellation can finish after Storage accepts this chunk.
+            if created_blob and (self.get_session(session_id) or {}).get("status") == "cancelled":
+                storage_blob.reload()
+                storage_blob.delete(if_generation_match=storage_blob.generation)
+            raise
 
         return {
             "sessionId": session_id,
@@ -132,25 +141,53 @@ class FirebaseRecordingService:
         }
 
     def complete_session(self, session_id: str, final_chunk_index: int, duration_seconds: int | None = None) -> dict:
-        session = self.get_session(session_id)
-        if session is None:
-            raise FileNotFoundError(session_id)
-        if session.get("status") != "recording":
-            raise ValueError("Recording session is not active")
-        if int(session.get("uploadedChunks", 0) or 0) <= 0:
-            raise ValueError("Recording session cannot be completed without uploaded chunks")
-        received = self._normalize_received_chunk_indexes(session.get("receivedChunkIndexes"))
-        if final_chunk_index < 0 or sorted(int(index) for index, present in received.items() if present) != list(range(final_chunk_index + 1)):
-            raise ValueError("Recording session has missing or unexpected chunks")
-
         now = self._now_iso()
-        session["status"] = "completed"
-        session["lastChunkIndex"] = max(int(session.get("lastChunkIndex", -1)), final_chunk_index)
-        session["durationSeconds"] = duration_seconds
-        session["updatedAt"] = now
-        session["completedAt"] = now
-        session["mergeStatus"] = "pending"
-        self._session_ref(session_id).set(session)
+
+        def mark_completed(current):
+            if not isinstance(current, dict):
+                raise FileNotFoundError(session_id)
+            if current.get("status") != "recording":
+                raise ValueError("Recording session is not active")
+            if int(current.get("uploadedChunks", 0) or 0) <= 0:
+                raise ValueError("Recording session cannot be completed without uploaded chunks")
+            received = self._normalize_received_chunk_indexes(current.get("receivedChunkIndexes"))
+            actual_indexes = sorted(int(index) for index, present in received.items() if present)
+            if final_chunk_index < 0 or actual_indexes != list(range(final_chunk_index + 1)):
+                raise ValueError("Recording session has missing or unexpected chunks")
+            current["status"] = "completed"
+            current["lastChunkIndex"] = max(int(current.get("lastChunkIndex", -1)), final_chunk_index)
+            current["durationSeconds"] = duration_seconds
+            current["updatedAt"] = now
+            current["completedAt"] = now
+            current["mergeStatus"] = "pending"
+            return current
+
+        return self._session_ref(session_id).transaction(mark_completed)
+
+    def cancel_session(self, session_id: str, caregiver_id: int) -> dict:
+        ref = self._session_ref(session_id)
+        now = self._now_iso()
+
+        def mark_cancelled(current):
+            if not isinstance(current, dict):
+                raise FileNotFoundError(session_id)
+            if int(current.get("caregiverId", 0) or 0) != caregiver_id:
+                raise PermissionError("Recording session belongs to a different caregiver")
+            if current.get("status") not in ("recording", "cancelled"):
+                raise PermissionError("Only unfinished recording sessions can be cancelled")
+            current["status"] = "cancelled"
+            current["updatedAt"] = now
+            current["cancelledAt"] = current.get("cancelledAt") or now
+            return current
+
+        session = ref.transaction(mark_cancelled)
+        prefix = str(session.get("storagePrefix") or "")
+        if not prefix.startswith("audio/") or not prefix.endswith(f"/{session_id}/"):
+            raise ValueError("Invalid recording storage prefix")
+        bucket = get_storage_bucket()
+        for blob in bucket.list_blobs(prefix=prefix):
+            blob.reload()
+            blob.delete(if_generation_match=blob.generation)
         return session
 
     def _normalize_received_chunk_indexes(self, received: object) -> dict[str, bool]:
