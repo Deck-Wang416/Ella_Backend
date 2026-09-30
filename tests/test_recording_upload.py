@@ -81,6 +81,22 @@ class RecordingUploadTests(unittest.TestCase):
         self.assertEqual(next(iter(self.bucket.blobs.values())).data, b"first")
         self.assertEqual(self.ref.value["uploadedChunks"], 1)
 
+    def test_rtdb_numeric_key_arrays_allow_next_chunk_and_lost_ack_retry(self):
+        self.ref.value["chunkFormat"] = "standalone"
+        self.service.upload_chunk(self.session_id, 0, "audio/wav", b"first")
+        # Firebase converts maps containing only numeric keys to JSON arrays.
+        self.ref.value["receivedChunkIndexes"] = [True]
+        self.ref.value["chunkSha256"] = [self.ref.value["chunkSha256"]["0"]]
+        path = f"{self.ref.value['storagePrefix']}chunk_000001.wav"
+        self.bucket.blob(path).data = b"second"  # Storage write succeeded before acknowledgement.
+
+        result = self.service.upload_chunk(self.session_id, 1, "audio/wav", b"second")
+        self.assertEqual(result["chunkIndex"], 1)
+        self.assertEqual(self.ref.value["uploadedChunks"], 2)
+        self.assertEqual(self.ref.value["lastChunkIndex"], 1)
+        with self.assertRaisesRegex(ValueError, "different audio"):
+            self.service.upload_chunk(self.session_id, 1, "audio/wav", b"changed")
+
     def test_acknowledgements_accumulate_and_legacy_suffix_is_preserved(self):
         self.service.upload_chunk(self.session_id, 0, "audio/webm;codecs=opus", b"first")
         self.service.upload_chunk(self.session_id, 1, "audio/webm;codecs=opus", b"second")

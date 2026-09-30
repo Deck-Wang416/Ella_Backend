@@ -107,8 +107,8 @@ class FirebaseRecordingService:
             if current_mime and current_mime != base_mime:
                 raise ValueError("All chunks in a session must use the same audio MIME type")
             received = self._normalize_received_chunk_indexes(current.get("receivedChunkIndexes"))
-            hashes = current.get("chunkSha256") or {}
-            if not isinstance(hashes, dict) or (hashes.get(str(chunk_index)) not in (None, checksum)):
+            hashes = self._normalize_chunk_hashes(current.get("chunkSha256"))
+            if hashes.get(str(chunk_index)) not in (None, checksum):
                 raise ValueError("Chunk index already contains different audio")
             received[str(chunk_index)] = True
             hashes[str(chunk_index)] = checksum
@@ -178,6 +178,16 @@ class FirebaseRecordingService:
                     continue
             return normalized
         return {}
+
+    def _normalize_chunk_hashes(self, hashes: object) -> dict[str, str]:
+        # RTDB reads numeric-key maps such as {"0": "..."} back as arrays.
+        if isinstance(hashes, list):
+            return {str(index): value for index, value in enumerate(hashes) if isinstance(value, str)}
+        if isinstance(hashes, dict):
+            return hashes
+        if hashes is None:
+            return {}
+        raise ValueError("Invalid chunk checksum metadata")
 
     def _guess_extension(self, mime_type: str) -> str:
         return {
