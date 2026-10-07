@@ -100,6 +100,15 @@ class FirebaseNotificationStateService:
                 return item
         return None
 
+    def _deactivate_other_bindings(self, caregiver_id: int, platform: str, endpoint_or_token: str, keep_id: int) -> None:
+        ref = get_rtdb_reference(f"{self.root}/subscriptions")
+        for key, item in self._iter_keyed_items(ref.get() or {}):
+            if not isinstance(item, dict) or int(key) == keep_id:
+                continue
+            if (item.get("platform") == platform and item.get("endpointOrToken") == endpoint_or_token
+                    and int(item.get("caregiverId", 0)) != caregiver_id and item.get("active", True)):
+                self.deactivate_subscription(int(key))
+
     def upsert_subscription(self, caregiver_id: int, platform: str, endpoint_or_token: str, keys: dict[str, Any] | None) -> dict[str, Any]:
         now = self._now_iso()
         existing = self.find_subscription_by_identity(caregiver_id, platform, endpoint_or_token)
@@ -116,6 +125,7 @@ class FirebaseNotificationStateService:
                 "updatedAt": now,
             }
             get_rtdb_reference(f"{self.root}/subscriptions/{subscription_id}").set(payload)
+            self._deactivate_other_bindings(caregiver_id, platform, endpoint_or_token, subscription_id)
             return payload
 
         subscription_id = self._next_id("nextSubscriptionId")
@@ -130,6 +140,7 @@ class FirebaseNotificationStateService:
             "updatedAt": now,
         }
         get_rtdb_reference(f"{self.root}/subscriptions/{subscription_id}").set(payload)
+        self._deactivate_other_bindings(caregiver_id, platform, endpoint_or_token, subscription_id)
         return payload
 
     def get_subscription(self, subscription_id: int) -> dict[str, Any] | None:
@@ -149,6 +160,10 @@ class FirebaseNotificationStateService:
             return None
         updated = {**existing, **patch, "id": subscription_id, "updatedAt": self._now_iso()}
         get_rtdb_reference(f"{self.root}/subscriptions/{subscription_id}").set(updated)
+        if updated.get("active", True):
+            self._deactivate_other_bindings(
+                int(updated["caregiverId"]), updated["platform"], updated["endpointOrToken"], subscription_id
+            )
         return updated
 
     def deactivate_subscription(self, subscription_id: int) -> bool:

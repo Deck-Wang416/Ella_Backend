@@ -45,7 +45,6 @@ class ReminderRunner:
 
             # Child tables are deprecated in single-user mode; keep a stable child_id for dedupe key.
             child_id = 1
-            child_name = "Child"
             if self.daily_service.is_submitted(caregiver_id, local_today):
                 continue
 
@@ -55,7 +54,7 @@ class ReminderRunner:
                 local_date=local_today,
                 slot_time=current_hhmm,
                 timezone=timezone_name,
-                message=f"Diary not submitted yet for {child_name}",
+                message="Please complete today's Parent Diary.",
             )
             if sent:
                 triggered_notifications += 1

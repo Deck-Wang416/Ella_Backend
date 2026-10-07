@@ -8,6 +8,7 @@ __pycache__/
 
 # Env
 .env
+*.p8
 
 # Local Data
 secrets/

@@ -41,7 +41,14 @@ WEB_PUSH_VAPID_PUBLIC_KEY=
 WEB_PUSH_VAPID_PRIVATE_KEY=
 WEB_PUSH_VAPID_CLAIMS_SUB=mailto:you@example.com
 MOBILE_PUSH_DRY_RUN=true
+APNS_TEAM_ID=
+APNS_KEY_ID=
+APNS_PRIVATE_KEY=
+APNS_BUNDLE_ID=com.ella.parentportal
+APNS_USE_SANDBOX=true
 ```
+
+`APNS_PRIVATE_KEY` is the contents of the Apple `.p8` key (escaped `\\n` is accepted). Keep it in Render environment variables, never in Git. Development-signed iOS builds use APNs sandbox; distributed builds use production. Android FCM uses the configured Firebase service account.
 
 ## Core API
 

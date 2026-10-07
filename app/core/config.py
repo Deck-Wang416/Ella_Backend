@@ -28,6 +28,11 @@ class Settings(BaseSettings):
     web_push_vapid_claims_sub: str = ""
 
     mobile_push_dry_run: bool = True
+    apns_team_id: str = ""
+    apns_key_id: str = ""
+    apns_private_key: str = ""
+    apns_bundle_id: str = "com.ella.parentportal"
+    apns_use_sandbox: bool = True
 
     cors_allow_all: bool = False
     cors_origins_raw: str = Field(default="http://localhost:3000,http://localhost:5173", alias="CORS_ORIGINS")

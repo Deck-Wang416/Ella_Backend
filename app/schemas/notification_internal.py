@@ -9,7 +9,7 @@ class InternalTestSendRequest(BaseModel):
     local_date: date
     slot_time: str = Field(default="18:00", pattern=r"^([01]\d|2[0-3]):[0-5]\d$")
     timezone: str = "UTC"
-    message: str = "Diary not submitted yet"
+    message: str = "Please complete today's Parent Diary."
 
 
 class InternalTestSendResult(BaseModel):
