@@ -190,11 +190,9 @@ class DailyContentService:
             target_value = 15.0
             unit = "stories"
         else:
-            current_value = self._display_parent_hours(
-                self._sum_parent_recording_seconds(caregiver_id, week_start, week_end)
-            )
-            target_value = 1.5
-            unit = "hours"
+            current_value = self._sum_parent_recording_seconds(caregiver_id, week_start, week_end) / 60
+            target_value = 90.0
+            unit = "min"
 
         return WeeklyProgress(
             startDate=week_start.isoformat(),
@@ -282,14 +280,6 @@ class DailyContentService:
             if week_start <= session_date <= week_end:
                 total_seconds += max(seconds, 0)
         return total_seconds
-
-    def _display_parent_hours(self, total_seconds: int) -> float:
-        if total_seconds <= 0:
-            return 0.0
-        total_hours = total_seconds / 3600.0
-        if total_hours < 0.1:
-            return 0.0
-        return round(total_hours, 1)
 
     def _get_daily_payload(self, caregiver_id: int, target_date: date) -> dict | None:
         payload = get_rtdb_reference(f"{self._daily_root(caregiver_id)}/{target_date.isoformat()}").get()

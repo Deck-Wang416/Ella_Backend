@@ -35,7 +35,7 @@ class WeeklyProgress(BaseModel):
     endDate: str
     currentValue: float
     targetValue: float
-    unit: Literal["stories", "hours"]
+    unit: Literal["stories", "min"]
 
 
 class DashboardContent(BaseModel):
