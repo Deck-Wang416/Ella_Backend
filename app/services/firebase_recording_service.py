@@ -205,9 +205,6 @@ class FirebaseRecordingService:
             # RTDB can return numeric-key maps as sparse arrays with None gaps.
             if all(item is None or isinstance(item, bool) for item in received):
                 return {str(index): True for index, present in enumerate(received) if present is True}
-            # Older records may contain an explicit list of integer indexes.
-            if all(isinstance(item, int) and not isinstance(item, bool) for item in received):
-                return {str(index): True for index in received if index >= 0}
             raise ValueError("Invalid received chunk index metadata")
         return {}
 

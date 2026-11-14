@@ -130,10 +130,9 @@ class RecordingUploadTests(unittest.TestCase):
         completed = self.service.complete_session(self.session_id, 3, 12)
         self.assertEqual(completed["status"], "completed")
 
-    def test_explicit_index_list_is_not_confused_with_boolean_flags(self):
-        self.assertEqual(self.service._normalize_received_chunk_indexes([0, 2]), {
-            "0": True, "2": True,
-        })
+    def test_integer_index_lists_are_rejected(self):
+        with self.assertRaisesRegex(ValueError, "Invalid received"):
+            self.service._normalize_received_chunk_indexes([0, 2])
         with self.assertRaisesRegex(ValueError, "Invalid received"):
             self.service._normalize_received_chunk_indexes([True, 2])
         self.assertEqual(self.service._normalize_received_chunk_indexes({

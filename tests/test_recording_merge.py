@@ -152,6 +152,12 @@ class RecordingMergeTests(unittest.TestCase):
         self.assertEqual(self.ref.value["mergeStatus"], "failed")
         self.assertEqual(len(self.bucket.objects), 3)
 
+    def test_integer_index_list_is_not_treated_as_acknowledgements(self):
+        self.ref.value["receivedChunkIndexes"] = [0, 1, 2]
+        with self.assertRaisesRegex(ValueError, "Invalid recorded chunk acknowledgements"):
+            self.service.merge_session(self.session_id)
+        self.assertEqual(len(self.bucket.objects), 3)
+
     def test_failed_cleanup_retries_from_verified_final(self):
         self.chunks[1].fail_delete_once = True
         with self.assertRaisesRegex(RuntimeError, "deletion failure"):

@@ -304,8 +304,6 @@ class RecordingMergeService:
             elif isinstance(received, list):
                 if all(value is None or isinstance(value, bool) for value in received):
                     acknowledged = {index for index, value in enumerate(received) if value is True}
-                elif all(isinstance(value, int) and not isinstance(value, bool) for value in received):
-                    acknowledged = {value for value in received if value >= 0}
                 else:
                     raise ValueError("Invalid recorded chunk acknowledgements")
             else:
