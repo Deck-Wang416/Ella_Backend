@@ -111,6 +111,35 @@ class RecordingUploadTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "different audio"):
             self.service.upload_chunk(self.session_id, 1, "audio/wav", b"changed")
 
+    def test_out_of_order_acknowledgements_preserve_sparse_boolean_indexes(self):
+        self.ref.value["chunkFormat"] = "standalone"
+        self.service.upload_chunk(self.session_id, 1, "audio/wav", b"one")
+        # RTDB materializes {"1": true} as [null, true].
+        self.ref.value["receivedChunkIndexes"] = [None, True]
+        self.ref.value["chunkSha256"] = [None, self.ref.value["chunkSha256"]["1"]]
+        self.service.upload_chunk(self.session_id, 3, "audio/wav", b"three")
+        self.assertEqual(self.ref.value["receivedChunkIndexes"], {"1": True, "3": True})
+
+        self.service.upload_chunk(self.session_id, 0, "audio/wav", b"zero")
+        self.ref.value["receivedChunkIndexes"] = [True, True, None, True]
+        self.service.upload_chunk(self.session_id, 2, "audio/wav", b"two")
+        self.assertEqual(self.ref.value["uploadedChunks"], 4)
+        self.assertEqual(self.ref.value["receivedChunkIndexes"], {
+            "0": True, "1": True, "2": True, "3": True,
+        })
+        completed = self.service.complete_session(self.session_id, 3, 12)
+        self.assertEqual(completed["status"], "completed")
+
+    def test_explicit_index_list_is_not_confused_with_boolean_flags(self):
+        self.assertEqual(self.service._normalize_received_chunk_indexes([0, 2]), {
+            "0": True, "2": True,
+        })
+        with self.assertRaisesRegex(ValueError, "Invalid received"):
+            self.service._normalize_received_chunk_indexes([True, 2])
+        self.assertEqual(self.service._normalize_received_chunk_indexes({
+            "0": True, "1": False, "2": None,
+        }), {"0": True})
+
     def test_acknowledgements_accumulate_and_legacy_suffix_is_preserved(self):
         self.service.upload_chunk(self.session_id, 0, "audio/webm;codecs=opus", b"first")
         self.service.upload_chunk(self.session_id, 1, "audio/webm;codecs=opus", b"second")

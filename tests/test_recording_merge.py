@@ -145,6 +145,13 @@ class RecordingMergeTests(unittest.TestCase):
         self.assertEqual(len(self.bucket.objects), 2)
         self.assertNotIn("finalAudio", self.ref.value)
 
+    def test_sparse_acknowledgements_do_not_shift_chunk_indexes(self):
+        self.ref.value["receivedChunkIndexes"] = [True, None, True]
+        with self.assertRaisesRegex(ValueError, "acknowledgements"):
+            self.service.merge_session(self.session_id)
+        self.assertEqual(self.ref.value["mergeStatus"], "failed")
+        self.assertEqual(len(self.bucket.objects), 3)
+
     def test_failed_cleanup_retries_from_verified_final(self):
         self.chunks[1].fail_delete_once = True
         with self.assertRaisesRegex(RuntimeError, "deletion failure"):

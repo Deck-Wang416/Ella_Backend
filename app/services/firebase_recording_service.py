@@ -195,25 +195,20 @@ class FirebaseRecordingService:
             normalized: dict[str, bool] = {}
             for key, value in received.items():
                 try:
-                    normalized[str(int(key))] = bool(value)
+                    index = int(key)
                 except (TypeError, ValueError):
                     continue
+                if index >= 0 and value:
+                    normalized[str(index)] = True
             return normalized
         if isinstance(received, list):
-            normalized: dict[str, bool] = {}
-            # Some older payloads were stored as dense boolean arrays like [true, false, true].
-            if all(isinstance(item, bool) for item in received):
-                for index, present in enumerate(received):
-                    if present:
-                        normalized[str(index)] = True
-                return normalized
-            # Some payloads may contain explicit chunk indexes like [0, 1, 2].
-            for item in received:
-                try:
-                    normalized[str(int(item))] = True
-                except (TypeError, ValueError):
-                    continue
-            return normalized
+            # RTDB can return numeric-key maps as sparse arrays with None gaps.
+            if all(item is None or isinstance(item, bool) for item in received):
+                return {str(index): True for index, present in enumerate(received) if present is True}
+            # Older records may contain an explicit list of integer indexes.
+            if all(isinstance(item, int) and not isinstance(item, bool) for item in received):
+                return {str(index): True for index in received if index >= 0}
+            raise ValueError("Invalid received chunk index metadata")
         return {}
 
     def _normalize_chunk_hashes(self, hashes: object) -> dict[str, str]:
