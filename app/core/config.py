@@ -15,7 +15,6 @@ class Settings(BaseSettings):
     firebase_credentials_path: str = ""
     firebase_daily_root: str = "dailyData"
     firebase_storage_bucket: str = ""
-    recording_perf_enabled: bool = False
 
     scheduler_enabled: bool = True
     scheduler_interval_seconds: int = 60
