@@ -1,114 +1,55 @@
-# ELLA Backend Service
+# ELLA Backend
 
-FastAPI backend for:
+FastAPI service for caregiver profiles, daily dashboards and diaries, reminders, Web Push and native push, parent recordings, and robot uploads. It uses Firebase Realtime Database and Storage; APScheduler runs reminder checks and recording-merge retries in the API process.
 
-- daily dashboard + diary content
-- caregiver profile + login
-- reminder and push notification delivery
-- parent-mode audio recording
-- robot-side story count and photo upload
-
-## Run
+## Development
 
 ```bash
-cd /Users/wang/Desktop/Ella_Backend
-conda activate ella
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
-uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload --proxy-headers --forwarded-allow-ips='*'
+uvicorn app.main:app --reload
 ```
 
-Health:
-```bash
-curl http://127.0.0.1:8000/api/health
-```
-
-## Required Config (.env)
+Set the required Firebase values in `.env` or the deployment environment:
 
 ```env
-FIREBASE_DATABASE_URL=
-FIREBASE_CREDENTIALS_PATH=
-FIREBASE_STORAGE_BUCKET=
-FIREBASE_DAILY_ROOT=dailyData
-API_PREFIX=/api
-INTERNAL_API_KEY=change_me
-SCHEDULER_ENABLED=true
-SCHEDULER_INTERVAL_SECONDS=60
-CORS_ALLOW_ALL=false
-CORS_ORIGINS=http://localhost:3000,http://localhost:5173
-TRUSTED_HOSTS=*
-WEB_PUSH_DRY_RUN=true
-WEB_PUSH_VAPID_PUBLIC_KEY=
-WEB_PUSH_VAPID_PRIVATE_KEY=
-WEB_PUSH_VAPID_CLAIMS_SUB=mailto:you@example.com
-MOBILE_PUSH_DRY_RUN=true
-APNS_TEAM_ID=
-APNS_KEY_ID=
-APNS_PRIVATE_KEY=
-APNS_BUNDLE_ID=com.ella.parentportal
-APNS_USE_SANDBOX=true
+FIREBASE_DATABASE_URL=https://YOUR_PROJECT-default-rtdb.firebaseio.com
+FIREBASE_CREDENTIALS_PATH=/absolute/path/to/service-account.json
+FIREBASE_STORAGE_BUCKET=YOUR_PROJECT.firebasestorage.app
 ```
 
-`APNS_PRIVATE_KEY` is the contents of the Apple `.p8` key (escaped `\\n` is accepted). Keep it in Render environment variables, never in Git. Development-signed iOS builds use APNs sandbox; distributed builds use production. Android FCM uses the configured Firebase service account.
+`FIREBASE_STORAGE_BUCKET` is needed for recording and photo storage. Keep the service account, APNs private key, internal API key, and VAPID private key out of Git. `GET /api/health` checks the server. Run tests with `python -m pytest -q` (install `pytest` if it is not already available). Recording merges require `ffmpeg` and `ffprobe` on `PATH`.
 
-## Core API
+## Data and API
 
-Base: `/api`
+All routes below are under `/api`:
 
-- `GET /health`
-- `POST /profiles/login`
-- `GET /profiles/{caregiver_id}`
-- `PUT /profiles/{caregiver_id}`
-- `GET /daily/summaries`
-- `GET /daily/{date}`
-- `POST /daily/{date}/initialize`
-- `PUT /daily/{date}`
-- `GET/PUT /reminders/{caregiver_id}`
-- `POST /internal/reminders/run-due` (`X-Internal-API-Key`)
-- `POST /subscriptions`
-- `GET /subscriptions/{caregiver_id}`
-- `PUT /subscriptions/{id}`
-- `DELETE /subscriptions/{id}`
-- `POST /recordings/sessions`
-- `GET /recordings/sessions/{session_id}`
-- `POST /recordings/sessions/{session_id}/chunks`
-- `POST /recordings/sessions/{session_id}/complete`
-- `POST /recordings/sessions/{session_id}/cancel`
-- `POST /internal/robot-story-count/increment` (`X-Internal-API-Key`)
-- `GET /internal/robot-story-count/current-week` (`X-Internal-API-Key`)
-- `POST /internal/robot-photo` (`X-Internal-API-Key`)
-- `POST /internal/notifications/test-send` (`X-Internal-API-Key`)
-- `GET /internal/notifications/logs` (`X-Internal-API-Key`)
-- `GET /internal/notifications/deliveries` (`X-Internal-API-Key`)
-- `GET /internal/notifications/metrics` (`X-Internal-API-Key`)
+| Area | Routes | Notes |
+| --- | --- | --- |
+| Profiles | `POST /profiles/login`, `GET/PUT /profiles/{caregiver_id}` | Login returns the profile. Profile updates are themes-only; `dayCount` is computed, not stored. |
+| Daily | `GET /daily/summaries`, `GET/PUT /daily/{date}` | Requires `caregiver_id` query parameter. `timezone` is optional; the frontend supplies `America/New_York`. |
+| Reminders | `GET/PUT /reminders/{caregiver_id}` | Settings include the caregiver's timezone and reminder times. |
+| Subscriptions | `POST /subscriptions`, `GET /subscriptions/{caregiver_id}`, `PUT/DELETE /subscriptions/{id}` | Web Push, APNs, and FCM device bindings. |
+| Recordings | `POST /recordings/sessions`, `GET /recordings/sessions/{session_id}`, `POST /recordings/sessions/{session_id}/chunks`, `/complete`, `/cancel` | Parent mode only. |
+| Robot integration | `GET /internal/robot-story-count/current-week`, `POST /internal/robot-story-count/increment`, `POST /internal/robot-photo` | Protected by `X-Internal-API-Key`. |
 
-## Data Notes
+Internal reminder and notification test/diagnostic endpoints also require `X-Internal-API-Key`; see `app/api/`. Set `INTERNAL_API_KEY` in the deployment environment.
 
-- `dailyData` is still the main RTDB root for daily content.
-- Robot story progress is stored separately under `robotStoryProgress/{caregiverId}/{weekStartDate}`.
-- `userProfiles` stores username, password, themes, and condition ranges.
-- `dayCount` is computed dynamically by the backend and is not stored in RTDB.
-- Robot dashboard `recentPhotos` is computed dynamically from the current active robot period and is not stored in RTDB.
+Profiles in `userProfiles/{caregiverId}` define the robot and parent date ranges. The backend creates today's daily content from the active range; daily content is stored under `dailyData/{caregiverId}/{date}`. Summaries exclude future dates. Detail is available for today or a past, submitted diary within the configured period; future dates and past unsubmitted diaries return 404. Only today's diary can be edited. The old `/daily/{date}/initialize` route remains for compatibility but rejects manual mode selection.
 
-## Scheduler Rules
+Robot story counts come from `robotStoryProgress`, not `dailyData.dashboard.storyCount`. Robot `recentPhotos` aggregates up to five photos from the active robot period, newest first. Weekly progress is computed on read: robot stories from story progress, parent reading minutes from completed recording sessions. The robot dashboard exposes photos, story count, recent photos, and weekly progress; the parent dashboard exposes weekly progress. Diary questions and their display conditions come from the daily response.
 
-- Check every minute (`SCHEDULER_INTERVAL_SECONDS`)
-- Timezone-aware by caregiver setting
-- Trigger only when local time hits configured slot and today diary is unsubmitted
-- Idempotent per `(caregiver_id, child_id, local_date, slot_time)`
+## Recording Pipeline
 
-## Mobile HTTPS Test (Tunnel)
+`POST /recordings/sessions` creates a new parent-mode session on each request. The default `chunkFormat` is `byte_stream` for Web `MediaRecorder`; native iOS and Android use `standalone` WAV segments. Both clients upload raw audio to `POST /recordings/sessions/{session_id}/chunks?chunkIndex=N&mimeType=...`. Chunk indexes start at 0; uploads may arrive out of order or concurrently. The backend verifies each chunk and accepts an identical retry of the same index. It rejects conflicting bytes or MIME types. The request body limit is 10 MB per chunk.
 
-```bash
-cloudflared tunnel --url http://localhost:8000
-cloudflared tunnel --url http://localhost:5173
-```
+After all chunks are acknowledged, `POST /recordings/sessions/{session_id}/complete` takes `finalChunkIndex` and optional integer `durationSeconds`. Completion verifies contiguous indexes and marks the session `completed`; the audio merge then runs asynchronously. **Session `status=completed` does not mean the merge is finished.** `GET /recordings/sessions/{session_id}` exposes `mergeStatus` and `finalAudio`. The merge uses FFmpeg to produce a verified final file, then deletes temporary Storage chunks; failed merges retain their source chunks for retry. Native clients may delete app-private chunks after `/complete` succeeds because the backend has accepted all source chunks. `/cancel` can abandon an unfinished session and clean up its uploaded chunks.
 
-Set frontend API base URL to backend tunnel domain: `https://<backend-tunnel>/api`.
+## Notifications
 
-## Recording Merge
+APScheduler checks enabled reminder settings every `SCHEDULER_INTERVAL_SECONDS` (default 60). Each caregiver's configured timezone determines the local reminder slots; reminders are sent only within an active study period when that day's diary is unsubmitted. Configure each caregiver's reminder settings explicitly.
 
-`POST /recordings/sessions` accepts optional `chunkFormat`: `byte_stream` (default, Web MediaRecorder) or `standalone` (native live upload). Native iOS and Android use the same `audio/wav` standalone-segment contract; the backend produces one AAC/M4A final file. Standalone M4A and WebM segments are also supported. Both formats use the same session/chunk/complete endpoints and format-specific merge service. A session cannot mix MIME types. Uploads use `POST /recordings/sessions/{session_id}/chunks?chunkIndex=...&mimeType=...` with raw audio bytes; each request is limited to 10 MB. Clients must serialize uploads, use contiguous indexes from 0, and wait for all acknowledgements before calling complete. Retrying the same index with identical bytes is safe; different bytes at that index are rejected.
+Web delivery uses VAPID-authenticated Web Push (`WEB_PUSH_VAPID_*`). iOS uses APNs (`APNS_TEAM_ID`, `APNS_KEY_ID`, `APNS_PRIVATE_KEY`, `APNS_BUNDLE_ID`, `APNS_USE_SANDBOX`); Android uses FCM through the Firebase service account. Set `WEB_PUSH_DRY_RUN=false` and/or `MOBILE_PUSH_DRY_RUN=false` only when the corresponding credentials and platform configuration are ready. Development-signed iOS builds use APNs sandbox; TestFlight/distributed builds use production. Notification subscriptions are deactivated on explicit logout or account switching, not merely because an app is refreshed.
 
-`POST /recordings/sessions/{session_id}/complete` requires contiguous acknowledged indexes and starts the format-specific merge. `GET /recordings/sessions/{session_id}` returns `mergeStatus` and `finalAudio`; a `completed` session is **not** necessarily merged yet. Delete device-local audio only after `mergeStatus=completed` and `finalAudio` is present. The backend verifies final audio before deleting Storage chunks; failures retain chunks for retry. The Render runtime must provide `ffmpeg` and `ffprobe`.
-
-`POST /recordings/sessions/{session_id}/cancel` accepts `{ "caregiverId": 1 }` for an unfinished recording. It marks only that session `cancelled` and removes its Storage chunks. It is safe to retry if cleanup fails; completed sessions cannot be cancelled. Clients should delete local audio only after cancellation succeeds. There is no automatic age-based deletion of unfinished sessions.
+Configure `CORS_ORIGINS` with the actual web origins (or use `CORS_ALLOW_ALL` only for temporary testing). On a multi-process deployment, ensure only one scheduler instance runs the periodic jobs.
